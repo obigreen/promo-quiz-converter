@@ -1,0 +1,77 @@
+.notif {
+    position: fixed;
+    top: 1%;
+    right: 1%;
+    max-width: 320px;
+    z-index: 5;
+}
+
+.notif__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.notif__item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 6px 10px;
+    margin-top: 5px;
+    border: 1px solid #e2dede;
+    border-radius: 20px;
+    background-color: #fff;
+}
+
+.notif__image img,
+.notif__icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.notif__image img {
+    max-width: 50px;
+    max-height: 50px;
+}
+
+.notif__icon img {
+    max-width: 20px;
+    max-height: 20px;
+}
+
+.notif__desc {
+    color: #134094;
+}
+
+.notif__location {
+    text-decoration: underline;
+}
+
+.notif__close {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.notif--show {
+    animation: fadeIn 1.5s linear;
+}
+
+.notif--hide {
+    animation: fadeOut 1.5s linear;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+@keyframes fadeOut {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 0; }
+}
