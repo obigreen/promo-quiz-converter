@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link rel="icon" href="favicon.png" type="image/x-icon">
+<!--    <link rel="icon" href="favicon.png" type="image/x-icon">-->
     <link rel="icon" data-product-img="1_3.webp" type="image/x-icon">
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/styles.css">
@@ -134,32 +134,43 @@
 </div>
 <!--=====block_notifications======-->
 
-<!--&lt;!&ndash;=====block_header======&ndash;&gt;-->
-<!--<header class="header">-->
-<!--    <div class="container">-->
-<!--        &lt;!&ndash;=====header_logo======&ndash;&gt;-->
-<!--        <div class="header__logo">-->
-<!--            <img src="" alt="">-->
-<!--        </div>-->
-<!--        &lt;!&ndash;=====header_logo======&ndash;&gt;-->
+<!--=====block_header======-->
+<header class="header">
+    <div class="container">
+        <!--=====header_logo======-->
+        <div class="header__logo" aria-label="Logo placeholder">
+            <!-- Replace this placeholder with the product logo image. -->
+            <span class="header__logo-placeholder">LOGO</span>
+        </div>
+        <!--=====header_logo======-->
 
-<!--        <div class="header__search">-->
-<!--            <input type="text" placeholder="What can we help you find today?">-->
-<!--            <button>-->
-<!--                <svg viewBox="0 0 24 24" width="20" height="20" fill="white" aria-hidden="true">-->
-<!--                    <path d="M10 2a8 8 0 1 1-6.32 12.9l-4.13 4.12 1.41 1.42 4.13-4.13A8 8 0 0 1 10 2zm0 2a6 6 0 1 0 0 12A6 6 0 0 0 10 4z"/>-->
-<!--                </svg>-->
-<!--            </button>-->
-<!--        </div>-->
+        <div class="header__actions">
+            <button class="header__action" type="button" aria-label="Search">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="11" cy="11" r="7.5"></circle>
+                    <path d="m16.5 16.5 4.5 4.5"></path>
+                </svg>
+            </button>
 
-<!--        <div class="header__cart">-->
-<!--            <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true">-->
-<!--                <path d="M7 4V2a1 1 0 1 1 2 0v2h6V2a1 1 0 1 1 2 0v2h3a1 1 0 0 1 1 1v2h-1l-1.68 12.16A2 2 0 0 1 16.34 21H7.66a2 2 0 0 1-1.98-1.84L4 7H3V5a1 1 0 0 1 1-1h3Zm0 4h10l1.5 10.5a.5.5 0 0 1-.5.5H7.66a.5.5 0 0 1-.5-.5L7 8Z"/>-->
-<!--            </svg>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</header>-->
-<!--&lt;!&ndash;=====block_header======&ndash;&gt;-->
+            <button class="header__action" type="button" aria-label="Profile">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="12" cy="8" r="4"></circle>
+                    <path d="M4.5 21c.7-4.2 3.2-6.5 7.5-6.5s6.8 2.3 7.5 6.5"></path>
+                </svg>
+            </button>
+
+            <button class="header__action header__cart" type="button" aria-label="Cart">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M3 4h2l2.2 10.1a2 2 0 0 0 2 1.6h7.9a2 2 0 0 0 2-1.6L20.5 7H6"></path>
+                    <circle cx="9.5" cy="20" r="1"></circle>
+                    <circle cx="18" cy="20" r="1"></circle>
+                </svg>
+                <span class="header__cart-badge" hidden>1</span>
+            </button>
+        </div>
+    </div>
+</header>
+<!--=====block_header======-->
 
 
 
@@ -171,7 +182,7 @@
 
                 <!--=====block_main======-->
                 <div id="text-block">
-                    <h1 style="line-height: 1">
+                    <h1>
                         <span class="product-title"></span>
                     </h1>
                     <p class="product-subtitle"></p>
@@ -414,13 +425,11 @@
                 <div class="comment-form">
                     <h2>Comments:</h2>
                     <div class="comment-form__body">
-                        <img src="product/img/unnamed.png" alt="">
-                        <textarea id="textarea" placeholder="Write a comment..."></textarea>
-                        <button disabled="" id="commentBtn">Post</button>
-                        <div class="comment-form__icons">
-                            <img src="product/img/smile.png" alt="">
-                            <img src="product/img/camera.png" alt="">
+                        <div class="comment-add-avatar">
+                            <img src="product/img/unnamed.png" alt="">
                         </div>
+                        <textarea id="textarea" rows="1" placeholder="Write a comment..."></textarea>
+                        <button disabled="" id="commentBtn">Post</button>
                     </div>
                 </div>
 
@@ -438,12 +447,6 @@
                                 <ul class="comment__actions">
                                         <span>
                                             <img src="product/img/like.png" alt="">
-                                        </span>
-                                    <span>
-                                            <img src="product/img/surprise.png" alt="">
-                                        </span>
-                                    <span>
-                                            <img src="product/img/love.png" alt="">
                                         </span>
                                     <div>62</div>
                                 </ul>
@@ -468,12 +471,6 @@
                                         <ul class="comment__actions">
                                                 <span>
                                                     <img src="product/img/like.png" alt="">
-                                                </span>
-                                            <span>
-                                                    <img src="product/img/surprise.png" alt="">
-                                                </span>
-                                            <span>
-                                                    <img src="product/img/love.png" alt="">
                                                 </span>
                                             <div>31</div>
                                         </ul>
@@ -502,12 +499,6 @@
                                                         <span>
                                                             <img src="product/img/like.png" alt="">
                                                         </span>
-                                                    <span>
-                                                            <img src="product/img/surprise.png" alt="">
-                                                        </span>
-                                                    <span>
-                                                            <img src="product/img/love.png" alt="">
-                                                        </span>
                                                     <div>31</div>
                                                 </ul>
                                             </div>
@@ -523,7 +514,7 @@
                             <li class="comment__item">
                                 <div class="comment__container">
                                     <div class="comment__avatar">
-                                        <img src="favicon.png" alt="">
+                                        <img src="product/img/unnamed.png" alt="">
                                     </div>
                                     <div class="comment__content">
                                         <div class="comment__name text_comments_1-name-support">
@@ -565,12 +556,6 @@
                                         <span>
                                             <img src="product/img/like.png" alt="">
                                         </span>
-                                    <span>
-                                            <img src="product/img/surprise.png" alt="">
-                                        </span>
-                                    <span>
-                                            <img src="product/img/love.png" alt="">
-                                        </span>
                                     <div>162</div>
                                 </ul>
                             </div>
@@ -584,7 +569,7 @@
                             <li class="comment__item">
                                 <div class="comment__container">
                                     <div class="comment__avatar">
-                                        <img src="favicon.png" alt="">
+                                        <img src="product/img/unnamed.png" alt="">
                                     </div>
                                     <div class="comment__content">
                                         <div class="comment__name text_comments_1-name-support">
@@ -596,12 +581,6 @@
                                         <ul class="comment__actions">
                                                 <span>
                                                     <img src="product/img/like.png" alt="">
-                                                </span>
-                                            <span>
-                                                    <img src="product/img/surprise.png" alt="">
-                                                </span>
-                                            <span>
-                                                    <img src="product/img/love.png" alt="">
                                                 </span>
                                             <div>12</div>
                                         </ul>
@@ -626,12 +605,6 @@
                                                 <ul class="comment__actions">
                                                         <span>
                                                             <img src="product/img/like.png" alt="">
-                                                        </span>
-                                                    <span>
-                                                            <img src="product/img/surprise.png" alt="">
-                                                        </span>
-                                                    <span>
-                                                            <img src="product/img/love.png" alt="">
                                                         </span>
                                                     <div>2</div>
                                                 </ul>
@@ -661,12 +634,6 @@
                                         <span>
                                             <img src="product/img/like.png" alt="">
                                         </span>
-                                    <span>
-                                            <img src="product/img/surprise.png" alt="">
-                                        </span>
-                                    <span>
-                                            <img src="product/img/love.png" alt="">
-                                        </span>
                                     <div>22</div>
                                 </ul>
                             </div>
@@ -680,7 +647,7 @@
                             <li class="comment__item">
                                 <div class="comment__container">
                                     <div class="comment__avatar">
-                                        <img src="favicon.png" alt="">
+                                        <img src="product/img/unnamed.png" alt="">
                                     </div>
                                     <div class="comment__content">
                                         <div class="comment__name text_comments_1-name-support">
@@ -692,12 +659,6 @@
                                         <ul class="comment__actions">
                                                 <span>
                                                     <img src="product/img/like.png" alt="">
-                                                </span>
-                                            <span>
-                                                    <img src="product/img/surprise.png" alt="">
-                                                </span>
-                                            <span>
-                                                    <img src="product/img/love.png" alt="">
                                                 </span>
                                             <div>5</div>
                                         </ul>
@@ -726,12 +687,6 @@
                                             <span>
                                                 <img src="product/img/like.png" alt="">
                                             </span>
-                                        <span>
-                                                <img src="product/img/surprise.png" alt="">
-                                            </span>
-                                        <span>
-                                                <img src="product/img/love.png" alt="">
-                                            </span>
                                         <div>10</div>
                                     </ul>
                                 </div>
@@ -758,12 +713,6 @@
                                             <ul class="comment__actions">
                                                     <span>
                                                         <img src="product/img/like.png" alt="">
-                                                    </span>
-                                                <span>
-                                                        <img src="product/img/surprise.png" alt="">
-                                                    </span>
-                                                <span>
-                                                        <img src="product/img/love.png" alt="">
                                                     </span>
                                                 <div>5</div>
                                             </ul>
@@ -973,7 +922,7 @@
                                         <img src="product/img/norton.png" alt="Norton">
                                     </div>
                                     <div class="secure-payment__item">
-                                        <img src="product/img/100percentsatisfaction.svg"
+                                        <img src="img/100percentsatisfaction.svg"
                                              alt="100% Satisfaction Guarantee">
                                     </div>
                                     <div class="secure-payment__item">
@@ -983,7 +932,7 @@
                                         <img src="product/img/tuikuanbaozhang.svg" alt="Refund Guarantee">
                                     </div>
                                     <div class="secure-payment__item">
-                                        <img src="product/img/anquanbaohu.svg" alt="Secure Protection">
+                                        <img src="img/anquanbaohu.svg" alt="Secure Protection">
                                     </div>
                                 </div>
                             </div>

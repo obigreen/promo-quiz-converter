@@ -1,6 +1,6 @@
 .prefil {
     font-size: 14px;
-    color: #545454;
+    color: var(--prefill-text-color);
     line-height: 1.15;
     word-wrap: break-word;
 
@@ -60,6 +60,7 @@
 
 .slider__selected img {
     max-height: 350px;
+    border-radius: var(--border-radius);
 }
 
 @media (max-width: 375px) {
@@ -99,11 +100,11 @@
     height: 80px;
     padding: 5px;
     border: 2px solid #ccc;
-    border-radius: 8px;
+    border-radius: var(--border-radius);
 }
 
 .slider__item--active {
-    border-color: black;
+    border-color: var(--color-primary);
 }
 
 .slider__item img {
@@ -137,12 +138,14 @@
 }
 
 .secure-payment {
-    border: 2px solid #e0e0e0;
-    border-radius: 8px;
+    border: 2px solid var(--secure-payment-border-color);
+    border-radius: var(--border-radius);
     padding: 20px;
     text-align: center;
     max-width: 480px;
     margin: 0 auto;
+    background: var(--secure-payment-surface-bg);
+    color: var(--secure-payment-text-color);
 
     position: relative;
     margin-top: 20px;
@@ -151,16 +154,16 @@
 
 
 .secure-payment__title {
-    background-color: white;
+    background-color: var(--secure-payment-surface-bg);
     max-width: fit-content;
-    font-size: 15px;
+    font-size: 11px;
     font-weight: bold;
     margin-bottom: 20px;
     width: 100%;
     position: absolute;
     top: -10px;
     left: 50%;
-    color: black;
+    color: var(--secure-payment-text-color);
     transform: translateX(-50%);
 
 
@@ -181,9 +184,10 @@
     justify-content: center;
     width: 80px;
     height: 35px;
-    border: 1px solid #e0e0e0;
-    border-radius: 6px;
+    border: 1px solid var(--secure-payment-border-color);
+    border-radius: var(--border-radius);
     padding: 2px;
+    background: var(--secure-payment-surface-bg);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -274,7 +278,7 @@
 
     color: black;
     border: 1px solid #ccc;
-    border-radius: 3px;
+    border-radius: var(--border-radius);
     box-sizing: border-box;
     width: 100%;
     line-height: 1rem;
@@ -290,7 +294,7 @@
     padding: 0 3px;
     color: #777;
     background-color: #fafafa;
-    border-radius: 3px;
+    border-radius: var(--border-radius);
 
     pointer-events: none;
 }
@@ -314,7 +318,7 @@
     color: var(--text-color);
     font-size: 1em;
     font-weight: 600;
-    border-radius: 4px;
+    border-radius: var(--border-radius);
     padding: 13px 15px 12px;
     margin-top: 0;
     -webkit-transition: none;
@@ -336,7 +340,7 @@
     overflow: hidden;
     background-color: #fff;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: var(--border-radius);
     margin-bottom: 50px;
 }
 
@@ -369,7 +373,7 @@
     height: 40px;
     font-size: 16px;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: var(--border-radius);
     outline: none;
 }
 
@@ -388,7 +392,7 @@
 .iti__selected-flag {
     background-color: #ededec;
     border-right: 1px solid #ddd;
-    border-radius: 3px 0 0 3px;
+    border-radius: var(--border-radius);
     padding-left: 10px;
     padding-right: 10px;
     height: 38px;

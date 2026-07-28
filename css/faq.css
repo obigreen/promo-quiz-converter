@@ -18,7 +18,8 @@
     width: 100%;
     max-width: 420px;
     padding: 10px;
-    background: #f5f5f5;
+    background: var(--faq-surface-bg);
+    color: var(--faq-text-color);
     -webkit-transform: translateX(100%);
     -ms-transform: translateX(100%);
     transform: translateX(100%);
@@ -75,7 +76,7 @@
 }
 
 .accordion__header.active {
-    color: var(--color-primary)
+    color: var(--faq-active-text-color)
 }
 
 .accordion__header.active:after {
@@ -85,8 +86,17 @@
 }
 
 .accordion__body {
-    transition: .3s ease-in-out;
-    margin-bottom: 16px;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    margin-bottom: 0;
+    color: var(--faq-text-color);
     font-size: 16px;
-    display: none
+    line-height: 1.45;
+    transition: max-height .35s ease, opacity .25s ease, margin-bottom .35s ease
+}
+
+.accordion__body.active {
+    opacity: 1;
+    margin-bottom: 16px
 }

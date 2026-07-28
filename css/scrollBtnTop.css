@@ -2,7 +2,7 @@
     background-color: var(--color-primary);
     outline: 0;
     border: none;
-    border-radius: 50%;
+    border-radius: var(--border-radius);
     color: #fff;
     cursor: pointer;
     font-size: 16px;

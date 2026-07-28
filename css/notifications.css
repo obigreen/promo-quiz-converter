@@ -1,8 +1,8 @@
 .notif {
     position: fixed;
-    top: 1%;
-    right: 1%;
-    max-width: 320px;
+    top: 15px;
+    right: 15px;
+    max-width: 500px;
     z-index: 5;
 }
 
@@ -13,15 +13,21 @@
 }
 
 .notif__item {
+    position: relative;
     display: flex;
-    align-items: center;
+    align-items: start;
     justify-content: space-between;
     gap: 10px;
-    padding: 6px 10px;
-    margin-top: 5px;
+    padding: 12px;
     border: 1px solid #e2dede;
-    border-radius: 20px;
-    background-color: #fff;
+    border-radius: var(--border-radius);
+    background-color: var(--notification-surface-bg);
+    color: var(--notification-text-color);
+}
+
+.notif__content {
+    flex: 1;
+    min-width: 0;
 }
 
 .notif__image img,
@@ -34,6 +40,7 @@
 .notif__image img {
     max-width: 50px;
     max-height: 50px;
+    border-radius: var(--border-radius);
 }
 
 .notif__icon img {
@@ -42,7 +49,7 @@
 }
 
 .notif__desc {
-    color: #134094;
+    color: var(--notification-accent-color);
 }
 
 .notif__location {
@@ -50,10 +57,21 @@
 }
 
 .notif__close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: none;
     border: none;
     padding: 0;
     cursor: pointer;
+}
+
+.notif__close img {
+    width: 22px;
+    height: 22px;
 }
 
 .notif--show {
@@ -62,6 +80,12 @@
 
 .notif--hide {
     animation: fadeOut 1.5s linear;
+}
+
+.notif__footer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 @keyframes fadeIn {

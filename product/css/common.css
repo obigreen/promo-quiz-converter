@@ -1,8 +1,44 @@
 :root {
     --color-primary: #17b9de;
+    --color-primary-rgb: 23, 185, 222;
+    --border-radius: 12px;
     --text-color: #fff;
     --body-bg: #2c261f;
     --page-text-color: #fff;
+
+    --header-bg: #fff;
+    --header-border-color: #e4e7eb;
+    --header-logo-color: var(--color-primary);
+    --header-icon-color: #20242a;
+    --header-icon-hover-color: var(--color-primary);
+    --header-icon-bg: #fff;
+    --header-icon-hover-bg: rgba(var(--color-primary-rgb), 0.1);
+    --header-cart-badge-bg: var(--color-primary);
+    --header-cart-badge-color: #fff;
+
+    --swiper-button-bg: rgba(var(--color-primary-rgb), 0.78);
+    --swiper-button-bg-hover: rgba(var(--color-primary-rgb), 0.96);
+    --swiper-button-icon-color: #fff;
+
+    --faq-surface-bg: #f5f5f5;
+    --faq-text-color: #20242a;
+    --faq-active-text-color: var(--color-primary);
+
+    --notification-surface-bg: #fff;
+    --notification-text-color: #20242a;
+    --notification-accent-color: #134094;
+
+    --prefill-text-color: #fff;
+    --secure-payment-surface-bg: #fff;
+    --secure-payment-text-color: #20242a;
+    --secure-payment-border-color: #e0e0e0;
+
+    --comment-surface-bg: #f0f2f5;
+    --comment-text-color: #20242a;
+    --comment-name-color: #3f6f9f;
+    --comment-muted-color: #aeb5bf;
+    --comment-submit-bg: var(--color-primary);
+    --comment-submit-text-color: #fff;
 }
 
 

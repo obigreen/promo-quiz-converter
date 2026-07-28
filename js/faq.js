@@ -1,84 +1,46 @@
-document.getElementById('faqBtn').addEventListener('click', function () {
-    document.getElementById('faq').classList.add('active');
-    this.style.display = 'none';
+const faqButton = document.getElementById('faqBtn');
+const faqPanel = document.getElementById('faq');
+const faqCloseButton = document.getElementById('faqClose');
+const faqHeaders = document.querySelectorAll('.js-faq-header');
+
+function closeFaqPanel() {
+    faqPanel.classList.remove('active');
+    faqButton.style.display = 'block';
+}
+
+faqButton.addEventListener('click', function () {
+    faqPanel.classList.add('active');
+    faqButton.style.display = 'none';
 });
 
-document.getElementById('faqClose').addEventListener('click', function () {
-    document.getElementById('faq').classList.remove('active');
-    document.getElementById('faqBtn').style.display = 'block';
-});
+faqCloseButton.addEventListener('click', closeFaqPanel);
 
 document.addEventListener('mouseup', function (event) {
-    let faq = document.getElementById('faq');
-    if (!faq.contains(event.target)) {
-        faq.classList.remove('active');
-        document.getElementById('faqBtn').style.display = 'block';
+    if (
+        faqPanel.classList.contains('active') &&
+        !faqPanel.contains(event.target) &&
+        !faqButton.contains(event.target)
+    ) {
+        closeFaqPanel();
     }
 });
 
-document.querySelectorAll('.js-faq-header').forEach(function (header) {
+faqHeaders.forEach(function (header) {
     header.addEventListener('click', function () {
-        document
-            .querySelectorAll('.js-faq-header')
-            .forEach(function (otherHeader) {
-                if (otherHeader !== header) {
-                    otherHeader.classList.remove('active');
-                }
-            });
-        document.querySelectorAll('.js-faq-body').forEach(function (body) {
-            if (body !== header.nextElementSibling) {
-                body.style.display = 'none';
-            }
+        const body = header.nextElementSibling;
+        const isOpen = header.classList.contains('active');
+
+        faqHeaders.forEach(function (otherHeader) {
+            const otherBody = otherHeader.nextElementSibling;
+
+            otherHeader.classList.remove('active');
+            otherBody.classList.remove('active');
+            otherBody.style.maxHeight = null;
         });
-        header.classList.toggle('active');
-        let body = header.nextElementSibling;
-        if (body.style.display === 'block') {
-            body.style.display = 'none';
-        } else {
-            body.style.display = 'block';
-        }
-    });
-});
 
-document.getElementById('faqBtn').addEventListener('click', function () {
-    document.getElementById('faq').classList.add('active');
-    this.style.display = 'none';
-});
-
-document.getElementById('faqClose').addEventListener('click', function () {
-    document.getElementById('faq').classList.remove('active');
-    document.getElementById('faqBtn').style.display = 'block';
-});
-
-document.addEventListener('mouseup', function (event) {
-    let faq = document.getElementById('faq');
-    if (!faq.contains(event.target)) {
-        faq.classList.remove('active');
-        document.getElementById('faqBtn').style.display = 'block';
-    }
-});
-
-document.querySelectorAll('.js-faq-header').forEach(function (header) {
-    header.addEventListener('click', function () {
-        document
-            .querySelectorAll('.js-faq-header')
-            .forEach(function (otherHeader) {
-                if (otherHeader !== header) {
-                    otherHeader.classList.remove('active');
-                }
-            });
-        document.querySelectorAll('.js-faq-body').forEach(function (body) {
-            if (body !== header.nextElementSibling) {
-                body.style.maxHeight = null;
-                body.style.overflow = 'hidden';
-                body.style.transition = 'max-height 0.3s ease-out';
-            }
-        });
-        header.classList.toggle('active');
-        let body = header.nextElementSibling;
-        if (body.style.maxHeight) {
-            body.style.maxHeight = null;
-        } else {
+        if (!isOpen) {
+            header.classList.add('active');
+            body.classList.add('active');
             body.style.maxHeight = body.scrollHeight + 'px';
         }
     });
