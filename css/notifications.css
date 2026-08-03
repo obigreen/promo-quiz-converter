@@ -7,15 +7,18 @@
 }
 
 .notif__list {
-    list-style: none;
     margin: 0;
     padding: 0;
+}
+
+.notif__template {
+    display: none;
 }
 
 .notif__item {
     position: relative;
     display: flex;
-    align-items: start;
+    align-items: flex-start;
     justify-content: space-between;
     gap: 10px;
     padding: 12px;
@@ -63,9 +66,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: none;
-    border: none;
     padding: 0;
+    background: none;
     cursor: pointer;
 }
 
@@ -89,13 +91,29 @@
 }
 
 @keyframes fadeIn {
-    0% { opacity: 0; }
-    50% { opacity: 0.5; }
-    100% { opacity: 1; }
+    0% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+
+    100% {
+        opacity: 1;
+    }
 }
 
 @keyframes fadeOut {
-    0% { opacity: 1; }
-    50% { opacity: 0.5; }
-    100% { opacity: 0; }
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+
+    100% {
+        opacity: 0;
+    }
 }

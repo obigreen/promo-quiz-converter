@@ -2,9 +2,11 @@
     --color-primary: #17b9de;
     --color-primary-rgb: 23, 185, 222;
     --border-radius: 12px;
-    --text-color: #fff;
+
     --body-bg: #2c261f;
     --page-text-color: #fff;
+    --text-color: #fff;
+    --success-color: #5cb85c;
 
     --header-bg: #fff;
     --header-border-color: #e4e7eb;
@@ -20,6 +22,17 @@
     --swiper-button-bg-hover: rgba(var(--color-primary-rgb), 0.96);
     --swiper-button-icon-color: #fff;
 
+    --quiz-button-bg: var(--color-primary);
+    --quiz-button-text-color: #fff;
+    --quiz-text-color: #fff;
+
+    --comment-surface-bg: #f0f2f5;
+    --comment-text-color: #20242a;
+    --comment-name-color: #3f6f9f;
+    --comment-muted-color: #aeb5bf;
+    --comment-submit-bg: var(--color-primary);
+    --comment-submit-text-color: #fff;
+
     --faq-surface-bg: #f5f5f5;
     --faq-text-color: #20242a;
     --faq-active-text-color: var(--color-primary);
@@ -28,22 +41,16 @@
     --notification-text-color: #20242a;
     --notification-accent-color: #134094;
 
+    --modal-surface-bg: #fff;
+    --modal-title-color: #575757;
+    --modal-text-color: #797979;
+
     --prefill-text-color: #fff;
     --secure-payment-surface-bg: #fff;
     --secure-payment-text-color: #20242a;
     --secure-payment-border-color: #e0e0e0;
-
-    --comment-surface-bg: #f0f2f5;
-    --comment-text-color: #20242a;
-    --comment-name-color: #3f6f9f;
-    --comment-muted-color: #aeb5bf;
-    --comment-submit-bg: var(--color-primary);
-    --comment-submit-text-color: #fff;
-}
-
-
-:root {
-    --quiz-buttton-bg: #17b9de;
-    --quiz-button-text-color: #fff;
-    --quiz-text-color: #fff;
+    --form-surface-bg: #fafafa;
+    --form-text-color: #000;
+    --form-label-color: #777;
+    --form-border-color: #ccc;
 }

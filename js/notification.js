@@ -2,7 +2,7 @@ const notifContainer = document.querySelector('.notif');
 const notifList = notifContainer.querySelector('.notif__list');
 const notifTemplate = notifContainer.querySelector('.notif__template li');
 
-const nameAlternatesKeys = ["_name6", "_name7"];
+const reviewAuthorAlternates = ["reviewAuthor6", "reviewAuthor7"];
 let nameSwitchIndex = 0;
 let translations = {};
 
@@ -18,17 +18,17 @@ function createNotificationFromTemplate() {
 }
 
 function sendNotificationFromTemplate() {
-    const activeNameKey = nameAlternatesKeys[nameSwitchIndex];
-    nameSwitchIndex = (nameSwitchIndex + 1) % nameAlternatesKeys.length;
+    const activeNameKey = reviewAuthorAlternates[nameSwitchIndex];
+    nameSwitchIndex = (nameSwitchIndex + 1) % reviewAuthorAlternates.length;
 
     // подмена имени динамически (не в JSON напрямую)
-    translations["text_popup_1_name"] = `{${activeNameKey}}`;
+    translations["text_popup_1_name"] = `[[${activeNameKey}]]`;
 
     for (const key in translations) {
         const elements = document.querySelectorAll(`.${key}`);
         if (!elements.length) continue;
 
-        const value = replacePlaceholders(translations[key], templateVars);
+        const value = replacePlaceholders(translations[key], contentTokens);
 
         elements.forEach(el => {
             el.innerHTML = value;

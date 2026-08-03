@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<!--    <link rel="icon" href="favicon.png" type="image/x-icon">-->
-    <link rel="icon" data-product-img="1_3.webp" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="product/img/1_3.webp" data-product-img="1_3.webp" type="image/webp">
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/header.css">
@@ -17,7 +16,7 @@
     <link rel="stylesheet" href="css/scrollBtnTop.css">
     <link rel="stylesheet" href="css/quiz.css">
     <link rel="stylesheet" href="product/css/common.css">
-    <title class="text_page_title"></title>
+    <title class="text_page_title">Red Rocket Outpost</title>
 </head>
 <body>
 
@@ -28,35 +27,34 @@
         return urlParams.get(param);
     }
 
-    const productName = getQueryParam('product') || 'product';
-    const langCode = getQueryParam('lang') || 'en';
+    const productKey = getQueryParam('pqc_product_key') || 'product';
+    const locale = getQueryParam('pqc_locale') || 'en';
 
-    const countryCurrent = getQueryParam('country') || 'US'; // Можно использовать IP API позже
-    const offerTitle = "{_offertitle}" || "Product Offer";
-    const pricenew = "{_pricenew}" || "$39.99";
-    const priceold = "{_priceold}" || "$149.99";
+    const countryCode = getQueryParam('pqc_country_code') || 'US'; // Можно использовать IP API позже
+    const productName = "{_pqc_product_name}" || "Product Offer";
+    const salePrice = "{_pqc_sale_price}" || "$39.99";
+    const regularPrice = "{_pqc_regular_price}" || "$149.99";
 
-    const names = (getQueryParam('names') || "Anna,John").split(',').map(n => n.trim());
-    const supportName = "{_supportname}" || "Support";
+    const reviewAuthors = (getQueryParam('pqc_review_authors') || "Anna,John").split(',').map(name => name.trim());
+    const supportAgentName = "{_pqc_support_agent_name}" || "Support";
 
-    const nameVars = {};
-    names.forEach((name, i) => {
-        nameVars[`_name${i + 1}`] = name;
+    const reviewAuthorTokens = {};
+    reviewAuthors.forEach((name, index) => {
+        reviewAuthorTokens[`reviewAuthor${index + 1}`] = name;
     });
 
-    const templateVars = {
-        ...nameVars,
-        _supportname: supportName,
-        _offertitle: offerTitle,
-        _pricenew: pricenew,
-        _priceold: priceold,
-        _country: countryCurrent,
-        _cc_country: countryCurrent,
+    const contentTokens = {
+        ...reviewAuthorTokens,
+        supportAgentName,
+        productName,
+        salePrice,
+        regularPrice,
+        countryCode,
     };
 
     // ===== 2. ЗАМЕНА ТЕКСТОВ =====
     function replacePlaceholders(str, vars) {
-        return str.replace(/{(_[a-zA-Z0-9]+)}/g, (match, key) => {
+        return str.replace(/\[\[([a-zA-Z][a-zA-Z0-9]*)\]\]/g, (match, key) => {
             return vars[key] !== undefined ? vars[key] : match;
         });
     }
@@ -96,40 +94,40 @@
     }
 
     document.addEventListener("DOMContentLoaded", () => {
-        applyTranslationsFromJSON(productName, langCode, templateVars);
-        updateProductImages(productName);
+        applyTranslationsFromJSON(productKey, locale, contentTokens);
+        updateProductImages(productKey);
     });
 </script>
-
-
 
 <!--=====block_notifications======-->
 <div class="notif">
     <ul class="notif__list"></ul>
 
-    <div class="notif__template" style="display: none">
-        <li class="notif__item notif--show">
-            <div class="notif__image">
-                <img data-product-img="1_3.webp" alt="">
-            </div>
-            <div class="notif__content">
-                <div class="notif__header">
-                    <span class="text_popup_1_name"></span>
-                    <span class="text_popup_1_1"></span>
-                    <span class="notif__location">{_cc_country}</span>
+    <div class="notif__template">
+        <ul>
+            <li class="notif__item notif--show">
+                <div class="notif__image">
+                    <img data-product-img="1_3.webp" alt="">
                 </div>
-                <div class="notif__desc text_popup_1_2"></div>
-                <div class="notif__footer">
-                    <span class="notif__time text_popup_1_3"></span>
-                    <div class="notif__icon">
-                        <img data-product-img="notification-ok.svg" alt="">
+                <div class="notif__content">
+                    <div class="notif__header">
+                        <span class="text_popup_1_name"></span>
+                        <span class="text_popup_1_1"></span>
+                        <span class="notif__location">[[countryCode]]</span>
+                    </div>
+                    <div class="notif__desc text_popup_1_2"></div>
+                    <div class="notif__footer">
+                        <span class="notif__time text_popup_1_3"></span>
+                        <div class="notif__icon">
+                            <img data-product-img="notification-ok.svg" alt="">
+                        </div>
                     </div>
                 </div>
-            </div>
-            <button class="notif__close">
-                <img data-product-img="notifications-close.svg" alt="" width="15" height="15">
-            </button>
-        </li>
+                <button class="notif__close" type="button" aria-label="Close notification">
+                    <img data-product-img="notifications-close.svg" alt="" width="15" height="15">
+                </button>
+            </li>
+        </ul>
     </div>
 </div>
 <!--=====block_notifications======-->
@@ -190,37 +188,29 @@
                         <img id="main-photo" src="product/img/1_1.webp" alt="Main image">
                     </div>
                     <!--=====block_main_slider======-->
-                    <div class="swiper thumbnails-slider swiper-initialized swiper-horizontal swiper-backface-hidden">
-                        <div class="swiper-wrapper" id="swiper-wrapper-bdfe1008d301b8f38" aria-live="polite">
-                            <div class="swiper-slide swiper-slide-active" style="width: 153.333px; margin-right: 20px;"
-                                 role="group" aria-label="1 / 6" data-swiper-slide-index="0">
-                                <img src="product/img/1_1.webp" alt="1">
+                    <div class="swiper thumbnails-slider">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide">
+                                <img src="product/img/1_1.webp" alt="Product view 1">
                             </div>
-                            <div class="swiper-slide swiper-slide-next" style="width: 153.333px; margin-right: 20px;"
-                                 role="group" aria-label="2 / 6" data-swiper-slide-index="1">
-                                <img src="product/img/1_2.webp" alt="2"></div>
-                            <div class="swiper-slide" style="width: 153.333px; margin-right: 20px;" role="group"
-                                 aria-label="3 / 6" data-swiper-slide-index="2">
-                                <img src="product/img/1_3.webp" alt="3">
+                            <div class="swiper-slide">
+                                <img src="product/img/1_2.webp" alt="Product view 2">
                             </div>
-                            <div class="swiper-slide" style="width: 153.333px; margin-right: 20px;" role="group"
-                                 aria-label="4 / 6" data-swiper-slide-index="3">
-                                <img src="product/img/1_4.webp" alt="4">
+                            <div class="swiper-slide">
+                                <img src="product/img/1_3.webp" alt="Product view 3">
                             </div>
-                            <div class="swiper-slide" style="width: 153.333px; margin-right: 20px;" role="group"
-                                 aria-label="5 / 6" data-swiper-slide-index="4">
-                                <img src="product/img/1_5.webp" alt="5">
+                            <div class="swiper-slide">
+                                <img src="product/img/1_4.webp" alt="Product view 4">
                             </div>
-                            <div class="swiper-slide" role="group" aria-label="6 / 6" data-swiper-slide-index="5"
-                                 style="width: 153.333px; margin-right: 20px;">
-                                <img src="product/img/1_6.webp" alt="6">
+                            <div class="swiper-slide">
+                                <img src="product/img/1_5.webp" alt="Product view 5">
+                            </div>
+                            <div class="swiper-slide">
+                                <img src="product/img/1_6.webp" alt="Product view 6">
                             </div>
                         </div>
-                        <div class="swiper-button-prev" tabindex="0" role="button" aria-label="Previous slide"
-                             aria-controls="swiper-wrapper-bdfe1008d301b8f38"></div>
-                        <div class="swiper-button-next" tabindex="0" role="button" aria-label="Next slide"
-                             aria-controls="swiper-wrapper-bdfe1008d301b8f38"></div>
-                        <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
+                        <button class="swiper-button-prev" type="button" aria-label="Previous slide"></button>
+                        <button class="swiper-button-next" type="button" aria-label="Next slide"></button>
                     </div>
                     <!--=====block_main_slider======-->
 
@@ -235,38 +225,38 @@
                 <div class="quiz" id="quiz">
                     <div class="question__item active" id="que1" style="display: block;">
                         <div class="question__text quiz_question_1"></div>
-                        <a href="#"
-                           class="question__answer js-answer answer_1-1" data-next="que2"></a>
-                        <a href="#"
-                           class="question__answer js-answer answer_1-2" data-next="que2"></a>
-                        <a href="#"
-                           class="question__answer js-answer answer_1-3" data-next="que2"></a>
-                        <a href="#"
-                           class="question__answer js-answer answer_1-4" data-next="que2"></a>
+                        <button type="button" class="question__answer js-answer answer_1-1"
+                                data-next="que2"></button>
+                        <button type="button" class="question__answer js-answer answer_1-2"
+                                data-next="que2"></button>
+                        <button type="button" class="question__answer js-answer answer_1-3"
+                                data-next="que2"></button>
+                        <button type="button" class="question__answer js-answer answer_1-4"
+                                data-next="que2"></button>
                     </div>
                     <div class="question__item" id="que2">
                         <div class="question__text quiz_question_2"></div>
-                        <a href="#"
-                           class="question__answer js-answer answer_2-1" data-next="que3"></a>
-                        <a href="#"
-                           class="question__answer js-answer answer_2-2" data-next="que3"></a>
-                        <a href="#"
-                           class="question__answer js-answer answer_2-3" data-next="que3"></a>
-                        <a href="#"
-                           class="question__answer js-answer answer_2-4" data-next="que3"></a>
-                        <a href="#"
-                           class="question__answer js-answer answer_2-5" data-next="que3"></a>
+                        <button type="button" class="question__answer js-answer answer_2-1"
+                                data-next="que3"></button>
+                        <button type="button" class="question__answer js-answer answer_2-2"
+                                data-next="que3"></button>
+                        <button type="button" class="question__answer js-answer answer_2-3"
+                                data-next="que3"></button>
+                        <button type="button" class="question__answer js-answer answer_2-4"
+                                data-next="que3"></button>
+                        <button type="button" class="question__answer js-answer answer_2-5"
+                                data-next="que3"></button>
                     </div>
                     <div class="question__item" id="que3">
                         <div class="question__text quiz_question_3"></div>
-                        <a href="#"
-                           class="question__answer js-answer answer_3-1" data-next="end"></a>
-                        <a href="#"
-                           class="question__answer js-answer answer_3-2" data-next="end"></a>
-                        <a href="#"
-                           class="question__answer js-answer answer_3-3" data-next="end"></a>
-                        <a href="#"
-                           class="question__answer js-answer answer_3-4" data-next="end"></a>
+                        <button type="button" class="question__answer js-answer answer_3-1"
+                                data-next="end"></button>
+                        <button type="button" class="question__answer js-answer answer_3-2"
+                                data-next="end"></button>
+                        <button type="button" class="question__answer js-answer answer_3-3"
+                                data-next="end"></button>
+                        <button type="button" class="question__answer js-answer answer_3-4"
+                                data-next="end"></button>
                     </div>
                 </div>
                 <!--=====quiz_box======-->
@@ -286,80 +276,77 @@
                 <!--=====block_box======-->
                 <div class="choose-block" id="choose">
                     <div id="boxes" class="boxes">
-                        <div class="div_img_gift">
-                            <img class="img_gift" src="product/img/1_6.webp">
+                        <div id="0" class="choose__item">
+                            <div class="choose_tapa"><img src="product/img/box-01.png" alt=""></div>
+                            <div class="choose_trasera"><img src="product/img/box-03.png" alt=""></div>
+                            <div class="choose_gift"><img src="product/img/box-04.png" alt=""></div>
+                            <div class="choose"><img src="product/img/box-02.png" alt=""></div>
                         </div>
-                        <div id="0" class="choose__item temblor">
-                            <div class="choose_tapa"><img src="product/img/box-01.png"></div>
-                            <div class="choose_trasera"><img src="product/img/box-03.png"></div>
-                            <div class="choose_gift"><img src="product/img/box-04.png"></div>
-                            <div class="choose"><img src="product/img/box-02.png"></div>
+                        <div id="1" class="choose__item">
+                            <div class="choose_tapa"><img src="product/img/box-01.png" alt=""></div>
+                            <div class="choose_trasera"><img src="product/img/box-03.png" alt=""></div>
+                            <div class="choose_gift"><img src="product/img/box-04.png" alt=""></div>
+                            <div class="choose"><img src="product/img/box-02.png" alt=""></div>
                         </div>
-                        <div id="1" class="choose__item temblor">
-                            <div class="choose_tapa"><img src="product/img/box-01.png"></div>
-                            <div class="choose_trasera"><img src="product/img/box-03.png"></div>
-                            <div class="choose_gift"><img src="product/img/box-04.png"></div>
-                            <div class="choose"><img src="product/img/box-02.png"></div>
+                        <div id="2" class="choose__item">
+                            <div class="choose_tapa"><img src="product/img/box-01.png" alt=""></div>
+                            <div class="choose_trasera"><img src="product/img/box-03.png" alt=""></div>
+                            <div class="choose_gift"><img src="product/img/box-04.png" alt=""></div>
+                            <div class="choose"><img src="product/img/box-02.png" alt=""></div>
                         </div>
-                        <div id="2" class="choose__item temblor">
-                            <div class="choose_tapa"><img src="product/img/box-01.png"></div>
-                            <div class="choose_trasera"><img src="product/img/box-03.png"></div>
-                            <div class="choose_gift"><img src="product/img/box-04.png"></div>
-                            <div class="choose"><img src="product/img/box-02.png"></div>
+                        <div id="3" class="choose__item">
+                            <div class="choose_tapa"><img src="product/img/box-01.png" alt=""></div>
+                            <div class="choose_trasera"><img src="product/img/box-03.png" alt=""></div>
+                            <div class="choose_gift"><img src="product/img/box-04.png" alt=""></div>
+                            <div class="choose"><img src="product/img/box-02.png" alt=""></div>
                         </div>
-                        <div id="3" class="choose__item temblor">
-                            <div class="choose_tapa"><img src="product/img/box-01.png"></div>
-                            <div class="choose_trasera"><img src="product/img/box-03.png"></div>
-                            <div class="choose_gift"><img src="product/img/box-04.png"></div>
-                            <div class="choose"><img src="product/img/box-02.png"></div>
+                        <div id="4" class="choose__item">
+                            <div class="choose_tapa"><img src="product/img/box-01.png" alt=""></div>
+                            <div class="choose_trasera"><img src="product/img/box-03.png" alt=""></div>
+                            <div class="choose_gift"><img src="product/img/box-04.png" alt=""></div>
+                            <div class="choose"><img src="product/img/box-02.png" alt=""></div>
                         </div>
-                        <div id="4" class="choose__item temblor">
-                            <div class="choose_tapa"><img src="product/img/box-01.png"></div>
-                            <div class="choose_trasera"><img src="product/img/box-03.png"></div>
-                            <div class="choose_gift"><img src="product/img/box-04.png"></div>
-                            <div class="choose"><img src="product/img/box-02.png"></div>
+                        <div id="5" class="choose__item">
+                            <div class="choose_tapa"><img src="product/img/box-01.png" alt=""></div>
+                            <div class="choose_trasera"><img src="product/img/box-03.png" alt=""></div>
+                            <div class="choose_gift"><img src="product/img/box-04.png" alt=""></div>
+                            <div class="choose"><img src="product/img/box-02.png" alt=""></div>
                         </div>
-                        <div id="5" class="choose__item temblor">
-                            <div class="choose_tapa"><img src="product/img/box-01.png"></div>
-                            <div class="choose_trasera"><img src="product/img/box-03.png"></div>
-                            <div class="choose_gift"><img src="product/img/box-04.png"></div>
-                            <div class="choose"><img src="product/img/box-02.png"></div>
+                        <div id="6" class="choose__item">
+                            <div class="choose_tapa"><img src="product/img/box-01.png" alt=""></div>
+                            <div class="choose_trasera"><img src="product/img/box-03.png" alt=""></div>
+                            <div class="choose_gift"><img src="product/img/box-04.png" alt=""></div>
+                            <div class="choose"><img src="product/img/box-02.png" alt=""></div>
                         </div>
-                        <div id="6" class="choose__item temblor">
-                            <div class="choose_tapa"><img src="product/img/box-01.png"></div>
-                            <div class="choose_trasera"><img src="product/img/box-03.png"></div>
-                            <div class="choose_gift"><img src="product/img/box-04.png"></div>
-                            <div class="choose"><img src="product/img/box-02.png"></div>
+                        <div id="7" class="choose__item">
+                            <div class="choose_tapa"><img src="product/img/box-01.png" alt=""></div>
+                            <div class="choose_trasera"><img src="product/img/box-03.png" alt=""></div>
+                            <div class="choose_gift"><img src="product/img/box-04.png" alt=""></div>
+                            <div class="choose"><img src="product/img/box-02.png" alt=""></div>
                         </div>
-                        <div id="7" class="choose__item temblor">
-                            <div class="choose_tapa"><img src="product/img/box-01.png"></div>
-                            <div class="choose_trasera"><img src="product/img/box-03.png"></div>
-                            <div class="choose_gift"><img src="product/img/box-04.png"></div>
-                            <div class="choose"><img src="product/img/box-02.png"></div>
+                        <div id="8" class="choose__item">
+                            <div class="choose_tapa"><img src="product/img/box-01.png" alt=""></div>
+                            <div class="choose_trasera"><img src="product/img/box-03.png" alt=""></div>
+                            <div class="choose_gift"><img src="product/img/box-04.png" alt=""></div>
+                            <div class="choose"><img src="product/img/box-02.png" alt=""></div>
                         </div>
-                        <div id="8" class="choose__item temblor">
-                            <div class="choose_tapa"><img src="product/img/box-01.png"></div>
-                            <div class="choose_trasera"><img src="product/img/box-03.png"></div>
-                            <div class="choose_gift"><img src="product/img/box-04.png"></div>
-                            <div class="choose"><img src="product/img/box-02.png"></div>
+                        <div id="9" class="choose__item">
+                            <div class="choose_tapa"><img src="product/img/box-01.png" alt=""></div>
+                            <div class="choose_trasera"><img src="product/img/box-03.png" alt=""></div>
+                            <div class="choose_gift"><img src="product/img/box-04.png" alt=""></div>
+                            <div class="choose"><img src="product/img/box-02.png" alt=""></div>
                         </div>
-                        <div id="9" class="choose__item temblor">
-                            <div class="choose_tapa"><img src="product/img/box-01.png"></div>
-                            <div class="choose_trasera"><img src="product/img/box-03.png"></div>
-                            <div class="choose_gift"><img src="product/img/box-04.png"></div>
-                            <div class="choose"><img src="product/img/box-02.png"></div>
+                        <div id="10" class="choose__item">
+                            <div class="choose_tapa"><img src="product/img/box-01.png" alt=""></div>
+                            <div class="choose_trasera"><img src="product/img/box-03.png" alt=""></div>
+                            <div class="choose_gift"><img src="product/img/box-04.png" alt=""></div>
+                            <div class="choose"><img src="product/img/box-02.png" alt=""></div>
                         </div>
-                        <div id="10" class="choose__item temblor">
-                            <div class="choose_tapa"><img src="product/img/box-01.png"></div>
-                            <div class="choose_trasera"><img src="product/img/box-03.png"></div>
-                            <div class="choose_gift"><img src="product/img/box-04.png"></div>
-                            <div class="choose"><img src="product/img/box-02.png"></div>
-                        </div>
-                        <div id="11" class="choose__item temblor">
-                            <div class="choose_tapa"><img src="product/img/box-01.png"></div>
-                            <div class="choose_trasera"><img src="product/img/box-03.png"></div>
-                            <div class="choose_gift"><img src="product/img/box-04.png"></div>
-                            <div class="choose"><img src="product/img/box-02.png"></div>
+                        <div id="11" class="choose__item">
+                            <div class="choose_tapa"><img src="product/img/box-01.png" alt=""></div>
+                            <div class="choose_trasera"><img src="product/img/box-03.png" alt=""></div>
+                            <div class="choose_gift"><img src="product/img/box-04.png" alt=""></div>
+                            <div class="choose"><img src="product/img/box-02.png" alt=""></div>
                         </div>
                     </div>
                 </div>
@@ -369,11 +356,12 @@
 
 
                 <!--=====block_modal1======-->
-                <div id="modal1" class="modal fade text-center" style="display: none">
-                    <div class="modal-overlay"></div>
+                <div id="modal1" class="modal fade" role="dialog" aria-modal="true"
+                     aria-labelledby="modal1-title">
+                    <div class="modal-overlay" aria-hidden="true"></div>
                     <div class="modal-content">
-                        <img class="tremor_lower" src="product/img/box-00.png">
-                        <h2>Congratulations, you have successfully confirmed that you are a real person!</h2>
+                        <img class="tremor_lower" src="product/img/box-00.png" alt="Gift box">
+                        <h2 id="modal1-title">Congratulations, you have successfully confirmed that you are a real person!</h2>
                         <p class="modal1_date">
 
                         </p>
@@ -385,13 +373,14 @@
                 <!--=====block_modal1======-->
 
                 <!--=====block_modal2======-->
-                <div id="modal2" class="modal fade text-center" style="display: none">
-                    <div class="modal-overlay"></div>
+                <div id="modal2" class="modal fade" role="dialog" aria-modal="true"
+                     aria-labelledby="modal2-title">
+                    <div class="modal-overlay" aria-hidden="true"></div>
                     <div class="modal-content">
-                        <div class="circle-loader">
+                        <div class="circle-loader" aria-hidden="true">
                             <div class="check-icon draw"></div>
                         </div>
-                        <h2>OHHH...</h2>
+                        <h2 id="modal2-title">OHHH...</h2>
                         <p>Sorry, this gift box is empty! You still have (<span id="iteration">3</span>) attempts left.
                             Good luck!</p>
                         <button type="button" id="modal-button2" class="modal-button">OK</button>
@@ -400,12 +389,13 @@
                 <!--=====block_modal2======-->
 
                 <!--=====block_modal3======-->
-                <div id="modal3" class="modal fade text-center" style="display: none">
+                <div id="modal3" class="modal fade" role="dialog" aria-modal="true"
+                     aria-labelledby="modal3-title">
                     <canvas id="confetti-canvas"></canvas>
-                    <div class="modal-overlay"></div>
+                    <div class="modal-overlay" aria-hidden="true"></div>
                     <div class="modal-content">
-                        <img src="product/img/1_6.webp">
-                        <h2>Congratulations!</h2>
+                        <img src="product/img/1_6.webp" alt="Prize product">
+                        <h2 id="modal3-title">Congratulations!</h2>
                         <p>1. Click "OK" and go to the delivery page.</p>
                         <p>2. Complete the form and make the payment to receive the package.</p>
                         <p>3. The package will be delivered within 5 to 7 days.</p>
@@ -414,331 +404,327 @@
                 </div>
                 <!--=====block_modal3======-->
 
-
-
-
-
-
-
-
-
-                <div class="comment-form">
-                    <h2>Comments:</h2>
-                    <div class="comment-form__body">
-                        <div class="comment-add-avatar">
-                            <img src="product/img/unnamed.png" alt="">
+                <section class="comments" aria-labelledby="comments-title">
+                    <div class="comment-form">
+                        <h2 id="comments-title">Comments:</h2>
+                        <div class="comment-form__body">
+                            <div class="comment-add-avatar">
+                                <img src="product/img/unnamed.png" alt="">
+                            </div>
+                            <textarea id="textarea" rows="1" aria-label="Write a comment"
+                                      placeholder="Write a comment..."></textarea>
+                            <button type="button" id="commentBtn" disabled>Post</button>
                         </div>
-                        <textarea id="textarea" rows="1" placeholder="Write a comment..."></textarea>
-                        <button disabled="" id="commentBtn">Post</button>
                     </div>
-                </div>
 
-                <ul class="comment__list" id="commentsList">
-                    <li class="comment__item">
-                        <div class="comment__container">
-                            <div class="comment__avatar">
-                                <img src="product/img/avatar1.webp" alt="">
-                            </div>
-                            <div class="comment__content">
-                                <div class="comment__name text_comments_1-name-1"></div>
-                                <div class="comment__text text_comments_1_1">
-
+                    <ul class="comment__list" id="commentsList">
+                        <li class="comment__item">
+                            <div class="comment__container">
+                                <div class="comment__avatar">
+                                    <img src="product/img/avatar1.webp" alt="">
                                 </div>
-                                <ul class="comment__actions">
-                                        <span>
-                                            <img src="product/img/like.png" alt="">
-                                        </span>
-                                    <div>62</div>
-                                </ul>
-                            </div>
-                            <div class="comment__time">
-                                <span>7 h</span>
-                                <span>like</span>
-                                <span>comment</span>
-                            </div>
-                        </div>
-                        <ul>
-                            <li class="comment__item">
-                                <div class="comment__container">
-                                    <div class="comment__avatar">
-                                        <img src="product/img/avatar2.webp" alt="">
-                                    </div>
+                                <div class="comment__body">
                                     <div class="comment__content">
-                                        <div class="comment__name text_comments_1-name-2"></div>
-                                        <div class="comment__text text_comments_1_2">
-
-                                        </div>
-                                        <ul class="comment__actions">
-                                                <span>
-                                                    <img src="product/img/like.png" alt="">
-                                                </span>
-                                            <div>31</div>
-                                        </ul>
+                                        <div class="comment__name text_comments_1-name-1"></div>
+                                        <div class="comment__text text_comments_1_1"></div>
+                                        <button type="button" class="comment__actions" aria-label="Likes">
+                                            <span class="comment__reaction-icon">
+                                                <img src="product/img/like.png" alt="">
+                                            </span>
+                                            <span class="comment__reaction-count">62</span>
+                                        </button>
                                     </div>
                                     <div class="comment__time">
-                                        <span>3 h</span>
-                                        <span>like</span>
-                                        <span>comment</span>
+                                        <time>7 h</time>
+                                        <button type="button">like</button>
+                                        <button type="button">comment</button>
                                     </div>
                                 </div>
-                                <ul>
-                                    <li class="comment__item">
-                                        <div class="comment__container">
-                                            <div class="comment__avatar">
-                                                <img src="product/img/avatar3.webp" alt="">
-                                            </div>
+                            </div>
+                            <ul class="comment__replies">
+                                <li class="comment__item">
+                                    <div class="comment__container">
+                                        <div class="comment__avatar">
+                                            <img src="product/img/avatar2.webp" alt="">
+                                        </div>
+                                        <div class="comment__body">
                                             <div class="comment__content">
-                                                <div class="comment__name text_comments_1-name-3">Robert Williams</div>
-                                                <div class="comment__text text_comments_1_3">
-
-                                                </div>
-                                                <div class="comment__img">
-                                                    <img src="product/img/commen-rev1.webp" alt="">
-                                                </div>
-                                                <ul class="comment__actions">
-                                                        <span>
-                                                            <img src="product/img/like.png" alt="">
-                                                        </span>
-                                                    <div>31</div>
-                                                </ul>
+                                                <div class="comment__name text_comments_1-name-2"></div>
+                                                <div class="comment__text text_comments_1_2"></div>
+                                                <button type="button" class="comment__actions" aria-label="Likes">
+                                                    <span class="comment__reaction-icon">
+                                                        <img src="product/img/like.png" alt="">
+                                                    </span>
+                                                    <span class="comment__reaction-count">31</span>
+                                                </button>
                                             </div>
                                             <div class="comment__time">
-                                                <span>3 h</span>
-                                                <span>like</span>
-                                                <span>comment</span>
+                                                <time>3 h</time>
+                                                <button type="button">like</button>
+                                                <button type="button">comment</button>
                                             </div>
                                         </div>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="comment__item">
-                                <div class="comment__container">
-                                    <div class="comment__avatar">
-                                        <img src="product/img/unnamed.png" alt="">
                                     </div>
-                                    <div class="comment__content">
-                                        <div class="comment__name text_comments_1-name-support">
-
-                                        </div>
-                                        <div class="comment__text support_comments_1">
-
-                                        </div>
-                                        <ul class="comment__actions">
-                                                <span>
-                                                    <img src="product/img/like.png" alt="">
-                                                </span>
-                                            <div>2</div>
-                                        </ul>
-                                    </div>
-                                    <div class="comment__time">
-                                        <span>2 min</span>
-                                        <span>like</span>
-                                        <span>comment</span>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="comment__item">
-                        <div class="comment__container">
-                            <div class="comment__avatar">
-                                <img src="product/img/avatar5.webp" alt="">
-                            </div>
-                            <div class="comment__content">
-                                <div class="comment__name text_comments_1-name-4"></div>
-                                <div class="comment__text text_comments_1_4">
-
-                                </div>
-                                <div class="comment__img">
-                                    <img src="product/img/commen-rev2.webp" alt="">
-                                </div>
-                                <ul class="comment__actions">
-                                        <span>
-                                            <img src="product/img/like.png" alt="">
-                                        </span>
-                                    <div>162</div>
-                                </ul>
-                            </div>
-                            <div class="comment__time">
-                                <span>1 day</span>
-                                <span>like</span>
-                                <span>comment</span>
-                            </div>
-                        </div>
-                        <ul>
-                            <li class="comment__item">
-                                <div class="comment__container">
-                                    <div class="comment__avatar">
-                                        <img src="product/img/unnamed.png" alt="">
-                                    </div>
-                                    <div class="comment__content">
-                                        <div class="comment__name text_comments_1-name-support">
-
-                                        </div>
-                                        <div class="comment__text support_comments_2">
-
-                                        </div>
-                                        <ul class="comment__actions">
-                                                <span>
-                                                    <img src="product/img/like.png" alt="">
-                                                </span>
-                                            <div>12</div>
-                                        </ul>
-                                    </div>
-                                    <div class="comment__time">
-                                        <span>18 H</span>
-                                        <span>like</span>
-                                        <span>comment</span>
-                                    </div>
-                                </div>
-                                <ul>
-                                    <li class="comment__item">
-                                        <div class="comment__container">
-                                            <div class="comment__avatar">
-                                                <img src="product/img/avatar4.webp" alt="">
-                                            </div>
-                                            <div class="comment__content">
-                                                <div class="comment__name text_comments_1-name-5"></div>
-                                                <div class="comment__text text_comments_1_5">
-
+                                    <ul class="comment__replies">
+                                        <li class="comment__item">
+                                            <div class="comment__container">
+                                                <div class="comment__avatar">
+                                                    <img src="product/img/avatar3.webp" alt="">
                                                 </div>
-                                                <ul class="comment__actions">
-                                                        <span>
-                                                            <img src="product/img/like.png" alt="">
-                                                        </span>
-                                                    <div>2</div>
-                                                </ul>
+                                                <div class="comment__body">
+                                                    <div class="comment__content">
+                                                        <div class="comment__name text_comments_1-name-3">Robert Williams</div>
+                                                        <div class="comment__text text_comments_1_3"></div>
+                                                        <div class="comment__img">
+                                                            <img src="product/img/commen-rev1.webp"
+                                                                 alt="Photo attached to the comment">
+                                                        </div>
+                                                        <button type="button" class="comment__actions"
+                                                                aria-label="Likes">
+                                                            <span class="comment__reaction-icon">
+                                                                <img src="product/img/like.png" alt="">
+                                                            </span>
+                                                            <span class="comment__reaction-count">31</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="comment__time">
+                                                        <time>3 h</time>
+                                                        <button type="button">like</button>
+                                                        <button type="button">comment</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="comment__item">
+                                    <div class="comment__container">
+                                        <div class="comment__avatar">
+                                            <img src="product/img/unnamed.png" alt="">
+                                        </div>
+                                        <div class="comment__body">
+                                            <div class="comment__content">
+                                                <div class="comment__name text_comments_1-name-support"></div>
+                                                <div class="comment__text support_comments_1"></div>
+                                                <button type="button" class="comment__actions" aria-label="Likes">
+                                                    <span class="comment__reaction-icon">
+                                                        <img src="product/img/like.png" alt="">
+                                                    </span>
+                                                    <span class="comment__reaction-count">2</span>
+                                                </button>
                                             </div>
                                             <div class="comment__time">
-                                                <span>5 H</span>
-                                                <span>like</span>
-                                                <span>comment</span>
+                                                <time>2 min</time>
+                                                <button type="button">like</button>
+                                                <button type="button">comment</button>
                                             </div>
                                         </div>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="comment__item">
-                        <div class="comment__container">
-                            <div class="comment__avatar">
-                                <img src="product/img/avatar6.webp" alt="">
-                            </div>
-                            <div class="comment__content">
-                                <div class="comment__name text_comments_1-name-6"></div>
-                                <div class="comment__text text_comments_1_6">
-
-                                </div>
-                                <ul class="comment__actions">
-                                        <span>
-                                            <img src="product/img/like.png" alt="">
-                                        </span>
-                                    <div>22</div>
-                                </ul>
-                            </div>
-                            <div class="comment__time">
-                                <span>2 days 3h</span>
-                                <span>like</span>
-                                <span>comment</span>
-                            </div>
-                        </div>
-                        <ul>
-                            <li class="comment__item">
-                                <div class="comment__container">
-                                    <div class="comment__avatar">
-                                        <img src="product/img/unnamed.png" alt="">
                                     </div>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="comment__item">
+                            <div class="comment__container">
+                                <div class="comment__avatar">
+                                    <img src="product/img/avatar5.webp" alt="">
+                                </div>
+                                <div class="comment__body">
                                     <div class="comment__content">
-                                        <div class="comment__name text_comments_1-name-support">
-
+                                        <div class="comment__name text_comments_1-name-4"></div>
+                                        <div class="comment__text text_comments_1_4"></div>
+                                        <div class="comment__img">
+                                            <img src="product/img/commen-rev2.webp"
+                                                 alt="Photo attached to the comment">
                                         </div>
-                                        <div class="comment__text support_comments_3">
-
-                                        </div>
-                                        <ul class="comment__actions">
-                                                <span>
-                                                    <img src="product/img/like.png" alt="">
-                                                </span>
-                                            <div>5</div>
-                                        </ul>
+                                        <button type="button" class="comment__actions" aria-label="Likes">
+                                            <span class="comment__reaction-icon">
+                                                <img src="product/img/like.png" alt="">
+                                            </span>
+                                            <span class="comment__reaction-count">162</span>
+                                        </button>
                                     </div>
                                     <div class="comment__time">
-                                        <span>2 days</span>
-                                        <span>like</span>
-                                        <span>comment</span>
+                                        <time>1 day</time>
+                                        <button type="button">like</button>
+                                        <button type="button">comment</button>
                                     </div>
                                 </div>
-                            </li>
-                        </ul>
-                    </li>
-                    <ul>
+                            </div>
+                            <ul class="comment__replies">
+                                <li class="comment__item">
+                                    <div class="comment__container">
+                                        <div class="comment__avatar">
+                                            <img src="product/img/unnamed.png" alt="">
+                                        </div>
+                                        <div class="comment__body">
+                                            <div class="comment__content">
+                                                <div class="comment__name text_comments_1-name-support"></div>
+                                                <div class="comment__text support_comments_2"></div>
+                                                <button type="button" class="comment__actions" aria-label="Likes">
+                                                    <span class="comment__reaction-icon">
+                                                        <img src="product/img/like.png" alt="">
+                                                    </span>
+                                                    <span class="comment__reaction-count">12</span>
+                                                </button>
+                                            </div>
+                                            <div class="comment__time">
+                                                <time>18 H</time>
+                                                <button type="button">like</button>
+                                                <button type="button">comment</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <ul class="comment__replies">
+                                        <li class="comment__item">
+                                            <div class="comment__container">
+                                                <div class="comment__avatar">
+                                                    <img src="product/img/avatar4.webp" alt="">
+                                                </div>
+                                                <div class="comment__body">
+                                                    <div class="comment__content">
+                                                        <div class="comment__name text_comments_1-name-5"></div>
+                                                        <div class="comment__text text_comments_1_5"></div>
+                                                        <button type="button" class="comment__actions"
+                                                                aria-label="Likes">
+                                                            <span class="comment__reaction-icon">
+                                                                <img src="product/img/like.png" alt="">
+                                                            </span>
+                                                            <span class="comment__reaction-count">2</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="comment__time">
+                                                        <time>5 H</time>
+                                                        <button type="button">like</button>
+                                                        <button type="button">comment</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="comment__item">
+                            <div class="comment__container">
+                                <div class="comment__avatar">
+                                    <img src="product/img/avatar6.webp" alt="">
+                                </div>
+                                <div class="comment__body">
+                                    <div class="comment__content">
+                                        <div class="comment__name text_comments_1-name-6"></div>
+                                        <div class="comment__text text_comments_1_6"></div>
+                                        <button type="button" class="comment__actions" aria-label="Likes">
+                                            <span class="comment__reaction-icon">
+                                                <img src="product/img/like.png" alt="">
+                                            </span>
+                                            <span class="comment__reaction-count">22</span>
+                                        </button>
+                                    </div>
+                                    <div class="comment__time">
+                                        <time>2 days 3h</time>
+                                        <button type="button">like</button>
+                                        <button type="button">comment</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <ul class="comment__replies">
+                                <li class="comment__item">
+                                    <div class="comment__container">
+                                        <div class="comment__avatar">
+                                            <img src="product/img/unnamed.png" alt="">
+                                        </div>
+                                        <div class="comment__body">
+                                            <div class="comment__content">
+                                                <div class="comment__name text_comments_1-name-support"></div>
+                                                <div class="comment__text support_comments_3"></div>
+                                                <button type="button" class="comment__actions" aria-label="Likes">
+                                                    <span class="comment__reaction-icon">
+                                                        <img src="product/img/like.png" alt="">
+                                                    </span>
+                                                    <span class="comment__reaction-count">5</span>
+                                                </button>
+                                            </div>
+                                            <div class="comment__time">
+                                                <time>2 days</time>
+                                                <button type="button">like</button>
+                                                <button type="button">comment</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+
                         <li class="comment__item">
                             <div class="comment__container">
                                 <div class="comment__avatar">
                                     <img src="product/img/avatar9.webp" alt="">
                                 </div>
-                                <div class="comment__content">
-                                    <div class="comment__name text_comments_1-name-7"></div>
-                                    <div class="comment__text text_comments_1_7">
-
-                                    </div>
-                                    <ul class="comment__actions">
-                                            <span>
+                                <div class="comment__body">
+                                    <div class="comment__content">
+                                        <div class="comment__name text_comments_1-name-7"></div>
+                                        <div class="comment__text text_comments_1_7"></div>
+                                        <button type="button" class="comment__actions" aria-label="Likes">
+                                            <span class="comment__reaction-icon">
                                                 <img src="product/img/like.png" alt="">
                                             </span>
-                                        <div>10</div>
-                                    </ul>
-                                </div>
-                                <div class="comment__time">
-                                    <span>1 h</span>
-                                    <span>like</span>
-                                    <span>comment</span>
+                                            <span class="comment__reaction-count">10</span>
+                                        </button>
+                                    </div>
+                                    <div class="comment__time">
+                                        <time>1 h</time>
+                                        <button type="button">like</button>
+                                        <button type="button">comment</button>
+                                    </div>
                                 </div>
                             </div>
-                            <ul class="grace_left">
+                            <ul class="comment__replies">
                                 <li class="comment__item">
                                     <div class="comment__container">
                                         <div class="comment__avatar">
                                             <img src="product/img/avatar8.webp" alt="">
                                         </div>
-                                        <div class="comment__content">
-                                            <div class="comment__name text_comments_1-name-8"></div>
-                                            <div class="comment__text text_comments_1_8">
-
-                                            </div>
-                                            <div class="comment__img">
-                                                <img src="product/img/commen-rev3.webp" alt="">
-                                            </div>
-                                            <ul class="comment__actions">
-                                                    <span>
+                                        <div class="comment__body">
+                                            <div class="comment__content">
+                                                <div class="comment__name text_comments_1-name-8"></div>
+                                                <div class="comment__text text_comments_1_8"></div>
+                                                <div class="comment__img">
+                                                    <img src="product/img/commen-rev3.webp"
+                                                         alt="Photo attached to the comment">
+                                                </div>
+                                                <button type="button" class="comment__actions" aria-label="Likes">
+                                                    <span class="comment__reaction-icon">
                                                         <img src="product/img/like.png" alt="">
                                                     </span>
-                                                <div>5</div>
-                                            </ul>
-                                        </div>
-                                        <div class="comment__time">
-                                            <span>45 min</span>
-                                            <span>like</span>
-                                            <span>comment</span>
+                                                    <span class="comment__reaction-count">5</span>
+                                                </button>
+                                            </div>
+                                            <div class="comment__time">
+                                                <time>45 min</time>
+                                                <button type="button">like</button>
+                                                <button type="button">comment</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </li>
                             </ul>
                         </li>
                     </ul>
-                </ul>
+                </section>
             </div>
             <!--=====block_content======-->
         </div>
 
         <!--=====faq_button======-->
-        <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt"
-             viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet" id="faqBtn" style="">
+        <button id="faqBtn" type="button" aria-label="Open frequently asked questions">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+                 preserveAspectRatio="xMidYMid meet" aria-hidden="true">
 
-            <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="var(--color-primary)"
-               stroke="none">
-                <path d="M2053 5105 c-358 -66 -706 -214 -1005 -427 -542 -387 -899 -939
+                <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
+                   fill="var(--color-primary)" stroke="none">
+                    <path d="M2053 5105 c-358 -66 -706 -214 -1005 -427 -542 -387 -899 -939
       -1028 -1587 -18 -93 -20 -141 -20 -473 0 -357 1 -375 25 -497 101 -500 342
       -942 706 -1296 406 -394 873 -630 1414 -711 167 -25 552 -26 715 -1 215 34
       468 106 655 189 l100 44 95 -32 c82 -28 263 -90 794 -273 117 -40 122 -41 256
@@ -754,14 +740,15 @@
       -92 -43 -150 -14 -111 -29 -143 -73 -164 -41 -19 -75 -14 -110 19 -33 30 -42
       85 -28 168 50 289 250 513 523 586 131 35 186 38 297 15z m-83 -2348 c81 -34
       86 -145 8 -185 -56 -29 -133 10 -145 74 -8 37 22 87 62 107 42 21 33 21 75 4z"></path>
-            </g>
-        </svg>
+                </g>
+            </svg>
+        </button>
         <!--=====faq_button======-->
 
         <!--=====block_faq======-->
-        <div class="faq__container" id="faq">
-            <svg id="faqClose" version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 512 512"
-                 width="35px" height="35px" xml:space="preserve">
+        <aside class="faq__container" id="faq" aria-label="Frequently asked questions">
+            <button id="faqClose" class="faq__close" type="button" aria-label="Close frequently asked questions">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" aria-hidden="true">
                     <g transform="translate(1 1)">
                         <g>
                             <g>
@@ -777,39 +764,38 @@
                         </g>
                     </g>
                 </svg>
+            </button>
             <ul class="faq__list">
                 <li class="faq__item">
-                    <div class="accordion__header js-faq-header faq_title_1"></div>
+                    <button type="button" class="accordion__header js-faq-header faq_title_1"></button>
                     <div class="accordion__body js-faq-body faq_answer_1"></div>
                 </li>
                 <li class="faq__item">
-                    <div class="accordion__header js-faq-header faq_title_2"></div>
+                    <button type="button" class="accordion__header js-faq-header faq_title_2"></button>
                     <div class="accordion__body js-faq-body faq_answer_2"></div>
                 </li>
                 <li class="faq__item">
-                    <div class="accordion__header js-faq-header faq_title_3"></div>
+                    <button type="button" class="accordion__header js-faq-header faq_title_3"></button>
                     <div class="accordion__body js-faq-body faq_answer_3"></div>
                 </li>
                 <li class="faq__item">
-                    <div class="accordion__header js-faq-header faq_title_4"></div>
+                    <button type="button" class="accordion__header js-faq-header faq_title_4"></button>
                     <div class="accordion__body js-faq-body faq_answer_4"></div>
                 </li>
                 <li class="faq__item">
-                    <div class="accordion__header js-faq-header faq_title_5"></div>
+                    <button type="button" class="accordion__header js-faq-header faq_title_5"></button>
                     <div class="accordion__body js-faq-body faq_answer_5"></div>
                 </li>
                 <li class="faq__item">
-                    <div class="accordion__header js-faq-header faq_title_6"></div>
+                    <button type="button" class="accordion__header js-faq-header faq_title_6"></button>
                     <div class="accordion__body js-faq-body faq_answer_6"></div>
                 </li>
             </ul>
-
-
-        </div>
+        </aside>
         <!--=====block_faq======-->
 
         <!--=====up_button======-->
-        <button class="scrollToTopBtn">
+        <button class="scrollToTopBtn" type="button" aria-label="Scroll to top">
             <svg style="width: 34px; height: 34px" xmlns="http://www.w3.org/2000/svg"
                  xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 32 32" id="Слой_1" version="1.1"
                  viewBox="0 0 32 32" xml:space="preserve">
@@ -831,8 +817,8 @@
     <main class="prefil">
         <div class="container">
             <div class="prefil__container">
-                <div class="item">
-                    <div class="prefil__label ">
+                <section class="prefil__product">
+                    <div class="prefil__label">
                         <div class="product-name">
                             <h4><span class="product-title order_title"></span></h4>
                         </div>
@@ -840,28 +826,34 @@
 
                     <div class="slider">
                         <div class="slider__selected">
-                            <img src="product/img/1_1.webp" alt="" id="selectedImage">
+                            <img src="product/img/1_1.webp" alt="Selected product" id="selectedImage">
                         </div>
-                        <ul class="slider__list">
-                            <li class="slider__item slider__item--active" data-src="product/img/1_1.webp">
+                        <div class="slider__list" aria-label="Choose a product variant">
+                            <button type="button" class="slider__item slider__item--active"
+                                    data-src="product/img/1_1.webp" aria-label="Choose product variant 1">
                                 <img src="product/img/1_1.webp" alt="">
-                            </li>
-                            <li class="slider__item" data-src="product/img/1_2.webp">
+                            </button>
+                            <button type="button" class="slider__item" data-src="product/img/1_2.webp"
+                                    aria-label="Choose product variant 2">
                                 <img src="product/img/1_2.webp" alt="">
-                            </li>
-                            <li class="slider__item" data-src="product/img/1_3.webp">
+                            </button>
+                            <button type="button" class="slider__item" data-src="product/img/1_3.webp"
+                                    aria-label="Choose product variant 3">
                                 <img src="product/img/1_3.webp" alt="">
-                            </li>
-                            <li class="slider__item" data-src="product/img/1_4.webp">
+                            </button>
+                            <button type="button" class="slider__item" data-src="product/img/1_4.webp"
+                                    aria-label="Choose product variant 4">
                                 <img src="product/img/1_4.webp" alt="">
-                            </li>
-                            <li class="slider__item" data-src="product/img/1_5.webp">
+                            </button>
+                            <button type="button" class="slider__item" data-src="product/img/1_5.webp"
+                                    aria-label="Choose product variant 5">
                                 <img src="product/img/1_5.webp" alt="">
-                            </li>
-                            <li class="slider__item" data-src="product/img/1_6.webp">
+                            </button>
+                            <button type="button" class="slider__item" data-src="product/img/1_6.webp"
+                                    aria-label="Choose product variant 6">
                                 <img src="product/img/1_6.webp" alt="">
-                            </li>
-                        </ul>
+                            </button>
+                        </div>
                     </div>
 
                     <script>
@@ -873,13 +865,13 @@
                             });
                         });
                     </script>
-                </div>
-                <div class="item">
-                    <div class="order-summary ">
+                </section>
+                <section class="prefil__checkout">
+                    <div class="order-summary">
                         <div class="order-summary__total">
                             <div class="order-summary__total-list">
+                                <div class="order-summary__separator"></div>
                                 <ul>
-                                    <div class="order-summary__separator"></div>
                                     <li class="order-summary__item order-summary__item--total">
                                         <div class="order-summary__item-name">Total</div>
                                         <div class="order-summary__item-value">
@@ -899,9 +891,9 @@
                             </div>
                             <div class="order-summary__separator"></div>
                             <div class="order-summary__total-price">
-                                <div style="font-size: 18px;" class="order-summary__item-name">Total Price</div>
+                                <div class="order-summary__item-name order-summary__item-name--total">Total Price</div>
                                 <div class="order-summary__item-value">
-                                    <p style="font-size: 18px; font-weight: 600;" class="order-summary__money order_total_price" id="money2">
+                                    <p class="order-summary__money order_total_price" id="money2">
 
                                     </p>
                                 </div>
@@ -942,58 +934,56 @@
                         <h2 class="form-container__title">Please complete your personal information:</h2>
                         <form id="newForm" class="form">
                             <div class="form__row">
-                                <div class="form__group form__group__half">
-                                    <input type="text" id="first-name" class="form__input" placeholder=" " required="">
+                                <div class="form__group form__group--half">
+                                    <input type="text" id="first-name" class="form__input" placeholder=" " required>
                                     <input type="hidden" id="red">
                                     <label for="first-name" class="form__label">First Name</label>
                                 </div>
-                                <div class="form__group form__group__half">
-                                    <input type="text" id="last-name" class="form__input" placeholder=" " required="">
+                                <div class="form__group form__group--half">
+                                    <input type="text" id="last-name" class="form__input" placeholder=" " required>
                                     <label for="last-name" class="form__label">Last Name</label>
                                 </div>
                             </div>
 
                             <div class="form__group">
-                                <input type="text" id="address" class="form__input" placeholder=" " required="">
+                                <input type="text" id="address" class="form__input" placeholder=" " required>
                                 <label for="address" class="form__label">Address</label>
                             </div>
 
                             <div class="form__row">
-                                <div class="form__group form__group__half">
+                                <div class="form__group form__group--half">
                                     <input type="number" id="postal-code" class="form__input" placeholder=" "
-                                           required="">
+                                           required>
                                     <label for="postal-code" class="form__label">Postal Code</label>
                                 </div>
-                                <div class="form__group form__group__half">
-                                    <input type="text" id="city" class="form__input" placeholder=" " required="">
+                                <div class="form__group form__group--half">
+                                    <input type="text" id="city" class="form__input" placeholder=" " required>
                                     <label for="city" class="form__label">City</label>
                                 </div>
                             </div>
 
-                            <div class="form__group focused">
+                            <div class="form__group">
                                 <div class="iti iti--separate-dial-code iti--show-flags">
-                                    <div class="iti iti--separate-dial-code iti--show-flags">
-                                        <div class="iti__flag-container">
-                                            <div class="iti__selected-flag">
-                                                <img class="flag_holder" src="" alt="flag"/>
-                                                <div class="country-input__value"></div>
-                                            </div>
+                                    <div class="iti__flag-container">
+                                        <div class="iti__selected-flag">
+                                            <img class="flag_holder" src="" alt="Country flag">
+                                            <div class="country-input__value"></div>
                                         </div>
-                                        <input type="text"
-                                               class="w100 iti__tel-input"
-                                               id="ph"
-                                               name="phone"
-                                               placeholder=""
-                                               autocomplete="tel-national"
-                                               pattern="\d{10,10}"
-                                               title="The phone number cannot start with 0 and must contain 10 digits (without the +1 prefix)."
-                                               required>
                                     </div>
+                                    <input type="text"
+                                           class="iti__tel-input"
+                                           id="ph"
+                                           name="phone"
+                                           aria-label="Phone number"
+                                           autocomplete="tel-national"
+                                           pattern="\d{10,10}"
+                                           title="The phone number cannot start with 0 and must contain 10 digits (without the +1 prefix)."
+                                           required>
                                 </div>
                             </div>
 
                             <div class="form__group">
-                                <input type="email" id="email" class="form__input" placeholder=" " required="">
+                                <input type="email" id="email" class="form__input" placeholder=" " required>
                                 <label for="email" class="form__label">Email Address</label>
                             </div>
 
@@ -1004,7 +994,7 @@
                         <div class="badge__title">TRUSTED WORKSHOP</div>
                         <div class="badge__subtitle">SECURE PAYMENT</div>
                     </div>
-                </div>
+                </section>
             </div>
         </div>
 

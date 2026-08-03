@@ -134,6 +134,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 10);
     }
 
+    function closeModal(modal) {
+        modal.style.display = 'none';
+        modal.classList.remove('fade', 'show');
+        document.body.classList.remove('modal-open');
+        overlay.classList.add('overlay-hidden');
+        isBoxOpened = false;
+    }
+
     const modalButton1 = document.querySelector('#modal-button1');
     const modalButton2 = document.querySelector('#modal-button2');
     const modalButton3 = document.querySelector('#modal-button3');
@@ -154,28 +162,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //=====confetti========
     modalButton1.addEventListener('click', () => {
-        modal1.style.display = 'none';
-        modal1.classList.remove('fade', 'show');
-        document.body.classList.remove('modal-open');
-        overlay.classList.add('overlay-hidden');
-        isBoxOpened = false;
+        closeModal(modal1);
     });
 
     modalButton2.addEventListener('click', () => {
-        modal2.style.display = 'none';
-        modal2.classList.remove('fade', 'show');
-        document.body.classList.remove('modal-open');
-        overlay.classList.add('overlay-hidden');
-        isBoxOpened = false;
+        closeModal(modal2);
     });
 
 
     modalButton3.addEventListener('click', () => {
-        modal3.style.display = 'none';
-        modal3.classList.remove('fade', 'show');
-        document.body.classList.remove('modal-open');
-        overlay.classList.add('overlay-hidden');
-        isBoxOpened = false;
+        closeModal(modal3);
 
         if (lender && prefil) {
             lender.classList.add('fade-out');
@@ -183,8 +179,6 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 lender.style.display = 'none';
 
-                hasPassedToPrefil = true;
-                localStorage.setItem('hasPassedToPrefil', 'true');
                 prefil.classList.add('fade-in');
                 prefil.classList.remove('fade');
                 prefil.style.display = 'block';
@@ -227,8 +221,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //=====flag_and_country_code========
 });
-
-
 
 
 
