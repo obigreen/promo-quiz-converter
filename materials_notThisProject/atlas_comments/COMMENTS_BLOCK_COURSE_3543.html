@@ -1,0 +1,2155 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Atlas Comments Engine Course: 3559 Legacy → Robust</title>
+  <style>
+    :root {
+      --bg: #0f1218;
+      --bg-elev: #151a23;
+      --bg-elev-2: #1b2230;
+      --bg-soft: #202a3b;
+      --text: #edf1f8;
+      --muted: #a7b0c0;
+      --line: #2a3447;
+      --accent: #68d3ad;
+      --accent-2: #f3c57a;
+      --danger: #ff9a9a;
+      --ok: #88e9bf;
+      --code-bg: #0f1622;
+      --code-head: #141d2c;
+      --chip: #222c3d;
+      --shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      color: var(--text);
+      background:
+        radial-gradient(900px 500px at -5% -10%, #1f2b3f 0%, transparent 60%),
+        radial-gradient(900px 500px at 110% -20%, #28311f 0%, transparent 60%),
+        var(--bg);
+      font-family: "Inter", "SF Pro Text", "Segoe UI", Arial, sans-serif;
+      line-height: 1.62;
+    }
+
+    .page {
+      width: min(1480px, 95vw);
+      margin: 20px auto 70px;
+    }
+
+    .hero {
+      background: linear-gradient(150deg, #161d2a 0%, #121822 100%);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 26px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(30px, 4vw, 48px);
+      line-height: 1.15;
+      letter-spacing: 0.01em;
+    }
+
+    .hero p {
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .chip {
+      border: 1px solid #35435d;
+      background: var(--chip);
+      border-radius: 999px;
+      padding: 5px 11px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #d2deef;
+    }
+
+    .layout {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: 320px minmax(0, 1fr);
+      gap: 18px;
+    }
+
+    @media (max-width: 1100px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 12px;
+      align-self: start;
+      max-height: calc(100vh - 24px);
+      overflow: auto;
+      background: var(--bg-elev);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      padding: 14px;
+    }
+
+    .sidebar h2 {
+      margin: 4px 0 12px;
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #c6cfde;
+    }
+
+    .sidebar a {
+      display: block;
+      color: #c3cce0;
+      text-decoration: none;
+      border-radius: 8px;
+      padding: 7px 9px;
+      margin-bottom: 2px;
+      font-size: 14px;
+      border: 1px solid transparent;
+    }
+
+    .sidebar a:hover {
+      background: #1f2838;
+      border-color: #36435c;
+      color: #ffffff;
+    }
+
+    .content {
+      background: var(--bg-elev);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      padding: 24px;
+      min-width: 0;
+    }
+
+    section {
+      margin-bottom: 30px;
+      scroll-margin-top: 14px;
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: clamp(24px, 2.5vw, 34px);
+      line-height: 1.2;
+    }
+
+    h3 {
+      margin: 18px 0 8px;
+      font-size: clamp(18px, 2vw, 24px);
+      line-height: 1.3;
+    }
+
+    h4 {
+      margin: 14px 0 8px;
+      font-size: 16px;
+      letter-spacing: 0.02em;
+      color: #d9e4f5;
+    }
+
+    p { margin: 10px 0; }
+
+    ul, ol {
+      margin: 10px 0;
+      padding-left: 22px;
+    }
+
+    li { margin-bottom: 6px; }
+
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 11px;
+      border-radius: 999px;
+      border: 1px solid #37537a;
+      color: #cde3ff;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      font-weight: 700;
+      margin-bottom: 8px;
+      background: #1b2537;
+    }
+
+    .point {
+      border: 1px solid #34435d;
+      background: var(--bg-elev-2);
+      border-radius: 14px;
+      padding: 14px;
+      margin: 12px 0;
+    }
+
+    .point h4 {
+      margin-top: 0;
+    }
+
+    .note,
+    .warn,
+    .ok {
+      border-radius: 10px;
+      border: 1px solid transparent;
+      padding: 12px 14px;
+      margin: 12px 0;
+      font-size: 14px;
+    }
+
+    .note {
+      background: #1e2839;
+      border-color: #3b4b67;
+      color: #d8e1f0;
+    }
+
+    .warn {
+      background: #352129;
+      border-color: #6b3a47;
+      color: #ffd7df;
+    }
+
+    .ok {
+      background: #1d3028;
+      border-color: #3d6d58;
+      color: #d6ffe8;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 14px;
+    }
+
+    th,
+    td {
+      border: 1px solid #33415a;
+      padding: 9px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #1c2638;
+      color: #e7f0ff;
+    }
+
+    td {
+      background: #171f2d;
+      color: #d2dcee;
+    }
+
+    .inline {
+      font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+      font-size: 0.93em;
+      border-radius: 6px;
+      border: 1px solid #31435f;
+      background: #1a2436;
+      padding: 2px 6px;
+      color: #e7eefb;
+    }
+
+    .code-wrap {
+      margin: 12px 0 16px;
+      border: 1px solid #33415a;
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--code-bg);
+      min-width: 0;
+    }
+
+    .code-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 8px 10px;
+      border-bottom: 1px solid #33415a;
+      background: var(--code-head);
+      color: #b7c7de;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .copy-btn {
+      border: 1px solid #49658b;
+      border-radius: 8px;
+      background: #22344d;
+      color: #dbe9ff;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 9px;
+      cursor: pointer;
+      transition: 0.18s ease;
+      white-space: nowrap;
+    }
+
+    .copy-btn:hover {
+      background: #2b4262;
+    }
+
+    .copy-btn.done {
+      border-color: #3d6d58;
+      background: #285742;
+      color: #d7ffe8;
+    }
+
+    pre {
+      margin: 0;
+      padding: 12px;
+      overflow: auto;
+      font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+      font-size: 12.5px;
+      line-height: 1.5;
+      color: #e6edf7;
+    }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, #32415b 20%, #32415b 80%, transparent 100%);
+      margin: 20px 0;
+    }
+
+    .tasklist li {
+      margin-bottom: 5px;
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="hero">
+      <h1>Учебник: Comments Engine (3559) от Legacy к Robust</h1>
+      <p>Формат курса: ты последовательно собираешь мини-лендинг только с блоком комментариев, сначала на старой рабочей архитектуре (где заложены слабые места), затем переписываешь тот же функционал на новую устойчивую архитектуру.</p>
+      <p>База курса в этой версии: <span class="inline">./3559_landing_archive</span> как legacy-источник и <span class="inline">./new/3559_landing_archive</span> как robust-источник.</p>
+      <div class="meta">
+        <span class="chip">Checkpoint 1: структура + html + css</span>
+        <span class="chip">Checkpoint 2: head/main-script + base js</span>
+        <span class="chip">Checkpoint 3: legacy comments v1</span>
+        <span class="chip">Checkpoint 4: robust comments v2</span>
+        <span class="chip">LTR + RTL</span>
+        <span class="chip">LocalStorage</span>
+        <span class="chip">1 live dynamic comment</span>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <h2>Содержание</h2>
+        <a href="#sec-0">0. Как пользоваться учебником</a>
+        <a href="#sec-1">1. Исходники и ориентиры</a>
+        <a href="#sec-2">2. Checkpoint 1: структура проекта</a>
+        <a href="#sec-3">3. Checkpoint 1: index.html блок comments</a>
+        <a href="#sec-4">4. Checkpoint 1: styles.css по шагам</a>
+        <a href="#sec-5">5. Checkpoint 2: head/main script</a>
+        <a href="#sec-6">6. Checkpoint 2: base scripts.js (без comments)</a>
+        <a href="#sec-7">7. Checkpoint 3: legacy comments v1</a>
+        <a href="#sec-8">8. Инженерная пауза перед рефакторингом</a>
+        <a href="#sec-9">9. Checkpoint 4: robust comments v2</a>
+        <a href="#sec-10">10. Сравнение v1 vs v2</a>
+        <a href="#sec-11">11. Чеклист регрессии</a>
+        <a href="#sec-12">12. План практики</a>
+      </aside>
+
+      <main class="content">
+        <section id="sec-0">
+          <span class="kicker">Раздел 0</span>
+          <h2>Как работать с этим учебником</h2>
+          <p>Это не справочник и не «кусок примера». Это рабочий маршрут разработки. Ты пишешь код в том же порядке, в каком пишет разработчик в реальном проекте.</p>
+
+          <div class="point">
+            <h4>Маршрут на весь курс</h4>
+            <ol>
+              <li>Собрать каркас проекта и comments-UI.</li>
+              <li>Поднять инфраструктуру: main-script в <span class="inline">head</span>, перевод, даты, макросы, общий JS runtime без логики комментариев.</li>
+              <li>Реализовать legacy-архитектуру comments v1: рабочую, но уязвимую.</li>
+              <li>Понять на семантическом уровне, почему v1 нестабильна.</li>
+              <li>Переписать тот же функционал на robust-архитектуру comments v2.</li>
+            </ol>
+          </div>
+
+          <div class="ok">
+            Важно: шаг «legacy v1» здесь не «плохой пример из статьи», а полноценный этап обучения. Ты осознанно собираешь работающую v1, фиксируешь ограничения, и только потом переходишь к v2.
+          </div>
+        </section>
+
+        <section id="sec-1">
+          <span class="kicker">Раздел 1</span>
+          <h2>Исходники и ориентиры по версиям</h2>
+          <p>Ниже источник правды для текущего состояния.</p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Роль</th>
+                <th>Путь</th>
+                <th>Что берём из него</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Legacy reference (v1)</td>
+                <td><span class="inline">./3559_landing_archive/js/scripts.js</span></td>
+                <td>Старый подход comments с разветвлением по static/dynamic, origin-флагами и смешанными путями сохранения.</td>
+              </tr>
+              <tr>
+                <td>Robust reference (v2)</td>
+                <td><span class="inline">./new/3559_landing_archive/js/scripts.js</span></td>
+                <td>Нормализация, safeRead/safeWrite, depth по DOM, единый контракт данных, корректная обработка live comments.</td>
+              </tr>
+              <tr>
+                <td>Current stylesheet pattern</td>
+                <td><span class="inline">./new/3559_landing_archive/css/styles.css</span></td>
+                <td>Организация LTR/RTL блоков, mini-reply, комментарные визуальные правила.</td>
+              </tr>
+              <tr>
+                <td>Current markup pattern</td>
+                <td><span class="inline">./new/3559_landing_archive/index.html</span></td>
+                <td>Структура comments блока, static nodes, hooks для reply/like/live updates.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="note">
+            В рамках этого курса мы создаём отдельный мини-проект с тем же подходом. Не редактируй рабочие лендинги во время прохождения этапов.
+          </div>
+        </section>
+
+        <section id="sec-2">
+          <span class="kicker">Checkpoint 1</span>
+          <h2>Структура проекта и файлов</h2>
+          <p>Сначала создаём файловую систему и пустые файлы. На этом этапе цель: чтобы у тебя был готов «скелет» курса.</p>
+
+          <div class="code-wrap">
+            <div class="code-head"><span>Структура mini-проекта</span><button class="copy-btn">Copy</button></div>
+            <pre><code>comments-engine-course/
+├─ index.html
+├─ css/
+│  └─ styles.css
+├─ js/
+│  └─ scripts.js
+├─ defaultproduct/
+│  ├─ css/
+│  │  └─ variables.css
+│  ├─ translate/
+│  │  └─ en.json
+│  └─ img/
+│     └─ US/
+│        ├─ comments_1_user.webp
+│        ├─ comments_1_like.webp
+│        ├─ comments_1_av1.webp
+│        ├─ comments_1_av2.webp
+│        ├─ comments_1_support.webp
+│        ├─ comments_1_rev2.webp
+│        ├─ comments_dynamic_1_av1.webp
+│        └─ comments_dynamic_1_rev1.webp
+└─ fonts/
+   ├─ Inter-Regular.woff2
+   └─ Inter-Bold.woff2</code></pre>
+          </div>
+
+          <div class="point">
+            <h4>Checkpoint 1.0 (что должно быть готово)</h4>
+            <ul class="tasklist">
+              <li>Все папки и файлы созданы.</li>
+              <li><span class="inline">index.html</span>, <span class="inline">styles.css</span>, <span class="inline">scripts.js</span> существуют и подключаются.</li>
+              <li>В проект добавлены базовые комментарные изображения.</li>
+              <li>Есть <span class="inline">en.json</span> c ключами comments.</li>
+            </ul>
+          </div>
+        </section>
+
+        <section id="sec-3">
+          <span class="kicker">Checkpoint 1</span>
+          <h2>index.html: каркас и comments-разметка</h2>
+          <p>Задача: сначала разметка и html-семантика. JS-логика комментариев будет позже. Здесь мы собираем дерево comments + статические узлы.</p>
+
+          <h3>Шаг 1. Базовый head и подключения</h3>
+          <div class="code-wrap">
+            <div class="code-head"><span>index.html — head</span><button class="copy-btn">Copy</button></div>
+            <pre><code>&lt;!doctype html&gt;
+&lt;html lang="en" dir="ltr"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8" /&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;
+  &lt;title&gt;Comments Engine Course&lt;/title&gt;
+
+  &lt;link rel="stylesheet" href="defaultproduct/css/variables.css?ver=1" /&gt;
+  &lt;link rel="stylesheet" href="css/styles.css?ver=1" /&gt;
+&lt;/head&gt;
+&lt;body&gt;</code></pre>
+          </div>
+
+          <h3>Шаг 2. Comments markup (статический baseline)</h3>
+          <div class="code-wrap">
+            <div class="code-head"><span>index.html — comments block</span><button class="copy-btn">Copy</button></div>
+            <pre><code>&lt;div class="container wrapper"&gt;
+  &lt;div id="comments"&gt;
+    &lt;!-- ===== block_comments_1_start ===== --&gt;
+    &lt;div class="comments-block"&gt;
+      &lt;div class="add-comment active"&gt;
+        &lt;h2 class="com__title"&gt;
+          &lt;p class="text_comments_1"&gt;&lt;/p&gt; &lt;span id="commentsTotal"&gt;28&lt;/span&gt;
+        &lt;/h2&gt;
+
+        &lt;div class="com__flex"&gt;
+          &lt;img loading="lazy" src="./{sub_id_28}/img/{country}/comments_1_user.webp"
+               onerror="handleImageError(this, 'comments_1_user.webp');"
+               alt="User" class="comment__avatar"&gt;
+
+          &lt;div class="relative-wrapper"&gt;
+            &lt;div class="relative"&gt;
+              &lt;textarea id="textarea" maxlength="800"&gt;&lt;/textarea&gt;
+              &lt;span class="placeholder text_comments_1_add_comment"&gt;&lt;/span&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;div class="comment-button-box"&gt;
+          &lt;div class="comment-button-right"&gt;
+            &lt;button aria-label="button" disabled class="disabled text_comments_1_post" id="postCommentBtn"&gt;&lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div class="comments comment-block"&gt;
+        &lt;div class="container"&gt;
+          &lt;ul class="comment__list list-reset" id="commentsList"&gt;
+            &lt;li class="comment__item" data-origin="static"&gt;
+              &lt;div class="comment__container"&gt;
+                &lt;div class="comment__avatar"&gt;
+                  &lt;img loading="lazy" src="./{sub_id_28}/img/{country}/comments_1_av1.webp"
+                       onerror="handleImageError(this, 'comments_1_av1.webp');" alt=""&gt;
+                &lt;/div&gt;
+                &lt;div class="comment__content"&gt;
+                  &lt;div class="comment__name text_comments_1-name-1"&gt;&lt;/div&gt;
+                  &lt;div class="comment__text text_comments_1_1"&gt;&lt;/div&gt;
+                  &lt;ul class="comment__actions list-reset"&gt;
+                    &lt;span&gt;
+                      &lt;img loading="lazy" src="./{sub_id_28}/img/{country}/comments_1_like.webp"
+                           onerror="handleImageError(this, 'comments_1_like.webp');" alt=""&gt;
+                    &lt;/span&gt;
+                    &lt;div class="likes_counter"&gt;62&lt;/div&gt;
+                  &lt;/ul&gt;
+                &lt;/div&gt;
+                &lt;div class="comment__time"&gt;
+                  &lt;span class="text_comments_1_1_time"&gt;&lt;/span&gt;
+                  &lt;span class="like-btn text_comments_1_like"&gt;&lt;/span&gt;
+                  &lt;span class="reply-btn text_comments_1_reply"&gt;&lt;/span&gt;
+                &lt;/div&gt;
+              &lt;/div&gt;
+
+              &lt;ul&gt;
+                &lt;li class="comment__item" data-origin="static"&gt;
+                  &lt;div class="comment__container"&gt;
+                    &lt;div class="comment__avatar"&gt;
+                      &lt;img loading="lazy" src="./{sub_id_28}/img/{country}/comments_1_support.webp"
+                           onerror="handleImageError(this, 'comments_1_support.webp');" alt=""&gt;
+                    &lt;/div&gt;
+                    &lt;div class="comment__content"&gt;
+                      &lt;div class="comment__name text_comments_1-name-support"&gt;&lt;/div&gt;
+                      &lt;div class="comment__text text_comments_1_3"&gt;&lt;/div&gt;
+                      &lt;ul class="comment__actions list-reset"&gt;
+                        &lt;span&gt;
+                          &lt;img loading="lazy" src="./{sub_id_28}/img/{country}/comments_1_like.webp"
+                               onerror="handleImageError(this, 'comments_1_like.webp');" alt=""&gt;
+                        &lt;/span&gt;
+                        &lt;div class="likes_counter"&gt;12&lt;/div&gt;
+                      &lt;/ul&gt;
+                    &lt;/div&gt;
+                    &lt;div class="comment__time"&gt;
+                      &lt;span class="text_comments_1_3_time"&gt;&lt;/span&gt;
+                      &lt;span class="like-btn text_comments_1_like"&gt;&lt;/span&gt;
+                      &lt;span class="reply-btn text_comments_1_reply"&gt;&lt;/span&gt;
+                    &lt;/div&gt;
+                  &lt;/div&gt;
+                &lt;/li&gt;
+              &lt;/ul&gt;
+            &lt;/li&gt;
+          &lt;/ul&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;!-- ===== block_comments_1_end ===== --&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;script src="js/scripts.js?ver=1"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+          </div>
+
+          <div class="note">
+            Семантика разметки: каждый <span class="inline">li.comment__item</span> — узел дерева. Вложенные <span class="inline">ul &gt; li.comment__item</span> — дочерние ответы. Это критично для вычисления глубины в robust v2.
+          </div>
+
+          <div class="point">
+            <h4>Checkpoint 1.1</h4>
+            <ul class="tasklist">
+              <li>HTML блок comments отрисовывается.</li>
+              <li>Нет JS-ошибок при открытии страницы.</li>
+              <li>Кнопка Post существует и disabled.</li>
+              <li>Видны хотя бы 1–2 статических комментария.</li>
+            </ul>
+          </div>
+        </section>
+
+        <section id="sec-4">
+          <span class="kicker">Checkpoint 1</span>
+          <h2>styles.css: пишем по частям, не «всё сразу»</h2>
+          <p>В этом разделе стиль специально разбит на логические порции: база контейнера, карточка комментария, mini-reply, RTL mirror.</p>
+
+          <h3>Шаг 1. Базовая рамка</h3>
+          <div class="code-wrap">
+            <div class="code-head"><span>styles.css — base shell</span><button class="copy-btn">Copy</button></div>
+            <pre><code>* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Inter, Arial, sans-serif;
+  background: #eceff4;
+  color: #101622;
+}
+
+.container.wrapper {
+  width: min(760px, 94vw);
+  margin: 18px auto;
+}
+
+.list-reset {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.comments-block {
+  background: #fff;
+  border: 1px solid #d9e1ef;
+  border-radius: 12px;
+  padding: 14px;
+}</code></pre>
+          </div>
+
+          <h3>Шаг 2. Верхняя форма + список комментариев</h3>
+          <div class="code-wrap">
+            <div class="code-head"><span>styles.css — comment form + list</span><button class="copy-btn">Copy</button></div>
+            <pre><code>.com__title {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0 0 12px;
+}
+
+.com__flex {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.com__flex &gt; img,
+.comment__avatar img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+}
+
+.relative { position: relative; flex: 1; }
+
+#textarea {
+  width: 100%;
+  min-height: 70px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  resize: none;
+  padding: 10px 12px;
+  font: inherit;
+  background: #f9fafb;
+}
+
+#textarea:focus {
+  border-color: #2563eb;
+  outline: none;
+  background: #fff;
+}
+
+.placeholder {
+  position: absolute;
+  top: 10px;
+  left: 14px;
+  color: #a0a7b6;
+  pointer-events: none;
+}
+
+.comment-button-box {
+  margin-top: 8px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.comment-button-right button {
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-weight: 700;
+  cursor: pointer;
+  background: #2563eb;
+  color: #fff;
+}
+
+.comment-button-right button.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.comment__item { margin-bottom: 10px; }
+.comment__item &gt; ul,
+.comment__item &gt; ul.replies {
+  margin-top: 8px;
+  padding-left: 44px;
+}
+
+.comment__container {
+  display: grid;
+  grid-template-columns: 40px 1fr auto;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.comment__content {
+  border-radius: 16px;
+  background: #eceff4;
+  padding: 7px 10px;
+  min-width: 0;
+}
+
+.comment__name {
+  font-size: 12px;
+  font-weight: 700;
+  color: #40547a;
+  margin-bottom: 3px;
+}
+
+.comment__text {
+  font-size: 14px;
+  color: #101622;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.comment__actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 5px;
+  cursor: pointer;
+}
+
+.comment__actions img {
+  width: 15px;
+  height: 15px;
+}
+
+.likes_counter {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.comment__time {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 12px;
+  color: #687180;
+}
+
+.like-btn,
+.reply-btn {
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.likes_counter.incremented {
+  color: #1d4ed8;
+}
+
+.comment__container.is-reply-target {
+  outline: 2px solid rgba(37, 99, 235, 0.25);
+  transition: outline-color 0.6s;
+}
+
+.comment__container.is-reply-target.fade {
+  outline-color: transparent;
+}</code></pre>
+          </div>
+
+          <h3>Шаг 3. mini-reply (в стиле финального 3559)</h3>
+          <div class="code-wrap">
+            <div class="code-head"><span>styles.css — mini reply (LTR + RTL)</span><button class="copy-btn">Copy</button></div>
+            <pre><code>/* ===== block_comments_1_mini_reply ===== */
+[dir=ltr] .mini-reply-form {
+  margin-left: 52px;
+  margin-bottom: 8px;
+  border-left: 2px solid rgba(0, 0, 0, 0.05);
+  padding-left: 10px;
+  width: 100%;
+  max-width: calc(100% - 52px);
+  display: inline-block;
+  box-sizing: border-box;
+}
+
+[dir=ltr] .mini-reply-form .relative {
+  position: relative;
+}
+
+[dir=ltr] .mini-reply-form .mini-textarea {
+  width: 100%;
+  min-height: 60px;
+  max-width: 100%;
+  resize: none;
+  border-radius: 12px;
+  border: 1px solid #cbd5e1;
+  padding: 8px 12px;
+  font-family: inherit;
+  font-size: 15px;
+  background: #f9fafb;
+  outline: none;
+}
+
+[dir=ltr] .mini-reply-form .mini-textarea:focus {
+  border-color: #2563eb;
+  background: #fff;
+}
+
+[dir=ltr] .mini-reply-form .comment-button-box {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 6px;
+}
+
+[dir=ltr] .mini-reply-form .comment-button-right button {
+  font-size: 14px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+[dir=ltr] .mini-reply-form .mini-cancel-btn {
+  margin-right: 6px;
+}
+
+[dir=ltr] .mini-reply-form .mini-post-btn {
+  color: #fff;
+}
+
+[dir=ltr] .mini-reply-form .mini-post-btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ===== block_comments_1_mini_reply ===== */
+[dir=rtl] .mini-reply-form {
+  margin-right: 52px;
+  margin-bottom: 8px;
+  border-right: 2px solid rgba(0, 0, 0, 0.05);
+  padding-right: 10px;
+  width: 100%;
+  max-width: calc(100% - 52px);
+  display: inline-block;
+  box-sizing: border-box;
+}
+
+[dir=rtl] .mini-reply-form .relative {
+  position: relative;
+}
+
+[dir=rtl] .mini-reply-form .mini-textarea {
+  width: 100%;
+  min-height: 60px;
+  max-width: 100%;
+  resize: none;
+  border-radius: 12px;
+  border: 1px solid #cbd5e1;
+  padding: 8px 12px;
+  font-family: inherit;
+  font-size: 15px;
+  background: #f9fafb;
+  outline: none;
+}
+
+[dir=rtl] .mini-reply-form .mini-textarea:focus {
+  border-color: #2563eb;
+  background: #fff;
+}
+
+[dir=rtl] .mini-reply-form .comment-button-box {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 6px;
+}
+
+[dir=rtl] .mini-reply-form .comment-button-right button {
+  font-size: 14px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+[dir=rtl] .mini-reply-form .mini-cancel-btn {
+  margin-left: 6px;
+}
+
+[dir=rtl] .mini-reply-form .mini-post-btn {
+  color: #fff;
+}
+
+[dir=rtl] .mini-reply-form .mini-post-btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}</code></pre>
+          </div>
+
+          <h3>Шаг 4. JSON только для comments</h3>
+          <div class="code-wrap">
+            <div class="code-head"><span>defaultproduct/translate/en.json</span><button class="copy-btn">Copy</button></div>
+            <pre><code>{
+  "text_comments_1": "Comments&ensp;",
+  "text_comments_1_add_comment": "Add a comment",
+  "text_comments_1_post": "Post",
+  "text_comments_1_like": "Like",
+  "text_comments_1_reply": "Reply",
+  "text_comments_1_cancel": "Cancel",
+
+  "text_comments_1_1": "Has anyone here actually received the {_product}? I signed up but I'm cautious.",
+  "text_comments_1_1_time": "&lt;span class='text_date_DMY'&gt;&lt;/span&gt;",
+  "text_comments_1_2": "I thought it was hype too. Did the short quiz and got confirmation.",
+  "text_comments_1_2_time": "&lt;span class='text_date_DMY_m1'&gt;&lt;/span&gt;",
+  "text_comments_1_3": "If you don't see the confirmation, check Spam/Promotions.",
+  "text_comments_1_3_time": "&lt;span class='text_date_DMY_m1'&gt;&lt;/span&gt;",
+
+  "text_comments_1-name-1": "{_name1}",
+  "text_comments_1-name-support": "{_supportname}'s support"
+}</code></pre>
+          </div>
+
+          <div class="point">
+            <h4>Checkpoint 1.2</h4>
+            <ul class="tasklist">
+              <li>Страница визуально похожа на comments-блок, без глобального JS.</li>
+              <li>Mini-reply стили подключены в LTR и RTL вариантах.</li>
+              <li>В разметке нет inline-стилей для comments-части.</li>
+            </ul>
+          </div>
+        </section>
+
+        <section id="sec-5">
+          <span class="kicker">Checkpoint 2</span>
+          <h2>Main Script в head: параметры и fallback-изображения</h2>
+          <p>Теперь добавляем в <span class="inline">head</span> runtime-параметры и функцию fallback для картинок. Это фундамент для последующей логики.</p>
+
+          <div class="code-wrap">
+            <div class="code-head"><span>index.html — block_main_script_start</span><button class="copy-btn">Copy</button></div>
+            <pre><code>&lt;script&gt;
+  function handleImageError(img, fileName) {
+    const basePaths = [
+      `./{sub_id_28}/img/{country}/`,
+      `./{sub_id_28}/img/`,
+      `./img/{country}/`,
+      `./img/`
+    ];
+
+    let attemptIndex = 0;
+
+    function tryNextSource() {
+      if (attemptIndex &lt; basePaths.length) {
+        img.onerror = tryNextSource;
+        img.src = basePaths[attemptIndex] + fileName;
+        attemptIndex++;
+      } else {
+        img.style.display = 'none';
+      }
+    }
+
+    tryNextSource();
+  }
+&lt;/script&gt;
+
+&lt;script&gt;
+  function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+  }
+
+  let lId = '{landing_id}';
+  let cId = '{campaign_id}';
+  let langCode = '{language}';
+  let productName = '{sub_id_28}';
+  let countryCurrent = '{country}';
+  let save = getQueryParam('save');
+  if (save == null) save = true;
+  else if (save === 'false') save = false;
+
+  let offerTitle = '{_offertitle}';
+  let product = '{_extra_param_4}';
+  if (product == '' || product.includes('extra_param_') || product.includes('name2')) {
+    product = offerTitle;
+  }
+&lt;/script&gt;</code></pre>
+          </div>
+
+          <div class="note">
+            Семантика: main-script в head нужен, потому что эти параметры используются во многих функциях runtime, включая перевод, localStorage namespace и макросы текстов.
+          </div>
+        </section>
+
+        <section id="sec-6">
+          <span class="kicker">Checkpoint 2</span>
+          <h2>scripts.js до comments: инфраструктура страницы</h2>
+          <p>На этом этапе comments-движка ещё нет. Мы пишем слой, который подготавливает окружение: переводы, даты, общие утилиты хранения.</p>
+
+          <h3>Шаг 1. Утилиты хранения и ключи</h3>
+          <div class="code-wrap">
+            <div class="code-head"><span>scripts.js — storage utils</span><button class="copy-btn">Copy</button></div>
+            <pre><code>function saveToLocalStorage(param, value) {
+  localStorage.setItem(lId + '_' + cId + '_' + param, value);
+}
+
+function getFromLocalStorage(param) {
+  return localStorage.getItem(lId + '_' + cId + '_' + param);
+}
+
+function safeReadJSON(key, fallback) {
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) return fallback;
+    const parsed = JSON.parse(raw);
+    return parsed === null ? fallback : parsed;
+  } catch {
+    return fallback;
+  }
+}
+
+function safeWriteJSON(key, value) {
+  localStorage.setItem(key, JSON.stringify(value));
+}</code></pre>
+          </div>
+
+          <h3>Семантика шага 1</h3>
+          <div class="point">
+            <h4>Что означает <span class="inline">lId + '_' + cId + '_' + param</span></h4>
+            <p>Ты формируешь namespace ключа в localStorage. Это защищает от пересечения данных между разными лендингами и кампаниями.</p>
+            <p>Почему важно: если не делать namespace, комментарии одного лендинга могут появиться в другом.</p>
+          </div>
+
+          <h3>Шаг 2. Переводы + макросы + даты</h3>
+          <div class="code-wrap">
+            <div class="code-head"><span>scripts.js — i18n + macros + date</span><button class="copy-btn">Copy</button></div>
+            <pre><code>const defaultLang = 'en';
+const defaultProductName = 'defaultproduct';
+const rtlLangs = ['ar', 'he', 'fa', 'ur', 'ps', 'sd', 'ckb', 'mt'];
+let translation = null;
+
+function getLangCode() {
+  const raw = navigator.language || navigator.userLanguage || 'en';
+  return raw.substring(0, 2).toLowerCase();
+}
+
+async function loadLangData(lang) {
+  if (productName === '{sub_id_28}' || !productName) {
+    productName = defaultProductName;
+  }
+
+  try {
+    const response = await fetch(`${productName}/translate/${lang}.json`);
+    if (!response.ok) throw new Error(`Language file not found: ${lang}`);
+    return await response.json();
+  } catch {
+    if (lang !== defaultLang) return loadLangData(defaultLang);
+    throw new Error('Cannot load translation file');
+  }
+}
+
+function expandMacros(text) {
+  if (typeof text !== 'string') return text;
+
+  const macroMap = {
+    '{_product}': () => product,
+    '{_supportname}': () => 'UGG',
+    '{_name1}': () => 'Alise Djns',
+    '{_name2}': () => 'Sam Pit'
+  };
+
+  let out = text;
+  for (const [token, getter] of Object.entries(macroMap)) {
+    out = out.replaceAll(token, getter());
+  }
+  return out;
+}
+
+function formatDateDMY(date) {
+  const d = String(date.getDate()).padStart(2, '0');
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const y = date.getFullYear();
+  return `${d}.${m}.${y}`;
+}
+
+function setDates() {
+  const now = new Date();
+  const map = {
+    '.text_date_DMY': 0,
+    '.text_date_DMY_m1': -1,
+    '.text_date_DMY_m2': -2
+  };
+
+  Object.entries(map).forEach(([selector, offset]) => {
+    const date = new Date(now);
+    date.setDate(now.getDate() + offset);
+    const value = formatDateDMY(date);
+
+    document.querySelectorAll(selector).forEach((el) => {
+      el.textContent = value;
+    });
+  });
+}</code></pre>
+          </div>
+
+          <h3>Семантика шага 2</h3>
+          <div class="point">
+            <h4>Почему здесь много функций, а не один большой блок</h4>
+            <ul>
+              <li><span class="inline">loadLangData</span> отвечает только за сеть и fallback языка.</li>
+              <li><span class="inline">expandMacros</span> отвечает только за замену токенов.</li>
+              <li><span class="inline">setDates</span> отвечает только за time-плейсхолдеры.</li>
+            </ul>
+            <p>Так легче тестировать и переиспользовать каждую часть независимо.</p>
+          </div>
+
+          <h3>Шаг 3. Применение переводов</h3>
+          <div class="code-wrap">
+            <div class="code-head"><span>scripts.js — applyTranslations</span><button class="copy-btn">Copy</button></div>
+            <pre><code>function applyTranslations(dict) {
+  Object.entries(dict).forEach(([key, value]) => {
+    const resolved = expandMacros(value);
+    const nodes = document.querySelectorAll(`.${key}`);
+    if (!nodes.length) return;
+
+    nodes.forEach((node) => {
+      if (key.endsWith('_time')) {
+        node.innerHTML = resolved;
+      } else {
+        node.innerHTML = resolved;
+      }
+    });
+  });
+}</code></pre>
+          </div>
+
+          <h3>Шаг 4. Общая инициализация (без comments)</h3>
+          <div class="code-wrap">
+            <div class="code-head"><span>scripts.js — init runtime</span><button class="copy-btn">Copy</button></div>
+            <pre><code>async function initBaseRuntime() {
+  if (langCode === '{language}') {
+    langCode = getLangCode();
+  }
+
+  translation = await loadLangData(langCode.toLowerCase());
+
+  if (rtlLangs.includes(langCode.toLowerCase())) {
+    document.documentElement.setAttribute('dir', 'rtl');
+  } else {
+    document.documentElement.setAttribute('dir', 'ltr');
+  }
+
+  applyTranslations(translation);
+  setDates();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  initBaseRuntime().catch((e) => {
+    console.error('initBaseRuntime error', e);
+  });
+});</code></pre>
+          </div>
+
+          <div class="point">
+            <h4>Checkpoint 2</h4>
+            <ul class="tasklist">
+              <li>Язык корректно определяется и выставляет <span class="inline">dir</span>.</li>
+              <li>Тексты comments подставляются из <span class="inline">en.json</span>.</li>
+              <li>Временные метки заполняются датами.</li>
+              <li>На странице всё ещё нет runtime ошибок.</li>
+            </ul>
+          </div>
+        </section>
+
+        <section id="sec-7">
+          <span class="kicker">Checkpoint 3</span>
+          <h2>Legacy comments v1: сначала пишем старую рабочую архитектуру</h2>
+          <p>Теперь ты осознанно пишешь v1. Она работает для пользователя, но имеет архитектурные слабости. Это обязательный этап курса.</p>
+
+          <div class="warn">
+            Важно: v1 здесь не «мок». Это рабочий код, который действительно создаёт комментарии/реплаи/лайки и хранит их в localStorage, включая один динамический приходящий комментарий.
+          </div>
+
+          <h3>Шаг 1. Инициализация comments-блока</h3>
+          <div class="code-wrap">
+            <div class="code-head"><span>legacy v1 — boot + state</span><button class="copy-btn">Copy</button></div>
+            <pre><code>function initCommentsLegacyV1() {
+  const commentBlocks = document.querySelectorAll('.comments-block');
+
+  commentBlocks.forEach((block, blockIndex) => {
+    const textarea = block.querySelector('#textarea');
+    const postBtn = block.querySelector('#postCommentBtn');
+    const commentsList = block.querySelector('#commentsList');
+    const totalEl = block.querySelector('#commentsTotal');
+
+    if (!textarea || !postBtn || !commentsList) return;
+
+    const storageKey = `user_comments_block_${blockIndex}`;
+    const staticReplyKey = `user_replies_block_${blockIndex}`;
+    let savedComments = safeReadJSON(storageKey, []);
+
+    let replyCtx = null;
+
+    // ... продолжим в следующих шагах
+  });
+}</code></pre>
+          </div>
+
+          <div class="point">
+            <h4>Семантика шага 1</h4>
+            <p><span class="inline">replyCtx</span> — временный контекст «на какой комментарий сейчас отвечаем». Он хранит тип ветки и ссылку на родительский узел.</p>
+          </div>
+
+          <h3>Шаг 2. Минимальный рендер пользовательского комментария</h3>
+          <div class="code-wrap">
+            <div class="code-head"><span>legacy v1 — renderUserComment</span><button class="copy-btn">Copy</button></div>
+            <pre><code>function renderUserCommentV1(c, list) {
+  const li = document.createElement('li');
+  li.classList.add('comment__item');
+  li.dataset.id = c.id;
+  li.dataset.origin = 'user';
+
+  li.innerHTML = `
+    &lt;div class="comment__container"&gt;
+      &lt;div class="comment__avatar"&gt;
+        &lt;img loading="lazy" src="./{sub_id_28}/img/{country}/comments_1_user.webp"
+             onerror="handleImageError(this, 'comments_1_user.webp');" alt="User"&gt;
+      &lt;/div&gt;
+      &lt;div class="comment__content"&gt;
+        &lt;div class="comment__name"&gt;${c.name}&lt;/div&gt;
+        &lt;div class="comment__text"&gt;${c.text}&lt;/div&gt;
+        &lt;ul class="comment__actions list-reset" style="cursor:pointer"&gt;
+          &lt;span&gt;
+            &lt;img loading="lazy" src="./{sub_id_28}/img/{country}/comments_1_like.webp"
+                 onerror="handleImageError(this, 'comments_1_like.webp');" alt=""&gt;
+          &lt;/span&gt;
+          &lt;div class="likes_counter"&gt;${c.likes || 0}&lt;/div&gt;
+        &lt;/ul&gt;
+      &lt;/div&gt;
+      &lt;div class="comment__time"&gt;
+        &lt;span&gt;${c.date}&lt;/span&gt;
+        &lt;span class="like-btn text_comments_1_like"&gt;Like&lt;/span&gt;
+        &lt;span class="reply-btn text_comments_1_reply"&gt;Reply&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;`;
+
+  list.prepend(li);
+  return li;
+}</code></pre>
+          </div>
+
+          <h3>Шаг 3. Публикация top-level комментария</h3>
+          <div class="code-wrap">
+            <div class="code-head"><span>legacy v1 — post top level</span><button class="copy-btn">Copy</button></div>
+            <pre><code>function wirePostTopLevelV1(textarea, postBtn, commentsList, storageKey, totalEl, savedCommentsRef) {
+  function updateTotal() {
+    if (!totalEl) return;
+    totalEl.textContent = String(document.querySelectorAll('.comment__item').length);
+  }
+
+  textarea.addEventListener('input', () => {
+    const text = textarea.value.trim();
+    postBtn.disabled = !text;
+    postBtn.classList.toggle('disabled', !text);
+  });
+
+  postBtn.addEventListener('click', () => {
+    const text = textarea.value.trim();
+    if (!text) return;
+
+    const c = {
+      id: `${Date.now()}_${Math.random().toString(16).slice(2)}`,
+      name: 'You',
+      text,
+      likes: 0,
+      liked: false,
+      date: formatDateDMY(new Date()),
+      replies: []
+    };
+
+    savedCommentsRef.push(c);
+    safeWriteJSON(storageKey, savedCommentsRef);
+    renderUserCommentV1(c, commentsList);
+
+    textarea.value = '';
+    postBtn.disabled = true;
+    postBtn.classList.add('disabled');
+
+    updateTotal();
+  });
+}</code></pre>
+          </div>
+
+          <h3>Шаг 4. Inline mini-reply форма для любого узла</h3>
+          <div class="code-wrap">
+            <div class="code-head"><span>legacy v1 — inline reply form</span><button class="copy-btn">Copy</button></div>
+            <pre><code>function showInlineReplyFormV1(item, onSubmit) {
+  const existing = item.querySelector('.mini-reply-form');
+  if (existing) {
+    existing.remove();
+    return;
+  }
+
+  document.querySelectorAll('.mini-reply-form').forEach((f) => f.remove());
+
+  const form = document.createElement('div');
+  form.className = 'mini-reply-form';
+  form.innerHTML = `
+    &lt;div class="relative"&gt;
+      &lt;textarea class="mini-textarea" maxlength="800"&gt;&lt;/textarea&gt;
+    &lt;/div&gt;
+    &lt;div class="comment-button-box"&gt;
+      &lt;div class="comment-button-right"&gt;
+        &lt;button type="button" class="mini-cancel-btn"&gt;Cancel&lt;/button&gt;
+        &lt;button type="button" class="mini-post-btn disabled" disabled&gt;Post&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;`;
+
+  item.appendChild(form);
+
+  const textarea = form.querySelector('.mini-textarea');
+  const cancel = form.querySelector('.mini-cancel-btn');
+  const post = form.querySelector('.mini-post-btn');
+
+  textarea.addEventListener('input', () => {
+    const valid = textarea.value.trim().length &gt; 0;
+    post.disabled = !valid;
+    post.classList.toggle('disabled', !valid);
+  });
+
+  cancel.addEventListener('click', () => form.remove());
+
+  post.addEventListener('click', () => {
+    const text = textarea.value.trim();
+    if (!text) return;
+    onSubmit(text);
+    form.remove();
+  });
+}</code></pre>
+          </div>
+
+          <h3>Шаг 5. Legacy-правило depth через origin-флаги (уязвимый момент)</h3>
+          <div class="code-wrap">
+            <div class="code-head"><span>legacy v1 — renderReply + origin flags</span><button class="copy-btn">Copy</button></div>
+            <pre><code>function ensureRepliesContainerV1(node) {
+  let replies = node.querySelector(':scope &gt; ul.replies');
+  if (!replies) {
+    replies = document.createElement('ul');
+    replies.classList.add('replies');
+    node.appendChild(replies);
+  }
+  return replies;
+}
+
+function renderReplyV1(parentNode, c, belongsToStatic, author = 'user') {
+  const replies = ensureRepliesContainerV1(parentNode);
+  const li = document.createElement('li');
+  li.classList.add('comment__item');
+  li.dataset.id = c.id;
+
+  const parentOrigin = parentNode.dataset.origin;
+  const isSecondLevel = parentOrigin === 'reply' || parentOrigin === 'reply-stop';
+
+  if (belongsToStatic) {
+    li.dataset.staticSid = parentNode.dataset.staticSid || parentNode.dataset.sid;
+    li.dataset.origin = isSecondLevel ? 'reply-stop' : 'reply';
+  } else {
+    li.dataset.origin = isSecondLevel ? 'reply-stop' : 'reply';
+  }
+
+  const allowReply = li.dataset.origin !== 'reply-stop';
+
+  li.innerHTML = `
+    &lt;div class="comment__container"&gt;
+      &lt;div class="comment__avatar"&gt;
+        &lt;img loading="lazy" src="./{sub_id_28}/img/{country}/comments_1_user.webp"
+             onerror="handleImageError(this, 'comments_1_user.webp');" alt="User"&gt;
+      &lt;/div&gt;
+      &lt;div class="comment__content"&gt;
+        &lt;div class="comment__name"&gt;${c.name}&lt;/div&gt;
+        &lt;div class="comment__text"&gt;${c.text}&lt;/div&gt;
+        &lt;ul class="comment__actions list-reset" style="cursor:pointer"&gt;
+          &lt;span&gt;
+            &lt;img loading="lazy" src="./{sub_id_28}/img/{country}/comments_1_like.webp"
+                 onerror="handleImageError(this, 'comments_1_like.webp');" alt=""&gt;
+          &lt;/span&gt;
+          &lt;div class="likes_counter"&gt;${c.likes || 0}&lt;/div&gt;
+        &lt;/ul&gt;
+      &lt;/div&gt;
+      &lt;div class="comment__time"&gt;
+        &lt;span&gt;${c.date}&lt;/span&gt;
+        &lt;span class="like-btn text_comments_1_like"&gt;Like&lt;/span&gt;
+        ${allowReply ? '&lt;span class="reply-btn text_comments_1_reply"&gt;Reply&lt;/span&gt;' : ''}
+      &lt;/div&gt;
+    &lt;/div&gt;`;
+
+  replies.appendChild(li);
+  return li;
+}</code></pre>
+          </div>
+
+          <div class="warn">
+            Это центральный уязвимый участок v1: limit глубины привязан к <span class="inline">origin</span> (derived flag), а не к реальной глубине дерева. Из-за этого похожие ветки могли вести себя по-разному.
+          </div>
+
+          <h3>Шаг 6. Сохранение ответов: static и dynamic в разных ветках</h3>
+          <div class="code-wrap">
+            <div class="code-head"><span>legacy v1 — reply save branches</span><button class="copy-btn">Copy</button></div>
+            <pre><code>function findByIdV1(arr, id) {
+  for (const c of arr) {
+    if (c.id === id) return c;
+    if (Array.isArray(c.replies)) {
+      const x = findByIdV1(c.replies, id);
+      if (x) return x;
+    }
+  }
+  return null;
+}
+
+function onReplySubmitV1(item, text, context) {
+  const newComment = {
+    id: `${Date.now()}_${Math.random().toString(16).slice(2)}`,
+    name: 'You',
+    text,
+    likes: 0,
+    liked: false,
+    date: formatDateDMY(new Date()),
+    replies: []
+  };
+
+  const isStaticRoot = item.dataset.origin === 'static';
+  const isStaticChild = !!item.dataset.staticSid;
+
+  if (isStaticRoot) {
+    const key = `${context.staticReplyKey}_${item.dataset.sid}`;
+    const arr = safeReadJSON(key, []);
+    arr.push(newComment);
+    safeWriteJSON(key, arr);
+    renderReplyV1(item, newComment, true, 'user');
+    return;
+  }
+
+  if (isStaticChild) {
+    const key = `${context.staticReplyKey}_${item.dataset.staticSid}`;
+    const arr = safeReadJSON(key, []);
+    const parent = findByIdV1(arr, item.dataset.id);
+    if (parent) {
+      if (!Array.isArray(parent.replies)) parent.replies = [];
+      parent.replies.push(newComment);
+      safeWriteJSON(key, arr);
+      renderReplyV1(item, newComment, true, 'user');
+    }
+    return;
+  }
+
+  const parent = findByIdV1(context.savedComments, item.dataset.id);
+  if (parent) {
+    if (!Array.isArray(parent.replies)) parent.replies = [];
+    parent.replies.push(newComment);
+    safeWriteJSON(context.storageKey, context.savedComments);
+    renderReplyV1(item, newComment, false, 'user');
+  }
+}</code></pre>
+          </div>
+
+          <h3>Шаг 7. Один динамический приходящий комментарий (legacy mini-feed)</h3>
+          <div class="code-wrap">
+            <div class="code-head"><span>legacy v1 — 1 live comment</span><button class="copy-btn">Copy</button></div>
+            <pre><code>function pushOneLiveCommentV1(commentsList, storageKey, savedComments) {
+  const payload = {
+    id: `live_${Date.now()}`,
+    name: 'Juli',
+    text: 'Not usually a commenter, but this time it actually worked for me.',
+    likes: 14,
+    liked: false,
+    date: formatDateDMY(new Date()),
+    replies: [],
+    origin: 'live',
+    avatar: 'dynamic',
+    dynIndex: 1
+  };
+
+  savedComments.push(payload);
+  safeWriteJSON(storageKey, savedComments);
+
+  const node = renderUserCommentV1(payload, commentsList);
+  node.dataset.author = 'dynamic';
+}
+
+// вызывать один раз через таймер
+setTimeout(() =&gt; {
+  // pushOneLiveCommentV1(...)
+}, 15000);</code></pre>
+          </div>
+
+          <h3>Шаг 8. Сборка legacy v1 целиком</h3>
+          <div class="code-wrap">
+            <div class="code-head"><span>legacy v1 — final assembly</span><button class="copy-btn">Copy</button></div>
+            <pre><code>function initCommentsLegacyV1() {
+  const blocks = document.querySelectorAll('.comments-block');
+
+  blocks.forEach((block, blockIndex) => {
+    const textarea = block.querySelector('#textarea');
+    const postBtn = block.querySelector('#postCommentBtn');
+    const commentsList = block.querySelector('#commentsList');
+    const totalEl = block.querySelector('#commentsTotal');
+
+    if (!textarea || !postBtn || !commentsList) return;
+
+    const storageKey = `user_comments_block_${blockIndex}`;
+    const staticReplyKey = `user_replies_block_${blockIndex}`;
+    let savedComments = safeReadJSON(storageKey, []);
+
+    // restore saved user/live comments
+    savedComments.forEach((c) => renderUserCommentV1(c, commentsList));
+
+    // enable post top-level
+    wirePostTopLevelV1(textarea, postBtn, commentsList, storageKey, totalEl, savedComments);
+
+    // reply & like delegation
+    block.addEventListener('click', (e) => {
+      const item = e.target.closest('.comment__item');
+      if (!item) return;
+
+      if (e.target.classList.contains('reply-btn')) {
+        showInlineReplyFormV1(item, (text) => {
+          onReplySubmitV1(item, text, {
+            storageKey,
+            staticReplyKey,
+            savedComments
+          });
+        });
+        return;
+      }
+
+      if (e.target.classList.contains('like-btn') || e.target.closest('.comment__actions')) {
+        const key = `like_${item.dataset.id}`;
+        const wasLiked = localStorage.getItem(key) === 'true';
+        const counter = item.querySelector('.likes_counter');
+        if (!counter) return;
+
+        const oldLikes = Number(counter.textContent) || 0;
+        counter.textContent = wasLiked ? oldLikes - 1 : oldLikes + 1;
+        counter.classList.toggle('incremented', !wasLiked);
+        localStorage.setItem(key, wasLiked ? 'false' : 'true');
+      }
+    });
+
+    // one live incoming comment
+    setTimeout(() => {
+      pushOneLiveCommentV1(commentsList, storageKey, savedComments);
+    }, 15000);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', initCommentsLegacyV1);</code></pre>
+          </div>
+
+          <div class="point">
+            <h4>Checkpoint 3 (должно работать)</h4>
+            <ul class="tasklist">
+              <li>Можно оставить top-level комментарий.</li>
+              <li>Можно ответить на комментарий и на ответ (до ограничения).</li>
+              <li>Лайки ставятся/снимаются.</li>
+              <li>Один live-комментарий приходит по таймеру.</li>
+              <li>После reload часть данных восстанавливается (но ты заметишь неоднородности на некоторых ветках).</li>
+            </ul>
+          </div>
+        </section>
+
+        <section id="sec-8">
+          <span class="kicker">Матчасть</span>
+          <h2>Инженерная пауза: подробный разбор ключевых конструкций перед рефакторингом</h2>
+          <p>Этот блок нужен, чтобы ты не просто «повторил», а понял, что именно пишешь и почему.</p>
+
+          <h3>8.1 Объект комментария как контракт данных</h3>
+          <div class="code-wrap">
+            <div class="code-head"><span>Comment DTO</span><button class="copy-btn">Copy</button></div>
+            <pre><code>const comment = {
+  id: '1700000000000_a1b2c3',
+  name: 'You',
+  text: 'Message body',
+  likes: 0,
+  liked: false,
+  date: '07.04.2026',
+  replies: [],
+  origin: 'user',
+  avatar: 'user'
+};</code></pre>
+          </div>
+          <div class="point">
+            <h4>Смысл полей</h4>
+            <ul>
+              <li><span class="inline">id</span>: уникальный идентификатор узла для поиска/лайка/ответа.</li>
+              <li><span class="inline">replies</span>: массив дочерних комментариев (дерево).</li>
+              <li><span class="inline">origin</span>: метка происхождения (user/live/static), но не показатель глубины.</li>
+            </ul>
+          </div>
+
+          <h3>8.2 Почему массив + рекурсия</h3>
+          <p>Коммент — это дерево. Рекурсия нужна, чтобы обойти дерево любой глубины.</p>
+          <div class="code-wrap">
+            <div class="code-head"><span>Recursive find by id</span><button class="copy-btn">Copy</button></div>
+            <pre><code>function findCommentById(tree, id) {
+  for (const node of tree) {
+    if (node.id === id) return node;
+
+    if (Array.isArray(node.replies) &amp;&amp; node.replies.length) {
+      const nested = findCommentById(node.replies, id);
+      if (nested) return nested;
+    }
+  }
+
+  return null;
+}</code></pre>
+          </div>
+
+          <h3>8.3 Разбор синтаксиса скобок</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Синтаксис</th>
+                <th>Что это</th>
+                <th>Зачем в comments-engine</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="inline">()</span></td>
+                <td>Вызов функции / группировка выражений</td>
+                <td><span class="inline">saveToLocalStorage('x', y)</span>, <span class="inline">if (cond)</span></td>
+              </tr>
+              <tr>
+                <td><span class="inline">{}</span></td>
+                <td>Блок кода / объект</td>
+                <td>Тело функции, <span class="inline">const c = { ... }</span></td>
+              </tr>
+              <tr>
+                <td><span class="inline">[]</span></td>
+                <td>Массив / доступ по индексу</td>
+                <td><span class="inline">replies: []</span>, <span class="inline">arr[i]</span></td>
+              </tr>
+              <tr>
+                <td><span class="inline">=&gt;</span></td>
+                <td>Стрелочная функция</td>
+                <td><span class="inline">setTimeout(() =&gt; {...}, 1000)</span></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>8.4 Optional chaining и guard clauses</h3>
+          <div class="code-wrap">
+            <div class="code-head"><span>Guards</span><button class="copy-btn">Copy</button></div>
+            <pre><code>const item = e.target.closest('.comment__item');
+if (!item) return;
+
+const counter = item.querySelector('.likes_counter');
+if (!counter) return;
+
+const text = textarea?.value?.trim?.() || '';
+if (!text) return;</code></pre>
+          </div>
+          <p>Guard clauses уменьшают вложенность и предотвращают ошибки вида «Cannot read property ... of null».</p>
+
+          <h3>8.5 Почему legacy ломалась концептуально</h3>
+          <ul>
+            <li>Контроль глубины через <span class="inline">origin</span>, а не через фактическую позицию в дереве.</li>
+            <li>Разделённые точки записи в localStorage без общего API потока.</li>
+            <li>Нормализация данных не выполнялась строго перед рендером.</li>
+            <li>Статика и динамика жили по разным правилам, что создавало edge-cases.</li>
+          </ul>
+        </section>
+
+        <section id="sec-9">
+          <span class="kicker">Checkpoint 4</span>
+          <h2>Robust comments v2: переписываем legacy на устойчивую архитектуру</h2>
+          <p>Теперь мы берём уже работающий v1 и системно переписываем. UI остаётся тем же, но модель данных и маршруты записи/рендера становятся предсказуемыми.</p>
+
+          <h3>Шаг 1. Нормализация данных</h3>
+          <div class="code-wrap">
+            <div class="code-head"><span>robust v2 — normalizeComment</span><button class="copy-btn">Copy</button></div>
+            <pre><code>function normalizeComment(raw) {
+  const safe = raw &amp;&amp; typeof raw === 'object' ? raw : {};
+  const likesVal = Number(safe.likes);
+
+  const normalized = {
+    id: String(safe.id || `${Date.now()}_${Math.random().toString(16).slice(2)}`),
+    text: typeof safe.text === 'string' ? safe.text : '',
+    name: typeof safe.name === 'string' &amp;&amp; safe.name.trim() ? safe.name.trim() : 'You',
+    liked: !!safe.liked,
+    likes: Number.isFinite(likesVal) ? Math.max(0, likesVal) : 0,
+    date: typeof safe.date === 'string' &amp;&amp; safe.date.trim() ? safe.date : formatDateDMY(new Date()),
+    replies: [],
+    origin: typeof safe.origin === 'string' ? safe.origin : 'user',
+    avatar: typeof safe.avatar === 'string' ? safe.avatar : 'user'
+  };
+
+  if (Array.isArray(safe.replies)) {
+    normalized.replies = safe.replies.map(normalizeComment);
+  }
+
+  return normalized;
+}</code></pre>
+          </div>
+
+          <h3>Шаг 2. Единый контракт static threads</h3>
+          <div class="code-wrap">
+            <div class="code-head"><span>robust v2 — static thread map</span><button class="copy-btn">Copy</button></div>
+            <pre><code>const staticThreads = new Map();
+
+function getStaticThreadKey(staticReplyKey, sid) {
+  return `${staticReplyKey}_${sid}`;
+}
+
+function getStaticThread(staticReplyKey, sid) {
+  if (!sid) return [];
+
+  if (!staticThreads.has(sid)) {
+    const raw = safeReadJSON(getStaticThreadKey(staticReplyKey, sid), []);
+    const normalized = Array.isArray(raw) ? raw.map(normalizeComment) : [];
+    staticThreads.set(sid, normalized);
+    safeWriteJSON(getStaticThreadKey(staticReplyKey, sid), normalized);
+  }
+
+  return staticThreads.get(sid);
+}
+
+function saveStaticThread(staticReplyKey, sid) {
+  if (!sid) return;
+  safeWriteJSON(getStaticThreadKey(staticReplyKey, sid), getStaticThread(staticReplyKey, sid));
+}</code></pre>
+          </div>
+
+          <h3>Шаг 3. Глубина через DOM, а не через origin</h3>
+          <div class="code-wrap">
+            <div class="code-head"><span>robust v2 — real DOM depth</span><button class="copy-btn">Copy</button></div>
+            <pre><code>const MAX_DEPTH = 2;
+
+function getCommentDepth(node) {
+  let depth = 0;
+  let parentItem = node.parentElement ? node.parentElement.closest('.comment__item') : null;
+
+  while (parentItem) {
+    depth++;
+    parentItem = parentItem.parentElement ? parentItem.parentElement.closest('.comment__item') : null;
+  }
+
+  return depth;
+}
+
+function enforceReplyLimit(node) {
+  const depth = getCommentDepth(node);
+  if (depth &lt; MAX_DEPTH) return;
+
+  const container = node.querySelector(':scope &gt; .comment__container');
+  if (!container) return;
+
+  const replyBtn = container.querySelector('.comment__time .reply-btn');
+  if (replyBtn) replyBtn.remove();
+}</code></pre>
+          </div>
+
+          <h3>Шаг 4. Унифицированный renderReply</h3>
+          <div class="code-wrap">
+            <div class="code-head"><span>robust v2 — renderReply unified</span><button class="copy-btn">Copy</button></div>
+            <pre><code>function ensureRepliesContainer(node) {
+  let replies = node.querySelector(':scope &gt; ul.replies');
+  if (!replies) {
+    replies = document.createElement('ul');
+    replies.classList.add('replies');
+    node.appendChild(replies);
+  }
+  return replies;
+}
+
+function renderReply(parentNode, comment, highlight, scope, author = null) {
+  const replies = ensureRepliesContainer(parentNode);
+
+  const li = document.createElement('li');
+  li.classList.add('comment__item');
+  li.dataset.id = comment.id;
+  li.dataset.parentId = parentNode.dataset.id || parentNode.dataset.parentId || '';
+
+  const childDepth = getCommentDepth(parentNode) + 1;
+  const allowReply = childDepth &lt; MAX_DEPTH;
+
+  li.dataset.origin = allowReply ? 'reply' : 'reply-stop';
+
+  if (scope === 'static') {
+    const sid = parentNode.dataset.threadSid || parentNode.dataset.sid || '';
+    if (sid) li.dataset.threadSid = sid;
+  }
+
+  if (author === 'user' || comment.origin === 'user') {
+    li.dataset.author = 'user';
+  }
+
+  li.innerHTML = buildCommentTemplate(comment, allowReply);
+  ensureRepliesContainer(li);
+  replies.appendChild(li);
+
+  if (highlight) {
+    const cont = li.querySelector('.comment__container');
+    if (cont) {
+      cont.classList.add('is-reply-target');
+      setTimeout(() =&gt; cont.classList.add('fade'), 10);
+      setTimeout(() =&gt; cont.classList.remove('is-reply-target', 'fade'), 800);
+    }
+  }
+
+  enforceReplyLimit(li);
+  return li;
+}</code></pre>
+          </div>
+
+          <h3>Шаг 5. Унифицированная запись reply</h3>
+          <div class="code-wrap">
+            <div class="code-head"><span>robust v2 — reply save pipeline</span><button class="copy-btn">Copy</button></div>
+            <pre><code>function addReplyRobust(item, text, ctx) {
+  const newComment = normalizeComment({
+    id: `${Date.now()}_${Math.random().toString(16).slice(2)}`,
+    name: 'You',
+    text,
+    likes: 0,
+    liked: false,
+    date: formatDateDMY(new Date()),
+    replies: [],
+    origin: 'user',
+    avatar: 'user'
+  });
+
+  const threadSid = item.dataset.threadSid || item.dataset.sid || item.dataset.staticSid || '';
+
+  if (threadSid) {
+    const thread = getStaticThread(ctx.staticReplyKey, threadSid);
+
+    if (item.dataset.origin === 'static') {
+      thread.push(newComment);
+    } else {
+      const parent = findCommentById(thread, item.dataset.id);
+      if (!parent) return;
+      if (!Array.isArray(parent.replies)) parent.replies = [];
+      parent.replies.push(newComment);
+    }
+
+    saveStaticThread(ctx.staticReplyKey, threadSid);
+    renderReply(item, newComment, true, 'static', 'user');
+    return;
+  }
+
+  const parent = findCommentById(ctx.savedComments, item.dataset.id);
+  if (!parent) return;
+  if (!Array.isArray(parent.replies)) parent.replies = [];
+  parent.replies.push(newComment);
+  safeWriteJSON(ctx.storageKey, ctx.savedComments);
+
+  renderReply(item, newComment, true, 'user', 'user');
+}</code></pre>
+          </div>
+
+          <h3>Шаг 6. Один динамический комментарий в robust v2</h3>
+          <div class="code-wrap">
+            <div class="code-head"><span>robust v2 — single live feed</span><button class="copy-btn">Copy</button></div>
+            <pre><code>function startOneLiveComment(commentsList, storageKey, savedComments) {
+  const payload = normalizeComment({
+    id: `live_${Date.now()}`,
+    name: 'Juli',
+    text: 'Not usually a commenter, but my experience was positive this time.',
+    likes: 19,
+    liked: false,
+    date: formatDateDMY(new Date()),
+    replies: [],
+    origin: 'live',
+    avatar: 'dynamic',
+    dynIndex: 1
+  });
+
+  setTimeout(() =&gt; {
+    const exists = savedComments.some((c) =&gt; c.id === payload.id || (c.name === payload.name &amp;&amp; c.text === payload.text));
+    if (exists) return;
+
+    savedComments.push(payload);
+    safeWriteJSON(storageKey, savedComments);
+
+    const node = renderSavedComment(payload, commentsList);
+    node.dataset.author = 'dynamic';
+  }, 15000);
+}</code></pre>
+          </div>
+
+          <h3>Шаг 7. Сборка robust v2</h3>
+          <div class="code-wrap">
+            <div class="code-head"><span>robust v2 — final init</span><button class="copy-btn">Copy</button></div>
+            <pre><code>function initCommentsRobustV2() {
+  const blocks = document.querySelectorAll('.comments-block');
+
+  blocks.forEach((block, blockIndex) => {
+    const textarea = block.querySelector('#textarea');
+    const postBtn = block.querySelector('#postCommentBtn');
+    const commentsList = block.querySelector('#commentsList');
+    const totalEl = block.querySelector('#commentsTotal');
+
+    if (!textarea || !postBtn || !commentsList) return;
+
+    const storageKey = `user_comments_block_${blockIndex}`;
+    const staticReplyKey = `user_replies_block_${blockIndex}`;
+    let savedComments = safeReadJSON(storageKey, []).map(normalizeComment);
+    safeWriteJSON(storageKey, savedComments);
+
+    const initialStaticItems = Array.from(commentsList.querySelectorAll('.comment__item[data-origin="static"]'));
+    initialStaticItems.forEach((item, idx) => {
+      if (!item.dataset.sid) item.dataset.sid = String(idx);
+      item.dataset.threadSid = item.dataset.sid;
+      ensureRepliesContainer(item);
+      enforceReplyLimit(item);
+    });
+
+    initialStaticItems.forEach((item) => {
+      const thread = getStaticThread(staticReplyKey, item.dataset.sid);
+      if (thread.length) {
+        renderStaticRepliesRecursive(item, thread);
+      }
+    });
+
+    savedComments.forEach((c) => {
+      const node = renderSavedComment(c, commentsList);
+      if (Array.isArray(c.replies) &amp;&amp; c.replies.length) {
+        renderUserRepliesRecursive(node, c.replies);
+      }
+    });
+
+    // post top-level
+    textarea.addEventListener('input', () => {
+      const valid = textarea.value.trim().length &gt; 0;
+      postBtn.disabled = !valid;
+      postBtn.classList.toggle('disabled', !valid);
+    });
+
+    postBtn.addEventListener('click', () => {
+      const text = textarea.value.trim();
+      if (!text) return;
+
+      const c = normalizeComment({
+        id: `${Date.now()}_${Math.random().toString(16).slice(2)}`,
+        name: 'You',
+        text,
+        likes: 0,
+        liked: false,
+        date: formatDateDMY(new Date()),
+        replies: [],
+        origin: 'user',
+        avatar: 'user'
+      });
+
+      savedComments.push(c);
+      safeWriteJSON(storageKey, savedComments);
+      renderSavedComment(c, commentsList);
+
+      textarea.value = '';
+      postBtn.disabled = true;
+      postBtn.classList.add('disabled');
+      updateCommentsTotal(block, totalEl);
+    });
+
+    // delegated actions
+    block.addEventListener('click', (e) => {
+      const item = e.target.closest('.comment__item');
+      if (!item) return;
+
+      if (e.target.classList.contains('reply-btn')) {
+        showInlineReplyFormV1(item, (text) =&gt; {
+          addReplyRobust(item, text, {
+            storageKey,
+            staticReplyKey,
+            savedComments
+          });
+          updateCommentsTotal(block, totalEl);
+        });
+        return;
+      }
+
+      if (e.target.classList.contains('like-btn') || e.target.closest('.comment__actions')) {
+        toggleLikeRobust(item, storageKey, staticReplyKey, savedComments);
+      }
+    });
+
+    startOneLiveComment(commentsList, storageKey, savedComments);
+    updateCommentsTotal(block, totalEl);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', initCommentsRobustV2);</code></pre>
+          </div>
+
+          <div class="point">
+            <h4>Checkpoint 4 (итоговый)</h4>
+            <ul class="tasklist">
+              <li>Top-level комментарии, ответы и ответы на ответы стабильны.</li>
+              <li>Лимит глубины предсказуемый на всех ветках (через DOM depth).</li>
+              <li>Один live-комментарий приходит и сохраняется корректно.</li>
+              <li>После reload дерево комментариев восстанавливается без потери 3-й вложенности для корректных веток.</li>
+            </ul>
+          </div>
+        </section>
+
+        <section id="sec-10">
+          <span class="kicker">Итог</span>
+          <h2>Сравнение архитектур: Legacy v1 и Robust v2</h2>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Критерий</th>
+                <th>Legacy v1</th>
+                <th>Robust v2</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Определение глубины</td>
+                <td>Через origin-флаги (косвенно)</td>
+                <td>Через реальную глубину DOM (<span class="inline">getCommentDepth</span>)</td>
+              </tr>
+              <tr>
+                <td>Хранение static replies</td>
+                <td>В нескольких ветках, ручные пути</td>
+                <td>Через единый контракт <span class="inline">getStaticThread/saveStaticThread</span></td>
+              </tr>
+              <tr>
+                <td>Нормализация данных</td>
+                <td>Частичная/эпизодическая</td>
+                <td>Централизованная (<span class="inline">normalizeComment</span>)</td>
+              </tr>
+              <tr>
+                <td>Предсказуемость reply</td>
+                <td>Разная на похожих ветках</td>
+                <td>Единая и проверяемая</td>
+              </tr>
+              <tr>
+                <td>Управляемость live comments</td>
+                <td>Скорее ad-hoc</td>
+                <td>В общем пайплайне модели/рендера</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="ok">
+            Главный инженерный вывод: в v2 UI может выглядеть так же, но архитектурная надёжность растёт за счёт единого контракта данных и детерминированного маршрута обработки событий.
+          </div>
+        </section>
+
+        <section id="sec-11">
+          <span class="kicker">Контроль качества</span>
+          <h2>Чеклист регрессии (прогон после каждой правки)</h2>
+
+          <ol class="tasklist">
+            <li>Стартовая страница открывается без JS-ошибок.</li>
+            <li>Тексты comments подтягиваются из JSON.</li>
+            <li>Top-level комментарий публикуется и сохраняется в localStorage.</li>
+            <li>Reply на static-comment работает.</li>
+            <li>Reply на user-comment работает.</li>
+            <li>Reply на reply (3-й уровень) работает и правильно ограничивается.</li>
+            <li>Лайк/анлайк у static и user-узлов не ломает счётчик.</li>
+            <li>После reload дерево сохраняется (включая глубину до разрешённого уровня).</li>
+            <li>Один live-comment приходит по таймеру и не дублируется бесконечно.</li>
+            <li>В RTL режимe структура и отступы mini-reply корректны.</li>
+          </ol>
+
+          <div class="note small">
+            Практический совет: после каждого крупного шага делай короткий smoke-test по этому чеклисту, чтобы не копить ошибку до конца главы.
+          </div>
+        </section>
+
+        <section id="sec-12">
+          <span class="kicker">Практика</span>
+          <h2>План самостоятельной отработки</h2>
+
+          <h3>Сессия A (legacy уверенно руками)</h3>
+          <ul>
+            <li>Собрать Checkpoint 1 и 2 с нуля без копирования целых блоков.</li>
+            <li>Собрать legacy v1 и intentionally поймать минимум 2 edge-case.</li>
+            <li>Зафиксировать в заметке: где именно код v1 хрупкий.</li>
+          </ul>
+
+          <h3>Сессия B (refactor и стабилизация)</h3>
+          <ul>
+            <li>Поверх готовой v1 внедрить normalize + static thread map + depth by DOM.</li>
+            <li>Повторить тесты чеклиста 1–10.</li>
+            <li>Сделать короткий отчёт «v1 → v2: 5 ключевых отличий» своими словами.</li>
+          </ul>
+
+          <div class="ok">
+            Точка завершения курса: ты можешь сам написать comments-движок с 3 уровнями вложенности, localStorage persistence и live-комментом, а также объяснить, почему реализация устойчива.
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll('.code-wrap').forEach((wrap) => {
+      const btn = wrap.querySelector('.copy-btn');
+      const codeNode = wrap.querySelector('pre code');
+      if (!btn || !codeNode) return;
+
+      btn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(codeNode.textContent);
+          const old = btn.textContent;
+          btn.textContent = 'Copied';
+          btn.classList.add('done');
+          setTimeout(() => {
+            btn.textContent = old;
+            btn.classList.remove('done');
+          }, 1000);
+        } catch (e) {
+          console.error('copy failed', e);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

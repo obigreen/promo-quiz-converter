@@ -1,0 +1,246 @@
+/* ===== block_css ===== */
+/* 
+========== BASE ============
+*/ 
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        display: none;
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes scaler {
+    0% {
+      transform: scale(0);
+    }
+    100% {
+      transform:  scale(1);
+    }
+  }
+
+  @keyframes scalerTranslate {
+    0% {
+      transform: scale(0);
+    }
+    100% {
+      transform:  scale(1) translate(-50%, -50%);
+    }
+  }
+
+  @keyframes modalScaler {
+    0% {
+      transform: translate(-50%, -50%) scale(0);
+    }
+    100% {
+      transform:  translate(-50%, -50%) scale(1);
+    }
+  }
+
+@keyframes slideInFromTop {
+    0% {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideInFromDown {
+    0% {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes rotateIn {
+  0% {
+      -webkit-transform-origin: center;
+      transform-origin: center;
+      -webkit-transform: translate(-50%, -50%) rotate3d(0, 0, 1, -200deg);
+      transform: translate(-50%, -50%) rotate3d(0, 0, 1, -200deg);
+      opacity: 0
+  }
+
+  100% {
+      -webkit-transform-origin: center;
+      transform-origin: center;
+      -webkit-transform: none;
+      -webkit-transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+      opacity: 1
+  }
+}
+
+/* 
+========== progress-bar ============
+*/ 
+
+@keyframes progress-bar {
+    100% {
+      transform: translateX(-300px);
+    }
+  }
+  @-webkit-keyframes progress-bar {
+    100% {
+      transform: translateX(-300px);
+    }
+  }
+  @-moz-keyframes progress-bar {
+    100% {
+      transform: translateX(-300px);
+    }
+  }
+  @-ms-keyframes progress-bar {
+    100% {
+      transform: translateX(-300px);
+    }
+  }
+  @-o-keyframes progress-bar {
+    100% {
+      transform: translateX(-300px);
+    }
+  }
+
+  @keyframes changeColor {
+    0%, 100% {
+      background: var(--main-color);
+    }
+    50% {
+      background: #ffffff;
+    }
+  }
+
+
+/* ===== block_loader_1 ===== */
+@-webkit-keyframes spinner-border {
+    to {
+      -webkit-transform: rotate(360deg);
+      transform: rotate(360deg)
+    }
+  }
+  
+  @keyframes spinner-border {
+    to {
+      -webkit-transform: rotate(360deg);
+      transform: rotate(360deg)
+    }
+}
+/* ===== block_boxes_2 ===== */
+/* 
+========== BOXES ============
+*/ 
+ @keyframes spinPrize {
+      0% {
+          -webkit-transform-origin: center;
+          transform-origin: center;
+          -webkit-transform: rotate3d(0, 0, 1, -200deg);
+          transform: rotate3d(0, 0, 1, -200deg);
+          opacity: 0;
+      }
+
+      100% {
+          -webkit-transform-origin: center;
+          transform-origin: center;
+          -webkit-transform: none;
+          transform: none;
+          opacity: 1;
+      }
+  }
+
+  @keyframes openBox {
+      0% {
+          transform: translateY(0);
+      }
+
+      100% {
+          transform: translateY(-40px);
+      }
+  }
+
+  @keyframes showPrize {
+      0% {
+          opacity: 0;
+          transform: translateY(0);
+      }
+
+      100% {
+          opacity: 1;
+          transform: translateY(-40px);
+      }
+  }
+
+
+  @keyframes fadeInPrize {
+      0% {
+          opacity: 0;
+          transform: translateX(30%) translateY(0px);
+      }
+
+      100% {
+          opacity: 1;
+          transform: translateX(30%) translateY(-20px);
+      }
+  }
+
+  @keyframes rotateIn {
+      0% {
+          transform-origin: center;
+          transform: translate(-50%, -50%);
+          opacity: 0;
+      }
+
+      100% {
+          transform-origin: center;
+          transform: translate(-50%, -50%);
+          opacity: 1;
+      }
+  }
+/* ===== block_order_1 ===== */
+/* 
+========== ORDER ============
+*/ 
+@-webkit-keyframes spinner-border {
+    to {
+      -webkit-transform: rotate(360deg);
+      transform: rotate(360deg)
+    }
+  }
+  
+  @keyframes spinner-border {
+    to {
+      -webkit-transform: rotate(360deg);
+      transform: rotate(360deg)
+    }
+  }
+  

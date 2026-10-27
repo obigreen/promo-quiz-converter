@@ -1,0 +1,191 @@
+(function () {
+    function qs(selector, root = document) {
+        return root.querySelector(selector);
+    }
+
+    function qsa(selector, root = document) {
+        return Array.from(root.querySelectorAll(selector));
+    }
+
+    function waitOn(btn) {
+        if (!btn) return;
+        btn.disabled = true;
+        btn.dataset.originalText = btn.innerHTML;
+        btn.innerHTML = 'Wait...';
+    }
+
+    function validatePhone(phone) {
+        return /^\d{5,}$/.test(String(phone).replace(/\D/g, ''));
+    }
+
+    function validate(form) {
+        let valid = true;
+
+        const emailInput = qs('.js-email-input', form);
+        const phoneInput = qs('.js-phone-input', form);
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (emailInput) {
+            const wrapper = emailInput.closest('.input');
+            if (!emailRegex.test(emailInput.value.trim())) {
+                emailInput.setCustomValidity('Please enter a valid email address');
+                wrapper?.classList.add('invalid');
+                wrapper?.classList.remove('valid');
+                valid = false;
+            } else {
+                emailInput.setCustomValidity('');
+                wrapper?.classList.add('valid');
+                wrapper?.classList.remove('invalid');
+            }
+        }
+
+        if (phoneInput) {
+            const wrapper = phoneInput.closest('.input');
+            if (!validatePhone(phoneInput.value)) {
+                phoneInput.setCustomValidity('Please enter a valid phone number (minimum 5 digits)');
+                wrapper?.classList.add('invalid');
+                wrapper?.classList.remove('valid');
+                valid = false;
+            } else {
+                phoneInput.setCustomValidity('');
+                wrapper?.classList.add('valid');
+                wrapper?.classList.remove('invalid');
+            }
+        }
+
+        return valid;
+    }
+
+    function findFirstInvalid(form) {
+        const controls = qsa('.input input, .input select', form);
+
+        const firstInvalid = controls.find(el => {
+            const wrapper = el.closest('.input');
+            return wrapper && wrapper.classList.contains('invalid');
+        });
+
+        if (firstInvalid) {
+            firstInvalid.focus();
+            const wrapper = firstInvalid.closest('.input');
+            wrapper?.classList.add('shake');
+            setTimeout(() => wrapper?.classList.remove('shake'), 600);
+        }
+    }
+
+    function setKeitaroOfferAction(form) {
+        const offerUrl = window.KT && typeof window.KT.offerUrl === 'string'
+            ? window.KT.offerUrl
+            : '';
+
+        if (!offerUrl || offerUrl.includes('{offer}') || offerUrl.includes('%7Boffer%7D')) {
+            return false;
+        }
+
+        if (!/^https?:\/\//i.test(offerUrl)) {
+            return false;
+        }
+
+        let actionUrl = offerUrl;
+        try {
+            const url = new URL(offerUrl, window.location.origin);
+            const formData = new FormData(form);
+
+            for (const [name, value] of formData.entries()) {
+                if (name === '_lp' || name === '_token') continue;
+                if (typeof value !== 'string') continue;
+                if (value.trim() === '') continue;
+                url.searchParams.set(name, value);
+            }
+
+            actionUrl = url.toString();
+        } catch (e) {
+            actionUrl = offerUrl;
+        }
+
+        form.setAttribute('action', actionUrl);
+        return true;
+    }
+
+    function waitForForm() {
+        const form = qs('#mForm');
+        if (!form) {
+            setTimeout(waitForForm, 50);
+            return;
+        }
+
+        qsa('.input input, .input select', form).forEach(el => {
+            const handler = () => {
+                const wrapper = el.closest('.input');
+                if (!wrapper) return;
+
+                if (el.value && el.value.trim().length > 0) {
+                    wrapper.classList.add('valid');
+                    wrapper.classList.remove('invalid');
+                } else {
+                    wrapper.classList.remove('valid');
+                    wrapper.classList.remove('invalid');
+                }
+            };
+
+            el.addEventListener('keyup', handler);
+            el.addEventListener('change', handler);
+        });
+
+        form.addEventListener('submit', function (e) {
+            if (!validate(form)) {
+                e.preventDefault();
+                findFirstInvalid(form);
+                return;
+            }
+
+            const img =
+                qs('.product-item-image') ||
+                qs('.def-product-item-image') ||
+                qs('img');
+
+            if (img && img.src) {
+                let hidden = qs('input[name="sub_id_15"]', form);
+                if (!hidden) {
+                    hidden = document.createElement('input');
+                    hidden.type = 'hidden';
+                    hidden.name = 'sub_id_15';
+                    form.appendChild(hidden);
+                }
+                hidden.value = img.src;
+            }
+
+            if (!setKeitaroOfferAction(form)) {
+                e.preventDefault();
+                return;
+            }
+            const btn = qs('button[type="submit"]', form);
+            waitOn(btn);
+
+            // Query-only redirect (no POST body / Form Data).
+            e.preventDefault();
+            const actionUrl = form.getAttribute('action');
+            if (actionUrl) {
+                window.location.href = actionUrl;
+            }
+        });
+    }
+
+    waitForForm();
+})();
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+

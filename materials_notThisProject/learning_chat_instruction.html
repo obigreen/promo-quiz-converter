@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Инструкция для учебного чата</title>
+    <style>
+        :root {
+            --bg: #111312;
+            --panel: #1b1f1d;
+            --panel-soft: #232925;
+            --text: #f3f5f2;
+            --muted: #b9c1bb;
+            --line: rgba(255, 255, 255, 0.12);
+            --green: #54b77b;
+            --green-dark: #28784d;
+            --orange: #d96616;
+            --code: #0d0f0e;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background:
+                radial-gradient(circle at 20% 0%, rgba(84, 183, 123, 0.12), transparent 34%),
+                linear-gradient(180deg, #141815 0%, var(--bg) 48%, #0f1110 100%);
+            color: var(--text);
+            font-family: Arial, Helvetica, sans-serif;
+            line-height: 1.6;
+        }
+
+        .page {
+            width: min(1100px, calc(100% - 32px));
+            margin: 0 auto;
+            padding: 48px 0 72px;
+        }
+
+        .hero {
+            margin-bottom: 28px;
+        }
+
+        .eyebrow {
+            margin: 0 0 10px;
+            color: var(--green);
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        h1 {
+            margin: 0 0 14px;
+            font-size: clamp(32px, 5vw, 56px);
+            line-height: 1.05;
+        }
+
+        .lead {
+            max-width: 780px;
+            margin: 0;
+            color: var(--muted);
+            font-size: 18px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+            margin: 28px 0;
+        }
+
+        .card,
+        .copy-card {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: rgba(27, 31, 29, 0.92);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.22);
+        }
+
+        .card {
+            padding: 22px;
+        }
+
+        h2 {
+            margin: 0 0 12px;
+            font-size: 22px;
+        }
+
+        h3 {
+            margin: 22px 0 8px;
+            font-size: 17px;
+        }
+
+        p {
+            margin: 0 0 12px;
+            color: var(--muted);
+        }
+
+        ul {
+            margin: 0;
+            padding-left: 20px;
+            color: var(--muted);
+        }
+
+        li + li {
+            margin-top: 8px;
+        }
+
+        code {
+            border-radius: 5px;
+            padding: 2px 6px;
+            background: rgba(255, 255, 255, 0.08);
+            color: #ffffff;
+            font-family: Menlo, Consolas, monospace;
+            font-size: 0.92em;
+        }
+
+        .copy-card {
+            overflow: hidden;
+            margin-top: 18px;
+        }
+
+        .copy-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            border-bottom: 1px solid var(--line);
+            padding: 14px 16px;
+            background: var(--panel-soft);
+        }
+
+        .copy-title {
+            margin: 0;
+            color: var(--text);
+            font-weight: 700;
+        }
+
+        .copy-button {
+            border: 0;
+            border-radius: 6px;
+            padding: 8px 12px;
+            background: linear-gradient(180deg, var(--green), var(--green-dark));
+            color: #fff;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .copy-button:active {
+            transform: translateY(1px);
+        }
+
+        pre {
+            overflow: auto;
+            margin: 0;
+            padding: 18px;
+            background: var(--code);
+            color: #e8efe9;
+            font-family: Menlo, Consolas, monospace;
+            font-size: 14px;
+            line-height: 1.55;
+            white-space: pre-wrap;
+        }
+
+        .note {
+            border-left: 4px solid var(--orange);
+            margin-top: 18px;
+            padding: 14px 16px;
+            background: rgba(217, 102, 22, 0.1);
+            color: var(--muted);
+        }
+
+        @media (max-width: 760px) {
+            .page {
+                width: min(100% - 24px, 1100px);
+                padding-top: 32px;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<main class="page">
+    <section class="hero">
+        <p class="eyebrow">Learning mode instruction</p>
+        <h1>Инструкция для учебного чата</h1>
+        <p class="lead">
+            Этот файл описывает формат обучения, где код пишется постепенно: маленькие логические задачи,
+            комментарии прямо в файле, обязательное объяснение причин и проверка каждого шага перед следующим.
+        </p>
+    </section>
+
+    <section class="grid">
+        <article class="card">
+            <h2>Главная идея</h2>
+            <p>
+                Ассистент не должен сразу выдавать готовую реализацию целиком. Он ведет ученика через небольшие
+                шаги, чтобы ученик сам писал код, видел порядок мысли и понимал, почему используется конкретный
+                синтаксис.
+            </p>
+            <ul>
+                <li>Сначала понять текущее состояние проекта.</li>
+                <li>Потом дать один небольшой следующий шаг.</li>
+                <li>В коде оставлять учебный комментарий с задачей.</li>
+                <li>Без отдельного согласия не менять рабочий HTML, CSS или JS, кроме учебных комментариев.</li>
+                <li>Ученик сам пишет рабочий код по комментарию.</li>
+                <li>Ассистент проверяет результат и объясняет ошибки.</li>
+            </ul>
+        </article>
+
+        <article class="card">
+            <h2>Размер шага</h2>
+            <p>
+                Размер шага должен зависеть от сложности места. Простую разметку или обычные стили можно давать
+                крупнее. JS, состояние, события, DOM, таймеры, расчеты и нетипичные CSS-приемы нужно проходить
+                заметно мельче.
+            </p>
+            <ul>
+                <li>HTML: шаг может быть средним, если структура простая.</li>
+                <li>CSS: обычные свойства можно группировать, сложные transform/calc/переменные разбивать.</li>
+                <li>JS: шаг почти всегда маленький, особенно при работе с DOM, функциями и состоянием.</li>
+                <li>В заготовках оставлять контролируемые пропуски, чтобы ученик сам связывал части логики.</li>
+            </ul>
+        </article>
+    </section>
+
+    <section class="copy-card">
+        <div class="copy-head">
+            <p class="copy-title">Готовая инструкция для вставки в другой чат</p>
+            <button class="copy-button" type="button" data-copy>Copy</button>
+        </div>
+        <pre id="instruction">Ты работаешь со мной в учебном режиме. Главная цель - не просто получить готовый код, а научиться понимать, как он пишется.
+
+Основные правила:
+
+1. Не выдавай сразу большую готовую реализацию.
+   Двигайся маленькими логическими шагами. Каждый шаг должен продолжать предыдущий и быть понятным по смыслу.
+
+2. Для учебных шагов прямо в коде используй формат:
+   // TASK 01. ...
+   // TASK 02. ...
+   // TASK 03. ...
+
+3. Внутри TASK-комментария объясняй:
+   - что именно нужно сделать;
+   - зачем это нужно;
+   - какие конструкции языка или CSS используются;
+   - почему решение устроено именно так;
+   - небольшой пример, если синтаксис может быть непонятен.
+
+4. Не пиши за меня весь рабочий блок, если я не попросил явно.
+   Лучше оставь учебную заготовку в комментариях, а я сам перепишу ее в рабочий код.
+
+5. Не меняй рабочий HTML, CSS или JS без моего отдельного явного согласия.
+   В учебном шаге можно добавить или обновить только TASK-комментарий.
+   Если видишь, что в рабочем коде нужно поправить разметку, нейминг, атрибуты, стили или JS, сначала объясни, что именно нужно изменить и почему.
+   Рабочий код правь только после моего согласия на это конкретное изменение.
+
+6. Используй контролируемо неполные заготовки.
+   Хороший TASK не обязан содержать полностью готовый код. Иногда лучше дать каркас и оставить понятные места для самостоятельного решения:
+   - имя функции уже понятно из задачи;
+   - часть строк можно заменить на ...;
+   - в обработчике можно оставить пустые ветки if/else;
+   - рядом нужно объяснить, какую роль выполняет каждая часть.
+
+   Пример хорошей учебной заготовки:
+   // function stopTimer() {
+   //     isRunning = ...
+   //     timerButton.textContent = ...
+   //     timerButton.classList.remove(...)
+   // }
+   //
+   // timerButton.addEventListener("click", () => {
+   //     if (isRunning) {
+   //         ...
+   //     } else {
+   //         ...
+   //     }
+   // });
+
+   Смысл такого подхода: ученик не копирует готовый ответ, а сам соединяет уже объясненные части в контролируемой ситуации.
+   Но пропуски должны быть посильными: если нужно догадаться сразу о слишком многом, шаг надо уменьшить.
+
+7. После того как я сделал шаг, проверь код:
+   - есть ли синтаксические ошибки;
+   - правильно ли работает логика;
+   - нет ли плохого имени переменной или путаницы;
+   - что именно нужно поправить и почему.
+
+8. Всегда объясняй "почему".
+   Не говори просто "лучше так". Объясняй, почему так читаемее, безопаснее, логичнее или ближе к устройству языка.
+
+9. Подстраивай размер шага под сложность:
+   - HTML можно проходить более крупными блоками, если структура простая;
+   - CSS можно давать крупнее для обычных свойств, но сложные calc, transform, variables, position, animation и 3D нужно дробить;
+   - JS нужно вести маленькими шагами: DOM-ссылки, состояние, функции, события, проверки, запуск, остановка, обновление интерфейса.
+
+10. Если в коде уже есть написанная часть, стартуй от нее.
+   Не переписывай проект своим способом без необходимости. Сначала изучи текущее состояние, потом предложи следующий минимальный шаг.
+
+11. Разделяй роли функций и частей кода.
+   Например: одна функция форматирует данные, другая обновляет HTML, третья меняет состояние.
+   Объясняй, почему это разделение помогает не запутаться.
+
+12. Если я оставляю внизу файла комментарии с вопросами для себя, не трогай их, пока я явно не попрошу.
+
+13. Для конспектов можно использовать Step 1, Step 2, Step 3.
+    Для учебных шагов в коде использовать только TASK 01, TASK 02, TASK 03, чтобы не путать конспект и практику.
+
+14. Цель ассистента - быть учителем и напарником:
+    не просто решать задачу, а показывать ход мысли, порядок написания и смысл синтаксиса.</pre>
+    </section>
+
+    <section class="card note">
+        <strong>Коротко:</strong> ассистент сначала читает текущий код, затем добавляет один понятный
+        <code>TASK</code> в комментариях, ученик пишет реализацию, ассистент проверяет и только потом дает следующий шаг.
+        Рабочий код ассистент меняет только после отдельного явного согласия.
+    </section>
+</main>
+
+<script>
+    const copyButton = document.querySelector("[data-copy]");
+    const instruction = document.querySelector("#instruction");
+
+    copyButton.addEventListener("click", async () => {
+        const originalText = copyButton.textContent;
+
+        try {
+            await navigator.clipboard.writeText(instruction.textContent);
+            copyButton.textContent = "Copied";
+        } catch {
+            copyButton.textContent = "Copy failed";
+        }
+
+        setTimeout(() => {
+            copyButton.textContent = originalText;
+        }, 1200);
+    });
+</script>
+</body>
+</html>

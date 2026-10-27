@@ -1,0 +1,1388 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Workbook 2934: Пишем мини-prefill с нуля</title>
+  <style>
+    :root {
+      --bg: #f5f7fc;
+      --card: #fff;
+      --line: #dbe3f3;
+      --text: #142644;
+      --muted: #5f7092;
+      --blue: #225fd3;
+      --green: #0d8a52;
+      --yellow: #b56b00;
+      --red: #b42318;
+      --code-bg: #0f172a;
+      --code-head: #172446;
+      --code-text: #dbeafe;
+      --shadow: 0 8px 24px rgba(18, 36, 66, 0.08);
+      --radius: 14px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      width: 100%;
+      max-width: 100%;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      width: 100%;
+      max-width: 100%;
+      overflow-x: hidden;
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      color: var(--text);
+      background: linear-gradient(180deg, #eef3ff 0%, var(--bg) 100%);
+      line-height: 1.6;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      width: 100%;
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(10px);
+      background: rgba(245, 247, 252, 0.94);
+    }
+
+    .topbar-inner {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 12px 20px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .nav-pill {
+      border: 1px solid #c7d5f7;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 13px;
+      color: #21498f;
+      text-decoration: none;
+      background: #fff;
+      white-space: nowrap;
+    }
+
+    .nav-pill.brand {
+      font-weight: 800;
+      color: #0f2f69;
+      background: #f7faff;
+    }
+
+    .wrap {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 22px 20px 56px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .hero,
+    .card {
+      width: 100%;
+      max-width: 100%;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px;
+    }
+
+    .hero {
+      background: radial-gradient(circle at top right, #dce8ff, #fff 58%);
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: 31px;
+      line-height: 1.22;
+      letter-spacing: -0.35px;
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 24px;
+      line-height: 1.28;
+      letter-spacing: -0.2px;
+    }
+
+    h3 {
+      margin: 16px 0 8px;
+      font-size: 19px;
+      line-height: 1.32;
+    }
+
+    h4 {
+      margin: 12px 0 6px;
+      font-size: 16px;
+      line-height: 1.35;
+    }
+
+    p { margin: 8px 0; }
+
+    ul {
+      margin: 8px 0;
+      padding-left: 20px;
+    }
+
+    li { margin: 6px 0; }
+
+    .small { font-size: 13px; color: var(--muted); }
+
+    .chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .chip {
+      border: 1px solid #c2d2f5;
+      border-radius: 999px;
+      padding: 4px 9px;
+      font-size: 12px;
+      color: #24488f;
+      background: #f8fbff;
+    }
+
+    .ok,
+    .warn,
+    .danger,
+    .info {
+      border-radius: 10px;
+      border: 1px solid;
+      padding: 11px 13px;
+      margin: 10px 0;
+      font-size: 14px;
+    }
+
+    .ok {
+      border-color: #a7e1c2;
+      background: #ecfbf3;
+      color: #045533;
+    }
+
+    .warn {
+      border-color: #ffd8a8;
+      background: #fff8eb;
+      color: #774700;
+    }
+
+    .danger {
+      border-color: #f4b8b8;
+      background: #fff2f2;
+      color: #8a1111;
+    }
+
+    .info {
+      border-color: #bed5ff;
+      background: #eef4ff;
+      color: #0e3b82;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .checklist {
+      border: 1px dashed #b7c9ed;
+      border-radius: 12px;
+      background: #f9fbff;
+      padding: 10px 12px;
+      display: grid;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .check {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 14px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      overflow: hidden;
+      table-layout: fixed;
+      font-size: 14px;
+    }
+
+    thead th {
+      background: #edf3ff;
+      color: #1d3f82;
+      font-weight: 700;
+    }
+
+    th,
+    td {
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 9px 10px;
+      text-align: left;
+      vertical-align: top;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+
+    th:last-child,
+    td:last-child { border-right: 0; }
+
+    tr:last-child td { border-bottom: 0; }
+
+    .step {
+      border: 1px solid #d8e4fb;
+      border-radius: 12px;
+      background: #fbfdff;
+      padding: 14px;
+      margin-top: 12px;
+    }
+
+    .step-title {
+      margin: 0 0 8px;
+      font-weight: 800;
+      font-size: 18px;
+      color: #173b79;
+    }
+
+    .code {
+      margin: 10px 0;
+      border: 1px solid #2b3b60;
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--code-bg);
+      max-width: 100%;
+    }
+
+    .code-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 8px 10px;
+      background: var(--code-head);
+      border-bottom: 1px solid #2b3b60;
+    }
+
+    .code-title {
+      color: #bdd3ff;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+
+    .copy-btn {
+      border: 1px solid #4e78d2;
+      border-radius: 8px;
+      background: #1f498f;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 9px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .copy-btn:hover { background: #2a5cba; }
+
+    pre {
+      margin: 0;
+      padding: 12px;
+      overflow: auto;
+      color: var(--code-text);
+      font-size: 12.5px;
+      line-height: 1.45;
+      tab-size: 2;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+      max-width: 100%;
+    }
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    }
+
+    .kbd {
+      display: inline-block;
+      border: 1px solid #c7d4f4;
+      border-bottom-width: 2px;
+      border-radius: 6px;
+      padding: 2px 7px;
+      font-size: 12px;
+      background: #fff;
+      color: #21478e;
+      white-space: nowrap;
+    }
+
+    .link-top {
+      color: var(--blue);
+      font-size: 13px;
+      text-decoration: none;
+      border-bottom: 1px dashed #9ab7f4;
+    }
+
+    @media (max-width: 980px) {
+      .grid-2 { grid-template-columns: 1fr; }
+      h1 { font-size: 26px; }
+      .topbar-inner,
+      .wrap {
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar" id="top">
+    <div class="topbar-inner">
+      <span class="nav-pill brand">Workbook 2934: Mini Prefill</span>
+      <a class="nav-pill" href="#how">Как работать</a>
+      <a class="nav-pill" href="#map">Карта sub_id</a>
+      <a class="nav-pill" href="#compare">2934 vs 4051</a>
+      <a class="nav-pill" href="#syntax">Синтаксис</a>
+      <a class="nav-pill" href="#braces">Скобки</a>
+      <a class="nav-pill" href="#steps">Пошагово</a>
+      <a class="nav-pill" href="#transport">POST vs Query</a>
+      <a class="nav-pill" href="#debug">Дебаг</a>
+      <a class="nav-pill" href="#exam">Мини-экзамен</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero" id="how">
+      <h1>Новая методичка: пишем мини-версию prefill в стиле 2934 (с нуля)</h1>
+      <p>
+        Эта методичка специально построена на стиле <strong>2934</strong>: глобальные переменные в <code>index.html</code>,
+        логика в <code>js/main.js</code>, JSON-переводы, popup, валидация и отправка формы.
+      </p>
+      <p>
+        Цель: ты не просто копируешь большие блоки, а понимаешь каждый шаг, каждую скобку и каждый метод JavaScript.
+      </p>
+      <div class="chips">
+        <span class="chip">База: 2934_landing_archive</span>
+        <span class="chip">Фокус: prefill + form submit</span>
+        <span class="chip">Уровень: from zero</span>
+        <span class="chip">Формат: задания + чекпоинты</span>
+      </div>
+      <div class="info">
+        Предыдущую методичку (по 4051) не удаляем. Она остаётся как второй этап. Эта — именно под базовую архитектуру 2934.
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Что мы строим в этом практикуме</h2>
+      <ul>
+        <li>Одну страницу с prefill-формой (city/address/zip/name/phone/email/state).</li>
+        <li>Popup-уведомление (аналог <code>block_popup_1</code> из 2934).</li>
+        <li>Загрузку текстов из <code>translate/en.json</code> и подстановку макросов.</li>
+        <li>Валидацию полей.</li>
+        <li>Отправку параметров на оффер (два режима: 2934-style POST и query-only redirect).</li>
+      </ul>
+
+      <div class="warn">
+        Важный момент: <strong>форма не обязана всегда отправляться только через URL</strong>. Это зависит от того,
+        что ожидает целевой оффер/бекенд.
+      </div>
+    </section>
+
+    <section class="card" id="map">
+      <h2>Карта параметров (что должно передаваться)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Параметр</th>
+            <th>Смысл</th>
+            <th>Откуда берётся</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><code>sub_id_27</code></td><td>Email</td><td><code>input[name="sub_id_27"]</code></td></tr>
+          <tr><td><code>sub_id_24</code></td><td>Имя</td><td><code>input[name="sub_id_24"]</code></td></tr>
+          <tr><td><code>sub_id_25</code></td><td>Фамилия</td><td><code>input[name="sub_id_25"]</code></td></tr>
+          <tr><td><code>sub_id_22</code></td><td>Адрес</td><td><code>input[name="sub_id_22"]</code></td></tr>
+          <tr><td><code>sub_id_9</code></td><td>Штат</td><td><code>select[name="sub_id_9"]</code></td></tr>
+          <tr><td><code>sub_id_23</code></td><td>Zip/Post code</td><td><code>input[name="sub_id_23"]</code></td></tr>
+          <tr><td><code>sub_id_21</code></td><td>Город</td><td><code>input[name="sub_id_21"]</code></td></tr>
+          <tr><td><code>sub_id_26</code></td><td>Телефон</td><td><code>input[name="sub_id_26"]</code></td></tr>
+          <tr><td><code>sub_id_15</code></td><td>Product image</td><td>hidden поле, заполняется из src картинки</td></tr>
+          <tr><td><code>country_code</code></td><td>Country calling code</td><td>hidden поле, заполняется логикой флага/кода</td></tr>
+          <tr><td><code>_lp</code>, <code>_token</code></td><td>служебные Keitaro</td><td>из входящего URL / hidden поля</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card" id="compare">
+      <h2>2934 vs 4051: одна логика, разный bootstrap</h2>
+      <p>
+        Ты правильно заметил: в 4051 часто встречается <code>window.KT</code> и другой стиль инициализации,
+        а в 2934 всё «классически» через глобальные переменные и общий <code>scripts.js</code>.
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th>Аспект</th>
+            <th>2934 (база для обучения)</th>
+            <th>4051 (адаптированный/выкачанный)</th>
+            <th>Что важно понять</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Источник данных</td>
+            <td>Глобальные <code>let/var</code> в <code>&lt;head&gt;</code></td>
+            <td>Часть данных может жить в <code>window.KT</code></td>
+            <td>Логика передачи параметров та же, меняется только место хранения переменных</td>
+          </tr>
+          <tr>
+            <td>Форма</td>
+            <td><code>#mForm</code> + <code>submit()</code> + hidden inputs</td>
+            <td>Может быть кастомный form-handler</td>
+            <td>Всегда смотри, в каком формате целевой оффер ждёт данные: POST или GET</td>
+          </tr>
+          <tr>
+            <td>Макросы</td>
+            <td><code>{_offertitle}</code>, <code>{_pricenew}</code> и т.д.</td>
+            <td>Те же макросы, но иногда через промежуточный runtime-объект</td>
+            <td>Макросы подставляет Keitaro, не сам JS-код</td>
+          </tr>
+          <tr>
+            <td>Поля</td>
+            <td>Базовый набор <code>sub_id_21..27</code>, <code>sub_id_9</code>, <code>sub_id_15</code></td>
+            <td>Могут добавляться специфичные поля (например, <code>paymentOption</code>)</td>
+            <td>Специфичные поля не ломают базу, если основной набор сабов сохранён</td>
+          </tr>
+          <tr>
+            <td>Дебаг</td>
+            <td>Network + читаемый скрипт</td>
+            <td>Network + минифицированные/кастомные обработчики</td>
+            <td>Начинай от модели 2934, потом маппь отличия в 4051</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="info">
+        Вывод: учиться писать с нуля лучше на 2934. Когда база понятна, 4051 воспринимается как та же логика в другом синтаксическом «корпусе».
+      </div>
+
+      <h3>Где здесь openUrl / actionUrl / waitOn</h3>
+      <ul>
+        <li><code>openUrl</code> в 2934 — это финальная ссылка оффера (источник: макрос <code>{offer}</code>).</li>
+        <li><code>actionUrl</code> — техническое имя переменной, когда ты программно собираешь URL перед редиректом (например, query-only режим).</li>
+        <li><code>waitOn(...)</code> в 2934 — это UX-логика кнопки (блокирует кнопку и ставит текст ожидания), а не транспорт данных.</li>
+      </ul>
+      <div class="warn">
+        Частая ошибка новичка: менять UX-функции (типа <code>waitOn</code>) и ждать, что починится отправка параметров.
+        Отправку определяет обработчик submit и формат транспорта (POST body или GET query).
+      </div>
+    </section>
+
+    <section class="card" id="syntax">
+      <h2>Мини-словарь синтаксиса JavaScript (чтобы не теряться в скобках)</h2>
+
+      <div class="grid-2">
+        <div>
+          <h3>1) Функция</h3>
+          <div class="code">
+            <div class="code-head">
+              <div class="code-title">Синтаксис function</div>
+              <button class="copy-btn" data-copy-target="syn-func">Copy</button>
+            </div>
+            <pre id="syn-func"><code>function validatePhone(phone) {
+  // тело функции
+  return /^\d{5,}$/.test(String(phone));
+}</code></pre>
+          </div>
+          <ul>
+            <li><code>function</code> — ключевое слово.</li>
+            <li><code>validatePhone</code> — имя функции.</li>
+            <li><code>(phone)</code> — аргументы в круглых скобках.</li>
+            <li><code>{ ... }</code> — тело функции в фигурных скобках.</li>
+            <li><code>return</code> — что функция возвращает наружу.</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>2) Условие if/else</h3>
+          <div class="code">
+            <div class="code-head">
+              <div class="code-title">Синтаксис if/else</div>
+              <button class="copy-btn" data-copy-target="syn-if">Copy</button>
+            </div>
+            <pre id="syn-if"><code>if (email !== '') {
+  // если условие true
+} else {
+  // если false
+}</code></pre>
+          </div>
+          <ul>
+            <li>Условие всегда в <code>(...)</code>.</li>
+            <li>Блоки действий в <code>{...}</code>.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div>
+          <h3>3) Цикл по массиву/NodeList</h3>
+          <div class="code">
+            <div class="code-head">
+              <div class="code-title">forEach с arrow function</div>
+              <button class="copy-btn" data-copy-target="syn-foreach">Copy</button>
+            </div>
+            <pre id="syn-foreach"><code>inputs.forEach((el) => {
+  const ok = el.value.trim() !== '';
+  if (!ok) valid = false;
+});</code></pre>
+          </div>
+          <ul>
+            <li><code>=&gt;</code> — стрелочная функция.</li>
+            <li>Если аргумент один, можно писать <code>el =&gt; { ... }</code>.</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>4) try/catch</h3>
+          <div class="code">
+            <div class="code-head">
+              <div class="code-title">Обработка ошибок</div>
+              <button class="copy-btn" data-copy-target="syn-try">Copy</button>
+            </div>
+            <pre id="syn-try"><code>try {
+  const url = new URL(offerUrl, window.location.origin);
+} catch (e) {
+  console.error(e);
+}</code></pre>
+          </div>
+          <ul>
+            <li><code>try</code> — опасный код.</li>
+            <li><code>catch</code> — что делать, если ошибка.</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3>5) Регулярка на примере телефона</h3>
+      <div class="code">
+        <div class="code-head">
+          <div class="code-title">RegExp разбор</div>
+          <button class="copy-btn" data-copy-target="syn-regex">Copy</button>
+        </div>
+        <pre id="syn-regex"><code>const re = /^\d{5,}$/;
+const clean = String(phone).replace(/\D/g, '');
+const ok = re.test(clean);</code></pre>
+      </div>
+      <ul>
+        <li><code>^</code> — начало строки, <code>$</code> — конец строки.</li>
+        <li><code>\d</code> — цифра.</li>
+        <li><code>{5,}</code> — минимум 5 символов.</li>
+        <li><code>/\D/g</code> — все нецифры (удаляем форматирование, пробелы, скобки).</li>
+      </ul>
+    </section>
+
+    <section class="card" id="braces">
+      <h2>Шпаргалка по скобкам и структуре кода (чтобы не путаться при наборе)</h2>
+      <p>
+        Этот блок держи открытым рядом, когда пишешь код с нуля. Здесь не логика бизнеса, а именно «как правильно собрать синтаксис».
+      </p>
+
+      <div class="grid-2">
+        <div>
+          <h3>1) Обычная функция</h3>
+          <div class="code">
+            <div class="code-head">
+              <div class="code-title">function skeleton</div>
+              <button class="copy-btn" data-copy-target="brace-fn">Copy</button>
+            </div>
+            <pre id="brace-fn"><code>function validateEmail(email) {
+  const value = String(email).trim().toLowerCase();
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(value);
+}</code></pre>
+          </div>
+          <ul>
+            <li><code>()</code> после имени функции — параметры.</li>
+            <li><code>{}</code> — тело функции.</li>
+            <li><code>return ...;</code> завершает функцию и возвращает результат.</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>2) Стрелочная функция</h3>
+          <div class="code">
+            <div class="code-head">
+              <div class="code-title">arrow skeleton</div>
+              <button class="copy-btn" data-copy-target="brace-arrow">Copy</button>
+            </div>
+            <pre id="brace-arrow"><code>const normalize = (value) => {
+  return String(value).trim();
+};</code></pre>
+          </div>
+          <ul>
+            <li><code>=&gt;</code> — стрелка между параметрами и телом.</li>
+            <li>После закрывающей <code>}</code> ставится <code>;</code>, потому что это присваивание переменной.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div>
+          <h3>3) if / else</h3>
+          <div class="code">
+            <div class="code-head">
+              <div class="code-title">if-else skeleton</div>
+              <button class="copy-btn" data-copy-target="brace-if">Copy</button>
+            </div>
+            <pre id="brace-if"><code>if (!email) {
+  markField(emailInput, false);
+} else {
+  markField(emailInput, true);
+}</code></pre>
+          </div>
+          <ul>
+            <li>После <code>if</code> условие всегда в <code>()</code>.</li>
+            <li>Блоки веток — в <code>{}</code>.</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>4) forEach</h3>
+          <div class="code">
+            <div class="code-head">
+              <div class="code-title">forEach skeleton</div>
+              <button class="copy-btn" data-copy-target="brace-foreach">Copy</button>
+            </div>
+            <pre id="brace-foreach"><code>form.querySelectorAll('[name][required]').forEach((input) => {
+  const ok = String(input.value || '').trim() !== '';
+  markField(input, ok);
+});</code></pre>
+          </div>
+          <ul>
+            <li><code>forEach((item) =&gt; { ... })</code>: сначала круглые, потом фигурные.</li>
+            <li>В конце всей конструкции — <code>);</code>.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div>
+          <h3>5) setTimeout</h3>
+          <div class="code">
+            <div class="code-head">
+              <div class="code-title">setTimeout skeleton</div>
+              <button class="copy-btn" data-copy-target="brace-timeout">Copy</button>
+            </div>
+            <pre id="brace-timeout"><code>setTimeout(() => {
+  notification.style.display = 'none';
+}, 10000);</code></pre>
+          </div>
+          <ul>
+            <li>Сначала функция-колбэк <code>() =&gt; { ... }</code>.</li>
+            <li>Потом через запятую число миллисекунд.</li>
+            <li>Закрытие: <code>}, 10000);</code>.</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>6) addEventListener submit</h3>
+          <div class="code">
+            <div class="code-head">
+              <div class="code-title">submit skeleton</div>
+              <button class="copy-btn" data-copy-target="brace-submit">Copy</button>
+            </div>
+            <pre id="brace-submit"><code>form.addEventListener('submit', (event) => {
+  event.preventDefault();
+  if (!validateForm(form)) return;
+  const actionUrl = buildActionUrlFromForm(form);
+  window.location.href = actionUrl;
+});</code></pre>
+          </div>
+          <ul>
+            <li>Первый аргумент — тип события в строке.</li>
+            <li>Второй — функция-обработчик.</li>
+            <li>В конце обязательно <code>);</code>.</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3>Мини-словарь методов из твоего кейса</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Метод / конструкция</th>
+            <th>Что делает</th>
+            <th>Мини-пример</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><code>querySelector()</code></td><td>Берёт первый элемент по CSS-селектору</td><td><code>document.querySelector('.js-email-input')</code></td></tr>
+          <tr><td><code>querySelectorAll()</code></td><td>Берёт все подходящие элементы</td><td><code>form.querySelectorAll('[required]')</code></td></tr>
+          <tr><td><code>classList.toggle()</code></td><td>Добавляет/убирает класс по условию</td><td><code>el.classList.toggle('invalid', !ok)</code></td></tr>
+          <tr><td><code>trim()</code></td><td>Убирает пробелы в начале и конце строки</td><td><code>'  abc '.trim()</code> → <code>'abc'</code></td></tr>
+          <tr><td><code>toLowerCase()</code></td><td>Переводит строку в нижний регистр</td><td><code>'A@B.COM'.toLowerCase()</code></td></tr>
+          <tr><td><code>test()</code></td><td>Проверка строки регуляркой</td><td><code>/^\d+$/.test('123')</code> → <code>true</code></td></tr>
+          <tr><td><code>return</code></td><td>Возвращает значение из функции</td><td><code>return valid;</code></td></tr>
+        </tbody>
+      </table>
+
+      <div class="checklist">
+        <label class="check"><input type="checkbox"/> Я понимаю, где ставить <code>);</code> у <code>forEach</code> и <code>addEventListener</code></label>
+        <label class="check"><input type="checkbox"/> Я понимаю разницу между <code>function</code> и <code>const fn = () =&gt; {}</code></label>
+        <label class="check"><input type="checkbox"/> Я понимаю, где нужен <code>return</code> и где он не нужен</label>
+      </div>
+    </section>
+
+    <section class="card" id="steps">
+      <h2>Пошаговое написание (очень дробно, в стиле 2934)</h2>
+
+      <div class="step">
+        <p class="step-title">Шаг 0. Создай проект и подключи файлы</p>
+        <h4>Задание</h4>
+        <p>Создай папку и базовые файлы.</p>
+        <div class="code">
+          <div class="code-head">
+            <div class="code-title">Структура</div>
+            <button class="copy-btn" data-copy-target="step0-structure">Copy</button>
+          </div>
+          <pre id="step0-structure"><code>mini-2934-prefill/
+  index.html
+  js/main.js
+  css/styles.css
+  translate/en.json
+  img/cards.webp
+  img/logo.webp</code></pre>
+        </div>
+
+        <div class="checklist">
+          <label class="check"><input type="checkbox"/> Все файлы созданы</label>
+          <label class="check"><input type="checkbox"/> В <code>index.html</code> подключены CSS и JS</label>
+        </div>
+      </div>
+
+      <div class="step">
+        <p class="step-title">Шаг 1. Верхний script в index.html: глобальные переменные (как в 2934)</p>
+        <h4>Задание</h4>
+        <p>Добавь в <code>&lt;head&gt;</code> блок с переменными. Здесь стиль именно 2934: без <code>window.KT</code>.</p>
+
+        <div class="code">
+          <div class="code-head">
+            <div class="code-title">index.html: main-script style 2934</div>
+            <button class="copy-btn" data-copy-target="step1-vars">Copy</button>
+          </div>
+          <pre id="step1-vars"><code>&lt;script&gt;
+  function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+  }
+
+  var productImageSrc = '{offerlogo}';
+  let lId = '{landing_id}';
+  let cId = '{campaign_id}';
+  let offerUrl = '{offer}';
+  let langCode = '{language}';
+
+  let cc_country = '{_cc_country}';
+  if (cc_country.includes('_cc_country') || cc_country === '') {
+    cc_country = '{_country:en}';
+  }
+
+  let pricenew = '{_offer_value:ctc}';
+  if (pricenew === '') {
+    pricenew = '{_pricenew}';
+  }
+  let priceold = '{_priceold}';
+
+  let names = '{_names}';
+  let name1 = '{_name1}';
+  let supportName = '{_supportname}';
+
+  let offerTitle = '{_offertitle}';
+  let product = '{_extra_param_4}';
+  if (product === '' || product.includes('extra_param_') || product.includes('name2')) {
+    product = offerTitle;
+  }
+&lt;/script&gt;</code></pre>
+        </div>
+
+        <h4>Разбор синтаксиса</h4>
+        <ul>
+          <li><code>let</code> — переменная, которую можно менять.</li>
+          <li><code>var</code> в старом коде 2934 тоже встречается; в твоём мини-проекте можно использовать <code>let/const</code>.</li>
+          <li><code>.includes()</code> проверяет, есть ли подстрока.</li>
+          <li><code>||</code> — логическое «ИЛИ».</li>
+          <li>Каждая инструкция заканчивается <code>;</code> — это полезно как дисциплина.</li>
+        </ul>
+      </div>
+
+      <div class="step">
+        <p class="step-title">Шаг 2. Нормализуй names-макрос (как в 2934)</p>
+        <h4>Задание</h4>
+        <p>Сделай парсинг строки <code>{_names}</code> и безопасный decode.</p>
+
+        <div class="code">
+          <div class="code-head">
+            <div class="code-title">index.html/script: decode names</div>
+            <button class="copy-btn" data-copy-target="step2-names">Copy</button>
+          </div>
+          <pre id="step2-names"><code>if (names && !names.includes('_names') && names.trim() !== '') {
+  const decodeName = (value) => {
+    const trimmed = value.trim();
+    if (!trimmed) return '';
+    try {
+      return decodeURIComponent(trimmed);
+    } catch (e) {
+      return trimmed;
+    }
+  };
+
+  const nameArr = names.split(',').map(decodeName);
+  if (nameArr.length > 0 && nameArr[0] !== '') {
+    name1 = nameArr[0];
+  }
+  if (nameArr.length > 1 && nameArr[nameArr.length - 1] !== '') {
+    supportName = nameArr[nameArr.length - 1];
+  }
+}</code></pre>
+        </div>
+
+        <h4>Разбор синтаксиса</h4>
+        <ul>
+          <li><code>const decodeName = (value) =&gt; { ... }</code> — стрелочная функция в переменной.</li>
+          <li><code>try/catch</code> нужен, чтобы не упасть на кривом URL-encoding.</li>
+          <li><code>map(decodeName)</code> применяет функцию ко всем элементам массива.</li>
+        </ul>
+      </div>
+
+      <div class="step">
+        <p class="step-title">Шаг 3. HTML prefill-форма (минимум полей под sub_id)</p>
+        <h4>Задание</h4>
+        <p>Собери форму с id <code>mForm</code> и именами полей 1:1 как в 2934.</p>
+
+        <div class="code">
+          <div class="code-head">
+            <div class="code-title">index.html: prefill form</div>
+            <button class="copy-btn" data-copy-target="step3-form">Copy</button>
+          </div>
+          <pre id="step3-form"><code>&lt;form class="cart-form" id="mForm" action="/"&gt;
+  &lt;input id="countryCodeHiddenField" type="hidden" name="country_code" value="" /&gt;
+
+  &lt;input name="sub_id_21" autocomplete="address-level2" placeholder="City" required /&gt;
+  &lt;input name="sub_id_22" autocomplete="address-line1" placeholder="Address" required /&gt;
+  &lt;input name="sub_id_23" autocomplete="postal-code" placeholder="ZIP" required /&gt;
+
+  &lt;input name="sub_id_24" autocomplete="given-name" placeholder="First name" required /&gt;
+  &lt;input name="sub_id_25" autocomplete="family-name" placeholder="Last name" required /&gt;
+  &lt;input id="phoneInput" class="js-phone-input" name="sub_id_26" autocomplete="tel" placeholder="Phone" required /&gt;
+  &lt;input class="js-email-input" name="sub_id_27" autocomplete="email" placeholder="Email" required /&gt;
+
+  &lt;select name="sub_id_9" required&gt;
+    &lt;option value=""&gt;State&lt;/option&gt;
+    &lt;option value="AL"&gt;AL&lt;/option&gt;
+    &lt;option value="AZ"&gt;AZ&lt;/option&gt;
+    &lt;option value="CA"&gt;CA&lt;/option&gt;
+  &lt;/select&gt;
+
+  &lt;button id="startBtn" type="submit"&gt;Continue&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+        </div>
+
+        <div class="checklist">
+          <label class="check"><input type="checkbox"/> Все sub_id-поля на месте</label>
+          <label class="check"><input type="checkbox"/> <code>id="mForm"</code> и <code>id="startBtn"</code> стоят</label>
+        </div>
+      </div>
+
+      <div class="step">
+        <p class="step-title">Шаг 4. JSON-переводы: загрузка + вставка текста в элементы</p>
+        <h4>Задание</h4>
+        <p>Сделай мини-версию механизма <code>applyTranslations()</code> из 2934.</p>
+
+        <div class="code">
+          <div class="code-head">
+            <div class="code-title">translate/en.json (пример)</div>
+            <button class="copy-btn" data-copy-target="step4-json">Copy</button>
+          </div>
+          <pre id="step4-json"><code>{
+  "text_page_title": "{_offertitle}",
+  "text_form_title": "Shipping details for {_offertitle}",
+  "text_wait": "Wait",
+  "text_popup_name": "{_name1}",
+  "text_popup_body": "from {_cc_country} just placed {_offertitle} for {_pricenew}"
+}</code></pre>
+        </div>
+
+        <div class="code">
+          <div class="code-head">
+            <div class="code-title">js/main.js: translation core</div>
+            <button class="copy-btn" data-copy-target="step4-js">Copy</button>
+          </div>
+          <pre id="step4-js"><code>let translation;
+
+async function loadLangData(lang) {
+  const response = await fetch(`translate/${lang}.json`);
+  if (!response.ok) {
+    throw new Error(`Language file not found: ${lang}`);
+  }
+  return await response.json();
+}
+
+function applyMacro(text) {
+  return String(text)
+    .replaceAll('{_cc_country}', cc_country)
+    .replaceAll('{_pricenew}', pricenew)
+    .replaceAll('{_priceold}', priceold)
+    .replaceAll('{_name1}', name1)
+    .replaceAll('{_supportname}', supportName)
+    .replaceAll('{_offertitle}', offerTitle)
+    .replaceAll('{_product}', product);
+}
+
+function applyTranslations(dict) {
+  Object.keys(dict).forEach((key) => {
+    document.querySelectorAll('.' + key).forEach((el) => {
+      el.innerHTML = applyMacro(dict[key]);
+    });
+  });
+}</code></pre>
+        </div>
+
+        <h4>Разбор синтаксиса</h4>
+        <ul>
+          <li><code>await fetch(...)</code> можно использовать только внутри <code>async function</code>.</li>
+          <li><code>throw new Error(...)</code> — явный выброс ошибки.</li>
+          <li><code>Object.keys(dict).forEach(...)</code> — проход по ключам объекта перевода.</li>
+        </ul>
+      </div>
+
+      <div class="step">
+        <p class="step-title">Шаг 5. Popup-логика (аналог 2934 block_popup_1)</p>
+        <h4>Задание</h4>
+        <p>Покажи popup один раз на пользователя (через localStorage), потом автоскрытие.</p>
+
+        <div class="code">
+          <div class="code-head">
+            <div class="code-title">js/main.js: popup</div>
+            <button class="copy-btn" data-copy-target="step5-popup">Copy</button>
+          </div>
+          <pre id="step5-popup"><code>function saveToLocalStorage(param, value) {
+  localStorage.setItem(lId + '_' + cId + '_' + param, value);
+}
+
+function getFromLocalStorage(param) {
+  return localStorage.getItem(lId + '_' + cId + '_' + param);
+}
+
+function initPopup() {
+  const notification = document.querySelector('.notification');
+  const notificationClose = document.querySelector('.notification__closeIcon');
+  if (!notification) return;
+
+  const popupShowed = getFromLocalStorage('popupShowed');
+  if (popupShowed === 'true') return;
+
+  setTimeout(() => {
+    notification.style.display = 'block';
+    saveToLocalStorage('popupShowed', 'true');
+  }, 3500);
+
+  setTimeout(() => {
+    notification.style.display = 'none';
+  }, 10000);
+
+  notificationClose?.addEventListener('click', () => {
+    notification.style.display = 'none';
+  });
+}</code></pre>
+        </div>
+      </div>
+
+      <div class="step">
+        <p class="step-title">Шаг 6. Country code + flag (учебная версия startOrderFrameProcesses)</p>
+        <h4>Задание</h4>
+        <p>Заполни <code>country_code</code> и визуально покажи calling code.</p>
+
+        <div class="code">
+          <div class="code-head">
+            <div class="code-title">js/main.js: country variables</div>
+            <button class="copy-btn" data-copy-target="step6-country">Copy</button>
+          </div>
+          <pre id="step6-country"><code>let flagImgUrl = '';
+let countryCallingCode = '';
+
+async function getCountryVariables() {
+  try {
+    const response = await fetch('https://ipapi.co/json/');
+    const data = await response.json();
+    const countryCode = data.country_code.toUpperCase();
+    countryCallingCode = data.country_calling_code;
+    flagImgUrl = `https://flagsapi.com/${countryCode}/flat/64.png`;
+  } catch (e) {
+    flagImgUrl = '';
+    countryCallingCode = '';
+  }
+}
+
+async function setCountryUI() {
+  if (flagImgUrl === '' || countryCallingCode === '') {
+    await getCountryVariables();
+  }
+
+  document.querySelectorAll('.flag_holder').forEach((el) => {
+    if (flagImgUrl) el.src = flagImgUrl;
+  });
+
+  const ccEl = document.querySelector('.country-input__value');
+  if (ccEl) ccEl.textContent = countryCallingCode;
+
+  const hidden = document.getElementById('countryCodeHiddenField');
+  if (hidden) hidden.value = countryCallingCode;
+}</code></pre>
+        </div>
+      </div>
+
+      <div class="step">
+        <p class="step-title">Шаг 7. Валидация: email + phone + required</p>
+        <h4>Задание</h4>
+        <p>Сделай понятную пошаговую проверку перед отправкой.</p>
+
+        <div class="grid-2">
+          <div>
+            <div class="code">
+              <div class="code-head">
+                <div class="code-title">Часть A: helpers</div>
+                <button class="copy-btn" data-copy-target="step7-a">Copy</button>
+              </div>
+              <pre id="step7-a"><code>function validateEmail(email) {
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(String(email).toLowerCase().trim());
+}
+
+function validatePhone(phone) {
+  const clean = String(phone).replace(/\D/g, '');
+  return /^\d{5,}$/.test(clean);
+}
+
+function markField(input, ok) {
+  input.classList.toggle('valid', ok);
+  input.classList.toggle('invalid', !ok);
+}</code></pre>
+            </div>
+          </div>
+          <div>
+            <div class="code">
+              <div class="code-head">
+                <div class="code-title">Часть B: validateForm</div>
+                <button class="copy-btn" data-copy-target="step7-b">Copy</button>
+              </div>
+              <pre id="step7-b"><code>function validateForm(form) {
+  let valid = true;
+
+  form.querySelectorAll('[name][required]').forEach((input) => {
+    const ok = String(input.value || '').trim() !== '';
+    markField(input, ok);
+    if (!ok) valid = false;
+  });
+
+  const emailInput = form.querySelector('.js-email-input');
+  if (emailInput) {
+    const ok = validateEmail(emailInput.value);
+    markField(emailInput, ok);
+    if (!ok) valid = false;
+  }
+
+  const phoneInput = form.querySelector('.js-phone-input');
+  if (phoneInput) {
+    const ok = validatePhone(phoneInput.value);
+    markField(phoneInput, ok);
+    if (!ok) valid = false;
+  }
+
+  return valid;
+}</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="checklist">
+          <label class="check"><input type="checkbox"/> Невалидный email отмечается классом <code>invalid</code></label>
+          <label class="check"><input type="checkbox"/> Номер меньше 5 цифр не проходит</label>
+          <label class="check"><input type="checkbox"/> Первая невалидная ячейка получает фокус</label>
+        </div>
+      </div>
+
+      <div class="step">
+        <p class="step-title">Шаг 8. Подготовка hidden-полей из offerUrl (стиль 2934)</p>
+        <h4>Задание</h4>
+        <p>Скопируй query-параметры из <code>offerUrl</code> в hidden input-ы формы.</p>
+
+        <div class="code">
+          <div class="code-head">
+            <div class="code-title">js/main.js: addHiddenField + parse offerUrl</div>
+            <button class="copy-btn" data-copy-target="step8-hidden">Copy</button>
+          </div>
+          <pre id="step8-hidden"><code>function addHiddenField(form, name, value) {
+  const input = document.createElement('input');
+  input.type = 'hidden';
+  input.name = name;
+  input.value = value;
+  form.appendChild(input);
+}
+
+function appendOfferQueryParamsToForm(form) {
+  try {
+    const query = offerUrl.split('?')[1];
+    if (!query) return;
+    query.split('&').forEach((item) => {
+      const [name, value = ''] = item.split('=');
+      if (!name) return;
+      addHiddenField(form, name, value);
+    });
+  } catch (e) {
+    console.warn('Cannot append offer params', e);
+  }
+}</code></pre>
+        </div>
+
+        <div class="warn">
+          Это именно «стиль 2934»: сначала прокинуть offer query в hidden inputs, потом делать submit.
+        </div>
+      </div>
+
+      <div class="step" id="transport">
+        <p class="step-title">Шаг 9. Транспорт данных: два режима (и когда какой нужен)</p>
+
+        <h4>Режим A — 2934-оригинал (POST submit + hidden fields)</h4>
+        <div class="code">
+          <div class="code-head">
+            <div class="code-title">submit handler: POST-style</div>
+            <button class="copy-btn" data-copy-target="step9-post">Copy</button>
+          </div>
+          <pre id="step9-post"><code>form.addEventListener('submit', async (event) => {
+  event.preventDefault();
+
+  if (!validateForm(form)) {
+    form.querySelector('.invalid')?.focus();
+    return;
+  }
+
+  // sub_id_15 гарантируем
+  const img = document.querySelector('.def-product-item-image');
+  if (img?.src) {
+    addHiddenField(form, 'sub_id_15', img.src);
+  }
+
+  // оригинальный submit формы (POST body)
+  event.target.submit();
+});</code></pre>
+        </div>
+
+        <h4>Режим B — query-only redirect (когда нужен GET-витрине типа Display GET Params)</h4>
+        <div class="code">
+          <div class="code-head">
+            <div class="code-title">submit handler: Query-only</div>
+            <button class="copy-btn" data-copy-target="step9-query">Copy</button>
+          </div>
+          <pre id="step9-query"><code>function buildActionUrlFromForm(form) {
+  const url = new URL(offerUrl, window.location.origin);
+
+  // входящие параметры страницы (чтобы не потерять _lp/_token)
+  new URLSearchParams(window.location.search).forEach((v, k) => {
+    if (!url.searchParams.has(k)) url.searchParams.set(k, v);
+  });
+
+  // поля формы в query
+  const fd = new FormData(form);
+  for (const [name, value] of fd.entries()) {
+    if (typeof value !== 'string') continue;
+    if (value.trim() === '') continue;
+    url.searchParams.set(name, value.trim());
+  }
+
+  return url.toString();
+}
+
+form.addEventListener('submit', (event) => {
+  event.preventDefault();
+  if (!validateForm(form)) return;
+  const finalUrl = buildActionUrlFromForm(form);
+  window.location.href = finalUrl;
+});</code></pre>
+        </div>
+
+        <div class="info">
+          Ключевая мысль: оба режима технически нормальные. Выбор зависит от того, как целевой оффер принимает данные.
+          Если оффер читает GET/query — нужен режим B. Если ожидает POST body — режим A.
+        </div>
+      </div>
+
+      <div class="step">
+        <p class="step-title">Шаг 10. Полная инициализация приложения</p>
+        <h4>Задание</h4>
+        <p>Собери порядок запуска, чтобы не было гонок (race conditions).</p>
+
+        <div class="code">
+          <div class="code-head">
+            <div class="code-title">js/main.js: init order</div>
+            <button class="copy-btn" data-copy-target="step10-init">Copy</button>
+          </div>
+          <pre id="step10-init"><code>document.addEventListener('DOMContentLoaded', async () => {
+  // 1) переводы
+  try {
+    translation = await loadLangData('en');
+    applyTranslations(translation);
+  } catch (e) {
+    console.warn('Translation failed', e);
+  }
+
+  // 2) popup
+  initPopup();
+
+  // 3) country flag/code
+  await setCountryUI();
+
+  // 4) form boot
+  const form = document.getElementById('mForm');
+  if (form) {
+    appendOfferQueryParamsToForm(form); // для POST-style
+    initFormHandlers(form);             // ты реализуешь внутри submit-логику
+  }
+});</code></pre>
+        </div>
+
+        <h4>Почему именно такой порядок</h4>
+        <ul>
+          <li>Сначала тексты, чтобы кнопка <code>Wait</code> уже была в translation.</li>
+          <li>Потом popup и country UI, потому что это не блокирует форму.</li>
+          <li>В конце — form handlers, когда DOM уже готов.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="card" id="debug">
+      <h2>Дебаг-процедура (универсально, не только под Display GET Params)</h2>
+
+      <h3>Чек A: синтаксис</h3>
+      <ul>
+        <li>Нет ли незакрытых <code>)</code>, <code>}</code>, <code>]</code>.</li>
+        <li>Нет ли обращения к элементу, которого ещё нет в DOM.</li>
+      </ul>
+
+      <h3>Чек B: валидация</h3>
+      <ul>
+        <li>Невалидный email реально блокирует submit.</li>
+        <li>Номер короче 5 цифр блокирует submit.</li>
+      </ul>
+
+      <h3>Чек C: параметры</h3>
+      <ul>
+        <li>Проверь в Network нужный запрос отправки.</li>
+        <li>Смотри отдельно <span class="kbd">Query String Parameters</span> и <span class="kbd">Form Data</span>.</li>
+        <li>Проверь наличие <code>sub_id_24..27</code>, <code>sub_id_21..23</code>, <code>sub_id_9</code>, <code>sub_id_15</code>.</li>
+      </ul>
+
+      <h3>Чек D: 404</h3>
+      <ul>
+        <li>Проверь, что <code>offerUrl</code> не содержит буквальный <code>{offer}</code>.</li>
+        <li>Проверь, что URL абсолютный и без битой query-строки.</li>
+      </ul>
+
+      <div class="warn">
+        Если всё в Network выглядит «нормально», но оффер не видит поля — проверь, совпадает ли формат передачи (GET или POST) с ожиданием оффера.
+      </div>
+    </section>
+
+    <section class="card" id="exam">
+      <h2>Мини-экзамен: сделай это без копирования больших блоков</h2>
+      <p>Задача: написать свою версию mini-prefill в стиле 2934 и пройти проверку ниже.</p>
+
+      <div class="checklist">
+        <label class="check"><input type="checkbox"/> В <code>index.html</code> есть глобальные переменные как в 2934-style</label>
+        <label class="check"><input type="checkbox"/> Форма содержит все нужные <code>sub_id</code></label>
+        <label class="check"><input type="checkbox"/> JSON-переводы реально загружаются через <code>fetch</code></label>
+        <label class="check"><input type="checkbox"/> Popup показывается и закрывается</label>
+        <label class="check"><input type="checkbox"/> Country code записывается в <code>country_code</code></label>
+        <label class="check"><input type="checkbox"/> Валидация email/phone работает</label>
+        <label class="check"><input type="checkbox"/> Ты понимаешь разницу режима POST и query-only</label>
+        <label class="check"><input type="checkbox"/> После submit нужные параметры уходят в выбранном режиме</label>
+      </div>
+
+      <div class="ok">
+        Когда пройдёшь этот лист, следующий логичный шаг — добавить модуль step/flow (квиз до префила) и уже расширять архитектуру.
+      </div>
+
+      <p><a class="link-top" href="#top">↑ Наверх</a></p>
+    </section>
+
+    <section class="card">
+      <h2>Референсы, на которых построена эта методичка</h2>
+      <p class="small">
+        <code>/Users/sergeybudyakin/Downloads/3894_landing_archive/2934_landing_archive/index.html</code><br/>
+        <code>/Users/sergeybudyakin/Downloads/3894_landing_archive/2934_landing_archive/js/scripts.js</code><br/>
+        Дополнительно для сравнения транспорта данных:
+        <code>/Users/sergeybudyakin/Downloads/3894_landing_archive/4051_landing_archive/form-handler.js</code>
+      </p>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      const buttons = document.querySelectorAll('.copy-btn');
+
+      function fallbackCopy(text) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.top = '-9999px';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        try {
+          document.execCommand('copy');
+        } catch (e) {}
+        document.body.removeChild(ta);
+      }
+
+      buttons.forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          const targetId = btn.getAttribute('data-copy-target');
+          const el = document.getElementById(targetId);
+          if (!el) return;
+
+          const text = el.innerText;
+          try {
+            if (navigator.clipboard && window.isSecureContext) {
+              await navigator.clipboard.writeText(text);
+            } else {
+              fallbackCopy(text);
+            }
+            const old = btn.textContent;
+            btn.textContent = 'Copied';
+            setTimeout(() => { btn.textContent = old; }, 1200);
+          } catch (e) {
+            fallbackCopy(text);
+            const old = btn.textContent;
+            btn.textContent = 'Copied';
+            setTimeout(() => { btn.textContent = old; }, 1200);
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

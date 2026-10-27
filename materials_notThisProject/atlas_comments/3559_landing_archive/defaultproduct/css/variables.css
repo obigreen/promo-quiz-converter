@@ -1,0 +1,200 @@
+/* ===== block_css ===== */
+/* 
+========== BASE ============
+*/
+:root {
+
+     --main-color: #E31837;
+
+    /* цвет подложек */
+    --card-background: #fff;
+
+    /*скругление углов подложек*/
+    --main-border-radius: 20px;
+
+    /*тень у подложек*/
+    --card-dropshadow: 0 4px 8px 0 rgba(0, 0, 0, .15);
+
+    /*цвет кнопок*/
+    --button-color: #E31837;
+    
+    /*цвет текста в кнопках*/
+    --font-button-color: #fff;
+
+     /*цвет тени в кнопках*/
+    --button-dropshadow: 0px 7px 11px 0px #67687533;
+    
+    /*цвет кнопки при наведении*/
+    --button-hover-color: #7E1727;
+    
+    /*цвет шрифта кнопки при наведении*/
+    --font-button-hover-color: #fff;
+    
+    /*цвет неактивной кнопки*/
+    --button-disabled-color:#E31837;
+    --font-button-disabled-color: #fff;
+
+    /* скругление кнопок */
+    --second-border-radius: 20px;
+    
+        /*цвет фона страницы*/
+    --body-background-color: #f4f2ee;
+    /* фоновое изображение */
+    /* если изображение отсутсвует - будет показан цвет из предыдущей переменной */
+    --body-background-img: url(../PRODUCTNAME/img/bg.webp);
+    /* фильтр для фона */
+    --body-background-filter: blur(3px);
+
+      /*цвет splash страницы*/
+    --splash-background-color: #fff;
+    
+    /*цвета стаднартного шрифта*/
+    --font-color: #000;
+
+    /*цвет шрифта заголовка на подложке */
+    --second-font-color: #000;
+
+    /*цвет шрифта в залитой плашке*/
+    --third-font-color: #fff;
+
+     /*цвет заголовка в залитой плашке*/
+    --fourth-font-color: #fff;
+   
+    /*серые элементы таймер, комменты, всплывашка*/  
+    --five-font-color: #a8a8a8;
+
+    /*доп.цвет*/
+    --six-font-color: #a8a8a3;
+
+    /*акцентный цвет для цен или еще чего-нибудь*/
+    --accent-font-color: #e40001;
+
+    /*цвет активной плашки в FAQ*/
+    --second-accent-font-color: #DB9B52;
+
+    /* выбор шрифта */
+    --font-family: Inter;
+    --primary-font-family: Geologica;
+    --second-font-family: Inter;
+
+    /*внутренний отсуп*/
+    --padding: 12px;
+
+    /*максимальная ширина контента*/
+    --page-max-width: 1200px;
+
+    /*отступы*/
+    --wrapper-desktop-gap: 20px;
+    --wrapper-mobile-gap: 20px;
+
+    /* доп */
+    --primary-border-radius: 12px;
+
+
+}
+/* ===== block_header_9 ===== */
+:root {
+    /*цвет нижней границы header*/
+   --header-border-bottom: 1px solid #e2e2e2;
+   
+   /*цвет шрифта header*/
+   --header-font-color:#000;
+
+   /*цвет шрифта header 2*/
+   --header-second-font-color:#fff;
+   
+   /*цвет фона header 2*/
+   --header-second-background-color:#f4f2ee;
+
+   /*цвет фона header*/
+   --header-background-color:#fff;
+}
+/* ===== block_popup_1 ===== */
+/* 
+========== POPUP 1 ============
+*/ 
+:root {
+
+  }
+  
+/* ===== block_content_27 ===== */
+/* 
+
+=========== CAROUSEL 3 ===========
+*/
+:root {
+    --pagination-dot-bg: #d7daff;
+    --pagination-dot-active-bg: #09ba23;
+    --pagination-dot-size: 8px;
+    --pagination-gap: 5px;
+    --pagination-padding: 2px;
+    --pagination-width: fit-content;
+    --pagination-position: relative;
+    --pagination-margin: 4px auto;
+    --swiper-transition: transform 0.3s ease-in-out;
+    --swiper-cursor: grab;
+    --swiper-dragging-transition: none;
+    --swiper-dragging-cursor: grabbing;
+    --swiper-slide-padding: 0 4px;
+    --swiper-slide-border-radius: 10px;
+    --swiper-img-background: #fff;
+
+ 
+    /* 
+        Цвета называть по аналогии с первым, можно добавлять, можно убирать
+        !!! Важно соблюдать порядок нумерации !!!
+        можно не указывать цвета вообще, тогда селекторы не отобразяться, как и заголовок к ним
+        !!! Не забывайте про изображения под селектор и то что они должны называться по аналогии
+        main_top_content_3_carousel_s1-1
+        main_top_content_3_carousel_s1-2
+        main_top_content_3_carousel_s2-1
+        main_top_content_3_carousel_s2-2
+        и т.д.
+    */
+
+
+    /* --carousel_3_color_selector_1_color_s1: #b68e19;
+    --carousel_3_color_selector_1_color_s2: #f2d4bf;
+    --carousel_3_color_selector_1_color_s3: #b85b5b;
+    --carousel_3_color_selector_1_color_s4: #454142;
+    --carousel_3_color_selector_1_color_s5: #e3b8aa; */
+
+
+    /*end_selectors*/
+    --cards_color_selector_1_color_s1: black;
+    --cards_color_selector_1_color_s2: green;
+    --cards_color_selector_1_color_s3: #1c2b1c;
+
+
+    /*Скругление для всех селекторов цвета*/
+    --carousel_3_color_selector_1_border_radius: 50%;
+
+    /*Цвет обводки селекторов цвета*/
+    --carousel_3_color_selector_1_border_color: 0 0 0 2px #000;
+
+    /*Общее селекторы размера и прочего*/
+    --basic_selector_1_border_radius: 4px;
+
+    /*Неактивный селектор размера и прочего*/
+    --basic_selector_1_font_color: #000;
+    --basic_selector_1_bg_color: #fff;
+    --basic_selector_1_border_color: #ccc;
+
+    /*Активный селектор размера и прочего*/
+    --basic_selector_1_active_font_color: #000;
+    --basic_selector_1_active_bg_color: #fff;
+    --basic_selector_1_active_border_color: #000;
+
+}
+
+
+/* ===== block_boxes_2 ===== */
+:root {
+    --box-top-color: #A9A9A9;
+    --box-left-color: #716C6C;
+    --box-inside-color: #2B2B2B;
+    --box-border-color: #d5d5d5;
+}
+
+
+

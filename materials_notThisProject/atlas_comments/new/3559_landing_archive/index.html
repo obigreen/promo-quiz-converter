@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <link rel="icon" href="./{sub_id_28}/img/comments_1_support.webp" type="image/x-icon">
+    <title class="text_page_title"></title>
+    <link rel="stylesheet" href="{sub_id_28}/css/variables.css?ver=36">
+    <link rel="stylesheet" href="css/anim.css">
+    <link rel="stylesheet" href="css/fonts.css">
+    <link rel="preload" href="css/styles.css?ver=107" as="style">
+    <link rel="stylesheet" href="css/styles.css?ver=107">
+    <link rel="preload" href="./fonts/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    <link rel="preload" href="./fonts/Inter-Black.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    <link rel="preload" href="./fonts/Inter-Bold.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    <link rel="preload" href="./fonts/Inter-Medium.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    <link rel="preload" href="./fonts/Inter-SemiBold.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+
+    <!-- ===== block_main_script_start ===== -->
+    <script>
+        function handleImageError(img, fileName) {
+            const basePaths = [
+                `./{sub_id_28}/img/{country}/`,
+                `./{sub_id_28}/img/`,
+                `./img/{country}/`,
+                `./img/`
+            ];
+
+            let attemptIndex = 0;
+
+
+            function tryNextSource() {
+                if (attemptIndex < basePaths.length) {
+                    img.onerror = tryNextSource; // Устанавливаем onerror для попытки следующего пути
+                    img.src = basePaths[attemptIndex] + fileName;
+                    attemptIndex++;
+                } else {
+                    img.style.display = 'none'; // Скрываем изображение, если все пути провалились
+                }
+            }
+
+
+            tryNextSource(); // Начинаем попытки загрузки
+        }
+    </script>
+    <script>
+        function getQueryParam(param) {
+            let urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        var productImageSrc = '{offerlogo}';
+        let lId = '{landing_id}'
+        let cId = '{campaign_id}'
+        let offerUrl = '{offer}'
+        let langCode = "{language}" //{language}
+        let testLang = getQueryParam('testlang');
+        if (testLang != null) {
+            langCode = testLang;
+        }
+
+        let save = getQueryParam('save');
+        if (save == null) {
+            save = true
+        } else if (save == 'false') {
+            save = false;
+        }
+
+        let productName = "{sub_id_28}"
+
+        let countryCurrent = "{country}" //{country}
+        let cc_country = "{_cc_country}"
+        if (cc_country.includes("_cc_country") || cc_country === "") {
+            cc_country = "{_country:en}"
+        }
+        let pricenew = "{_pricenew}"
+        let priceold = "{_priceold}"
+
+        let names = "{_names}";
+        let name1  = "{_name1}";
+        let name2  = "{_name2}";
+        let name3  = "{_name3}";
+        let name4  = "{_name4}";
+        let name5  = "{_name5}";
+        let name6  = "{_name6}";
+        let name7  = "{_name7}";
+        let name8  = "{_name8}";
+        let name9  = "{_name9}";
+        let name10 = "{_name10}";
+        let name11 = "{_name11}";
+        let name12 = "{_name12}";
+        let name13 = "{_name13}";
+        let name14 = "{_name14}";
+        let name15 = "{_name15}";
+        //Переехал к именам
+        let supportName = "{_supportname}";
+
+        let notifnames = "{_namesnotif}";
+
+        // обновлен скрипт
+        if (notifnames && !notifnames.includes('_namesnotif') && notifnames.trim() !== '') {
+            const notifnamesArr = notifnames.split(',').map(n => decodeURIComponent(n.trim()));
+            notifnames = notifnamesArr;
+        }
+
+        // обновлен скрипт распределения имен
+        if (names && !names.includes('_names') && names.trim() !== '') {
+            const nameArr = names.split(',').map(n => decodeURIComponent(n.trim()));
+            const arrLen = nameArr.length;
+
+            if (arrLen >= 1) {
+                supportName = nameArr[arrLen - 1];
+            }
+
+            const maxFirstNames = Math.min(15, arrLen - 1);
+
+            for (let i = 0; i < maxFirstNames; i++) {
+                switch (i) {
+                    case 0:
+                        name1 = nameArr[i];
+                        break;
+                    case 1:
+                        name2 = nameArr[i];
+                        break;
+                    case 2:
+                        name3 = nameArr[i];
+                        break;
+                    case 3:
+                        name4 = nameArr[i];
+                        break;
+                    case 4:
+                        name5 = nameArr[i];
+                        break;
+                    case 5:
+                        name6 = nameArr[i];
+                        break;
+                    case 6:
+                        name7 = nameArr[i];
+                        break;
+                    case 7:
+                        name8 = nameArr[i];
+                        break;
+                    case 8:
+                        name9 = nameArr[i];
+                        break;
+                    case 9:
+                        name10 = nameArr[i];
+                        break;
+                    case 10:
+                        name11 = nameArr[i];
+                        break;
+                    case 11:
+                        name12 = nameArr[i];
+                        break;
+                    case 12:
+                        name13 = nameArr[i];
+                        break;
+                    case 13:
+                        name14 = nameArr[i];
+                        break;
+                    case 14:
+                        name15 = nameArr[i];
+                        break;
+                }
+            }
+        }
+
+        let offerTitle = "{_offertitle}"
+        let product = "{_extra_param_4}"
+        if (product == "" || product.includes("extra_param_") || product.includes("name2")) {
+            product = offerTitle
+        }
+    </script>
+
+
+    <!-- ===== block_main_script_end ===== -->
+    <!-- ===== block_facebook_kt_start ===== -->
+    <script>
+        !function (f, b, e, v, n, t, s) {
+            if (f.fbq) return;
+            n = f.fbq = function () {
+                n.callMethod ?
+                    n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+            };
+            if (!f._fbq) f._fbq = n;
+            n.push = n;
+            n.loaded = !0;
+            n.version = '2.0';
+            n.queue = [];
+            t = b.createElement(e);
+            t.async = !0;
+            t.src = v;
+            s = b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t, s)
+        }(window, document, 'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '{pixel}');
+        fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+                   src="https://www.facebook.com/tr?id={pixel}&ev=PageView&noscript=1"/></noscript>
+    <!-- End Meta Pixel Code -->
+    <!-- ===== block_facebook_kt_end ===== -->
+</head>
+
+<body>
+<!-- ===== block_splash_1_start ===== -->
+<script>
+    document.body.style.overflow = 'hidden'
+</script>
+<div id="splash">
+    <svg class="spalsh_1_spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+        <circle class="spalsh_1_path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33"
+                r="30"></circle>
+    </svg>
+</div>
+<!-- ===== block_splash_1_end ===== -->
+
+<!-- ===== block_scrolltotop_1_start ===== -->
+<button id="scrollToTopBtn" class="scrolltotop_1" aria-label="Scroll to top">
+    <svg viewBox="0 0 24 24">
+        <path fill="currentColor" d="M12 5l7 12H5z"/>
+    </svg>
+</button>
+<!-- ===== block_scrolltotop_1_end ===== -->
+
+<!-- ===== block_header_9_start ===== -->
+<header class="header_9">
+    <div class="container">
+        <div class="header_9__flex">
+            <img class="header_9__logo" src="./{sub_id_28}/img/{country}/header_9_logo.webp"
+                 onerror="handleImageError(this, 'header_9_logo.webp');" alt="">
+            <div class="header_9__block">
+                <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" width="30px"
+                     height="30px">
+                    <path fill="var(--header-font-color)"
+                          d="M831 234.8c20.2 0 36.6 16.4 36.6 36.6 0 20.2-16.4 36.6-36.6 36.6l-438.9 0c-20.2 0-36.6-16.4-36.5-36.6 0-20.2 16.4-36.6 36.5-36.6l438.9 0z m-618.9 83.4c26.3 0 47.5-21.3 47.6-47.6 0-26.3-21.3-47.5-47.6-47.5-26.3 0-47.5 21.3-47.5 47.5 0 26.3 21.3 47.5 47.5 47.6z m618.9 399.4c20.2 0 36.6 16.4 36.6 36.5 0 20.2-16.4 36.6-36.6 36.6l-438.9 0c-20.2 0-36.6-16.4-36.5-36.6 0-20.2 16.4-36.6 36.5-36.5l438.9 0z m-618.9 83.3c26.3 0 47.5-21.3 47.6-47.5 0-26.3-21.3-47.5-47.6-47.6-26.3 0-47.5 21.3-47.5 47.6 0 26.3 21.3 47.5 47.5 47.5z m618.9-324.7c20.2 0 36.6 16.4 36.6 36.6 0 20.2-16.4 36.6-36.6 36.5l-438.9 0c-20.2 0-36.6-16.4-36.5-36.5 0-20.2 16.4-36.6 36.5-36.6l438.9 0z m-618.9 83.3c26.3 0 47.5-21.3 47.6-47.5 0-26.3-21.3-47.5-47.6-47.5-26.3 0-47.5 21.3-47.5 47.5 0 26.3 21.3 47.5 47.5 47.5z"></path>
+                </svg>
+                <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" width="30px"
+                     height="30px">
+                    <path fill="var(--header-font-color)"
+                          d="M510.8 541.3c204.6 0 323.6 71 356.9 213 8.9 38.1-14.8 76.3-52.9 85.2-5.3 1.2-10.8 1.9-16.3 1.8l-575.5 0c-39.2-0.1-70.9-31.9-70.8-71 0-5.4 0.6-10.8 1.9-16 33.2-142 152.1-213 356.7-213z m0 65.8c-176.9 0-267.3 54-292.6 162.1-0.1 0.4-0.1 0.8-0.2 1.2 0 2.8 2.3 5.1 5 5.1l575.7 0c0.4 0 0.8 0 1.1-0.1 2.7-0.6 4.4-3.4 3.8-6.1-25.4-108.2-115.9-162.2-292.8-162.2z m1.2-501c99 0 179.2 80.2 179.2 179.2 0 99-80.2 179.2-179.2 179.2-99 0-179.2-80.2-179.2-179.2 0-99 80.2-179.2 179.2-179.2z m0 65.8c-62.6 0-113.4 50.8-113.4 113.4 0 62.6 50.8 113.4 113.4 113.3 62.6 0 113.4-50.8 113.4-113.3 0-62.6-50.8-113.4-113.4-113.4z"></path>
+                </svg>
+                <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" width="30px"
+                     height="30px">
+                    <path fill="var(--header-font-color)"
+                          d="M384 775.3c30.3 0 54.9 24.6 54.9 54.9 0 30.3-24.6 54.9-54.9 54.8-30.3 0-54.9-24.6-54.9-54.8 0-30.3 24.6-54.9 54.9-54.9z m365.7 0c30.3 0 54.9 24.6 54.9 54.9 0 30.3-24.6 54.9-54.9 54.8-30.3 0-54.9-24.6-54.8-54.8 0-30.3 24.6-54.9 54.8-54.9z m-636.9-636.8l4.1 0.5 83.3 16c43.5 8.4 77.2 42.8 84.6 86.5l3 18.1 454.4 0.1c80.8 0 146.3 65.5 146.2 146.2 0 7.8-0.6 15.6-1.8 23.3l-26.7 165.3c-11.1 69.1-70.8 119.9-140.8 120l-310 0c-71.3 0-131.7-52.7-141.3-123.4l-39.8-291.1c-0.1-0.6-0.3-1.2-0.4-1.8l-7.7-45.7c-2.8-16.5-15.6-29.6-32.1-32.8l-83.4-16c-17.9-3.4-29.5-20.7-26.1-38.6 2.9-15.1 15.7-25.8 30.4-26.6l4.1 0z m629.4 187l-444.3 0 35.1 256.7c5.2 38 37.7 66.4 76.1 66.4l310 0c37.7 0 69.8-27.4 75.8-64.5l26.7-165.3c0.7-4.2 1-8.5 1-12.9 0-44.4-36-80.5-80.4-80.4z"></path>
+                </svg>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- ===== block_header_9_end ===== -->
+
+
+<!--=====block_notifications======-->
+<div class="notif">
+    <ul class="notif__list"></ul>
+    <div class="notif__template" style="display: none">
+        <li class="notif__item notif--show">
+            <div class="notif__image">
+                <img class="notification__img def-product-item-image" src="./{sub_id_28}/img/{country}/cards.webp"
+                     onerror="handleImageError(this, 'cards.webp');">
+            </div>
+            <div class="notif__content">
+                <div class="notif__header">
+                    <span class="text_popup_1_name" id="text_popup_name"></span>
+                    <span class="text_popup_1_1"></span>
+                    <span class="notif__location">{_cc_country}</span>
+                </div>
+                <div class="notif__desc text_popup_1_2"></div>
+                <div class="notif__footer" style="display: flex;gap: 10px;align-items: center;">
+                    <span class="notif__time text_popup_1_3"></span>
+                    <div class="notif__icon">
+                        <img loading="lazy" class="notification__closeIcon"
+                             src="./{sub_id_28}/img/{country}/notification-ok.svg"
+                             onerror="handleImageError(this, 'notification-ok.svg');" alt="photo">
+                    </div>
+                </div>
+            </div>
+            <button class="notif__close">
+                <img loading="lazy" class="notification__closeIcon"
+                     src="./{sub_id_28}/img/{country}/notifications-close.svg"
+                     onerror="handleImageError(this, 'notifications-close.svg');"
+                     height="15px" width="15px" alt="photo">
+            </button>
+        </li>
+    </div>
+</div>
+<!--=====block_notifications======-->
+
+
+<!-- ===== block_land_start ===== -->
+<div class="container wrapper">
+
+    <div id="step0" class="wrapper">
+        <div class="flex-dir-row">
+            <div class="block-2 aside">
+                <!-- ===== block_content_27_start ===== -->
+                <h1 class="aside__title text-2 text_content_27_subtitle">
+
+                </h1>
+                <!-- ===== block_content_1_end ===== -->
+            </div>
+            <div class="aside">
+                <!-- ===== block_main_top_content_3_carousel_start ===== -->
+                <main class="main">
+
+                    <div class="swiper hero__swiper" style="overflow: hidden;">
+                        <div class="swiper-wrapper">
+                            <svg class="spalsh_1_spinner" width="65px" height="65px" viewBox="0 0 66 66"
+                                 xmlns="http://www.w3.org/2000/svg" style="
+                                        position: absolute;
+                                        margin: 0 auto;
+                                        width: 100%;
+                                        height: 100%;
+                                        padding: 30%;
+                                        z-index: -1;
+                                    ">
+                                <circle class="spalsh_1_path" fill="none" stroke-width="6" stroke-linecap="round"
+                                        cx="33" cy="33" r="30"></circle>
+                            </svg>
+                            <div class="swiper-slide">
+
+                                <img id="sliderImage"
+                                     src="./{sub_id_28}/img/{country}/main_top_content_3_carousel_s1-1.webp"
+                                     onerror="handleImageError(this, 'main_top_content_3_carousel_s1-1.webp');">
+                            </div>
+                        </div>
+                        <div class="hero__pagination"></div>
+                    </div>
+                    <div>
+                        <div>
+                            <div id="main_top_content_3_color_container">
+
+                                <div class="main__flex-3">
+                                    <span class="main__text-6 text_main_top_content_3_text-5"></span>
+                                </div>
+                                <div class="main__flex-2">
+
+                                </div>
+                            </div>
+                            <div id="root_dynamic_containers">
+
+                            </div>
+
+                        </div>
+                        <p class="main__text-3 text-3 text_main_top_content_2_text">
+
+                        </p>
+                        <p class="main__text-3 text_main_top_content_2_text-2">
+                        </p>
+
+                        <p class="main__text-3 text_main_top_content_2_text-3">
+                        </p>
+
+                    </div>
+
+                </main>
+                <!-- ===== block_main_top_content_3_carousel_end ===== -->
+                <!-- ===== block_quiz_1_auto_start ===== -->
+
+                <div>
+                    <!-- ===== block_quiz_1_auto_start ===== -->
+                    <div class="main_top_content_2__btn">
+                        <button aria-label="button"
+                                class="main__btn text_quiz_1_auto_main_btn text_main_top_content_2_btn"
+                                data-bq="1"
+                                id="mainTopBtn">
+                        </button>
+                    </div>
+                    <!-- ===== block_quiz_1_auto_end ===== -->
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="step1" class="hidden aside">
+        <div class="quetions" id="quetions" style="display:none">
+
+            <h2 class="loader__title text-26 text_quiz_1_auto_title"></h2>
+
+            <div class="que__flex">
+                <div class="que__timer" id="timer">
+                    <span class="text_quiz_1_auto_timer_1"></span>
+                    <span id="quiz_min">2</span>:<span id="quiz_sec">00</span>
+                </div>
+
+                <div class="que__count" style="display: none">
+                    <span class="text_quiz_1_auto_timer_2"></span>
+                    <span id="queCounter">1</span>/<span id="queCount">5</span>
+                </div>
+            </div>
+
+            <div class="quiz-progress">
+                <div class="quiz-progress__header">
+                    <span class="text_quiz_1_auto_progress_label"></span>
+                    <span id="quizProgressCurrent">1</span>
+                    <span class="text_quiz_1_auto_progress_of"></span>
+                    <span id="quizProgressTotal">5</span>
+                </div>
+                <div class="quiz-progress__bar">
+                    <div class="quiz-progress__fill" id="quizProgressFill"></div>
+                </div>
+
+                <div class="quiz-progress__percent" id="quizProgressPercent">0%</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="step2" class="hidden aside">
+        <!-- ===== block_loader_1_start ===== -->
+        <section class="loader-1">
+            <div class="container wrapper">
+                <h2 class="loader__title text-26 text_loader_1_1"></h2>
+                <div class="loader__spinner"></div>
+                <ul class="loader__list list-reset">
+                    <li class="loader__item loader__item-1 text-27 text_loader_1_2"></li>
+                    <li class="loader__item loader__item-2 text-28 text_loader_1_3"></li>
+                    <li class="loader__item loader__item-3 text-29 text_loader_1_4"></li>
+                </ul>
+            </div>
+        </section>
+        <!-- ===== block_loader_1_end ===== -->
+    </div>
+
+    <div id="step5" class="hidden">
+        <!-- ===== step5 header block ===== -->
+        <div class="aside wrapper container thankyou-header" style="margin-bottom: 20px;">
+            <h2 class="thankyou-header__title text_congratulation_5_header_title"></h2>
+            <p class="thankyou-header__subtitle text_congratulation_5_header_subtitle"></p>
+            <p class="thankyou-header__note text_congratulation_5_header_note"></p>
+            <div class="thankyou-header__arrows">
+                <span class="arrow-down"></span>
+                <span class="arrow-down"></span>
+            </div>
+        </div>
+
+
+        <!-- ===== step5 main block ===== -->
+        <div class="aside wrapper container thankyou-main">
+
+            <!-- ===== end_selectors_block ===== -->
+            <main class="main" style="width: 100%">
+
+                <div class="con-prize">
+                    <div class="con-prize-outter">
+
+                        <div class="con-prize-ln1">
+                            <div class="prize-image-box">
+                                <img id="cardsImage"
+                                     class="product-image product-item-image def-product-item-image"
+                                     src="./{sub_id_28}/img/{country}/cards_s1.webp"
+                                     onerror="handleImageError(this, 'cards_s1.webp');"
+                                     alt="card">
+                                <div id="cardsImgLoader" class="img-loader" aria-hidden="true">
+                                    <span class="loader__spinner"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="con-prize-ln2">
+                            <h2 class="prize-ln2-title prize_title" id="prize-ln2-desc"></h2>
+
+                            <div class="prize-ln2-amount" style="font-size: 17px;">
+                                <div class="prize-ln2-zero1">
+                                    <span class="text_con_prize_price_label"></span>
+                                    <del class="prize_original_price"></del>
+                                </div>
+                                <div class="prize-ln2-zero2 animate__animated animate__heartBeat animate__slower animate__infinite prize_discounted_price"></div>
+                            </div>
+
+                            <ul class="colors" id="cardsColorsContainer"></ul>
+
+                            <p class="prize-ln2-stock">
+                                <span class="text_con_prize_stock_label"></span>
+                                <b>(<span id="qty"
+                                          class="animate__animated animate__flash animate__slower animate__infinite">5</span>)</b>
+                            </p>
+
+                            <div class="prize-ln2-btn">
+                                <button id="btn-claim" class="con-prize-button" style="border-radius:15px;">
+                                    <svg class="svg-inline--fa fa-shopping-cart fa-w-18"
+                                         style="padding-right: 4px;width: 20px"
+                                         aria-hidden="true" focusable="false" data-prefix="fas"
+                                         data-icon="shopping-cart" role="img" xmlns="http://www.w3.org/2000/svg"
+                                         viewBox="0 0 576 512">
+                                        <path fill="currentColor"
+                                              d="M528.12 301.319l47.273-208C578.806 78.301 567.391 64 551.99 64H159.208l-9.166-44.81C147.758 8.021 137.93 0 126.529 0H24C10.745 0 0 10.745 0 24v16c0 13.255 10.745 24 24 24h69.883l70.248 343.435C147.325 417.1 136 435.222 136 456c0 30.928 25.072 56 56 56s56-25.072 56-56c0-15.674-6.447-29.835-16.824-40h209.647C430.447 426.165 424 440.326 424 456c0 30.928 25.072 56 56 56s56-25.072 56-56c0-22.172-12.888-41.332-31.579-50.405l5.517-24.276c3.413-15.018-8.002-29.319-23.403-29.319H218.117l-6.545-32h293.145c11.206 0 20.92-7.754 23.403-18.681z"></path>
+                                    </svg>
+                                    <span class="text_con_prize_button_continue"></span>
+                                </button>
+                            </div>
+
+                            <ul class="features-list">
+                                <li class="prize-ln2-desc feature_1"></li>
+                                <li class="prize-ln2-desc feature_2"></li>
+                                <li class="prize-ln2-desc feature_3"></li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </main>
+            <!-- ===== end_selectors_block ===== -->
+        </div>
+    </div>
+
+    <div id="comments" class="hidden">
+        <!-- ===== block_comments_1_start ===== -->
+        <div class="comments-block">
+
+            <div class="add-comment active">
+                <h2 class="com__title">
+                    <p class="text-32 text_comments_1"></p>
+                    <span id="commentsTotal">28</span>
+                </h2>
+                <div class="com__flex">
+                    <img loading="lazy" src="./{sub_id_28}/img/{country}/comments_1_user.webp"
+                         onerror="handleImageError(this, 'comments_1_user.webp');"
+                         alt="User" class="comment__avatar">
+
+                    <div class="relative-wrapper">
+                        <!--Для указания своего имени-->
+                        <!--                        <div class="relative">-->
+                        <!--                            <input id="usernameInput" class="comment__name-input" type="text" maxlength="60"-->
+                        <!--                                   placeholder="Your name">-->
+                        <!--                        </div>-->
+
+                        <div class="relative">
+                            <textarea id="textarea" maxlength="800"></textarea>
+                            <span class="placeholder text-99 text_comments_1_add_comment"></span>
+                            <div class="replying-banner" id="replyingBanner">
+                                <span class="replying-label text_comments_1_replying_to"></span>
+                                <span class="replying-target" id="replyingTarget"></span>
+                                <button type="button" class="replying-cancel" id="replyingCancel"
+                                        data-i18n="text_comments_1_cancel"></button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="comment-button-box">
+                    <div class="comment-button-right">
+                        <button aria-label="button" disabled class="disabled text-34 text_comments_1_post"
+                                id="postCommentBtn"></button>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="comments comment-block">
+                <div class="container">
+                    <ul class="comment__list list-reset" id="commentsList">
+                        <!-- Комментатор 1 -->
+                        <li class="comment__item" data-origin="static">
+                            <div class="comment__container">
+                                <div class="comment__avatar">
+                                    <img loading="lazy" src="./{sub_id_28}/img/{country}/comments_1_av1.webp"
+                                         onerror="handleImageError(this, 'comments_1_av1.webp');" alt="">
+                                </div>
+                                <div class="comment__content">
+                                    <div class="comment__name text_comments_1-name-1"></div>
+                                    <div class="comment__text text_comments_1_1"></div>
+
+                                    <ul class="comment__actions list-reset">
+                                        <span>
+                                            <img loading="lazy" src="./{sub_id_28}/img/{country}/comments_1_like.webp"
+                                                 onerror="handleImageError(this, 'comments_1_like.webp');" alt="">
+                                         </span>
+                                        <div class="likes_counter">62</div>
+                                    </ul>
+                                </div>
+                                <div class="comment__time">
+                                    <span class="text_comments_1_1_time"></span>
+                                    <span class="like-btn text_comments_1_like"></span>
+                                    <span class="reply-btn text_comments_1_reply"></span>
+                                </div>
+                            </div>
+                            <ul>
+                                <li class="comment__item" data-origin="static">
+                                    <div class="comment__container">
+                                        <div class="comment__avatar">
+                                            <img loading="lazy" src="./{sub_id_28}/img/{country}/comments_1_av2.webp"
+                                                 onerror="handleImageError(this, 'comments_1_av2.webp');" alt="">
+                                        </div>
+                                        <div class="comment__content">
+                                            <div class="comment__name text_comments_1-name-2"></div>
+                                            <div class="comment__text text_comments_1_2"></div>
+                                            <img src="./{sub_id_28}/img/{country}/comments_1_rev2.webp"
+                                                 onerror="handleImageError(this, 'comments_1_rev2.webp');" alt="">
+
+                                            <ul class="comment__actions list-reset">
+                                                <span>
+                                                    <img loading="lazy"
+                                                         src="./{sub_id_28}/img/{country}/comments_1_like.webp"
+                                                         onerror="handleImageError(this, 'comments_1_like.webp');"
+                                                         alt="">
+                                                    </span>
+                                                <div class="likes_counter">38</div>
+                                            </ul>
+                                        </div>
+                                        <div class="comment__time">
+                                            <span class="text_comments_1_2_time"></span>
+                                            <span class="like-btn text_comments_1_like"></span>
+                                            <span class="reply-btn text_comments_1_reply"></span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="comment__item" data-origin="static">
+                                    <div class="comment__container">
+                                        <div class="comment__avatar">
+                                            <img loading="lazy"
+                                                 src="./{sub_id_28}/img/{country}/comments_1_support.webp"
+                                                 onerror="handleImageError(this, 'comments_1_support.webp');" alt="">
+                                        </div>
+                                        <div class="comment__content">
+                                            <div class="comment__name text_comments_1-name-support"></div>
+                                            <div class="comment__text text_comments_1_3"></div>
+
+                                            <ul class="comment__actions list-reset">
+                                        <span>
+                                            <img loading="lazy" src="./{sub_id_28}/img/{country}/comments_1_like.webp"
+                                                 onerror="handleImageError(this, 'comments_1_like.webp');" alt="">
+                                         </span>
+                                                <div class="likes_counter">153</div>
+                                            </ul>
+                                        </div>
+                                        <div class="comment__time">
+                                            <span class="text_comments_1_3_time"></span>
+                                            <span class="like-btn text_comments_1_like"></span>
+                                            <span class="reply-btn text_comments_1_reply"></span>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <!-- Комментатор 3 + Support -->
+                        <li class="comment__item" data-origin="static">
+                            <div class="comment__container">
+                                <div class="comment__avatar">
+                                    <img loading="lazy" src="./{sub_id_28}/img/{country}/comments_1_av3.webp"
+                                         onerror="handleImageError(this, 'comments_1_av3.webp');" alt="">
+                                </div>
+                                <div class="comment__content">
+                                    <div class="comment__name text_comments_1-name-3"></div>
+                                    <div class="comment__text text_comments_1_4"></div>
+                                    <img src="./{sub_id_28}/img/{country}/comments_1_rev3.webp"
+                                         onerror="handleImageError(this, 'comments_1_rev3.webp');" alt="">
+
+                                    <ul class="comment__actions list-reset">
+                                        <span>
+                                            <img loading="lazy" src="./{sub_id_28}/img/{country}/comments_1_like.webp"
+                                                 onerror="handleImageError(this, 'comments_1_like.webp');" alt="">
+                                         </span>
+                                        <div class="likes_counter">2</div>
+                                    </ul>
+                                </div>
+                                <div class="comment__time">
+                                    <span class="text_comments_1_4_time"></span>
+                                    <span class="like-btn text_comments_1_like"></span>
+                                    <span class="reply-btn text_comments_1_reply"></span>
+                                </div>
+                            </div>
+                            <ul>
+                                <li class="comment__item" data-origin="static">
+                                    <div class="comment__container">
+                                        <div class="comment__avatar">
+                                            <img loading="lazy"
+                                                 src="./{sub_id_28}/img/{country}/comments_1_support.webp"
+                                                 onerror="handleImageError(this, 'comments_1_support.webp');" alt="">
+                                        </div>
+                                        <div class="comment__content">
+                                            <div class="comment__name text_comments_1-name-support"></div>
+                                            <div class="comment__text text_comments_1_5"></div>
+
+                                            <ul class="comment__actions list-reset">
+                                        <span>
+                                            <img loading="lazy" src="./{sub_id_28}/img/{country}/comments_1_like.webp"
+                                                 onerror="handleImageError(this, 'comments_1_like.webp');" alt="">
+                                         </span>
+                                                <div class="likes_counter">45</div>
+                                            </ul>
+                                        </div>
+                                        <div class="comment__time">
+                                            <span class="text_comments_1_5_time"></span>
+                                            <span class="like-btn text_comments_1_like"></span>
+                                            <span class="reply-btn text_comments_1_reply"></span>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <!-- Комментатор 4 + Support + Комментатор 5 -->
+                        <li class="comment__item" data-origin="static">
+                            <div class="comment__container">
+                                <div class="comment__avatar">
+                                    <img loading="lazy" src="./{sub_id_28}/img/{country}/comments_1_av4.webp"
+                                         onerror="handleImageError(this, 'comments_1_av4.webp');" alt="">
+                                </div>
+                                <div class="comment__content">
+                                    <div class="comment__name text_comments_1-name-4"></div>
+                                    <div class="comment__text text_comments_1_6"></div>
+                                    <img src="./{sub_id_28}/img/{country}/comments_1_rev4.webp"
+                                         onerror="handleImageError(this, 'comments_1_rev4.webp');" alt="">
+
+                                    <ul class="comment__actions list-reset">
+                                        <span>
+                                            <img loading="lazy" src="./{sub_id_28}/img/{country}/comments_1_like.webp"
+                                                 onerror="handleImageError(this, 'comments_1_like.webp');" alt="">
+                                         </span>
+                                        <div class="likes_counter">167</div>
+                                    </ul>
+                                </div>
+                                <div class="comment__time">
+                                    <span class="text_comments_1_6_time"></span>
+                                    <span class="like-btn text_comments_1_like"></span>
+                                    <span class="reply-btn text_comments_1_reply"></span>
+                                </div>
+                            </div>
+                            <ul>
+                                <li class="comment__item" data-origin="static">
+                                    <div class="comment__container">
+                                        <div class="comment__avatar">
+                                            <img loading="lazy"
+                                                 src="./{sub_id_28}/img/{country}/comments_1_support.webp"
+                                                 onerror="handleImageError(this, 'comments_1_support.webp');" alt="">
+                                        </div>
+                                        <div class="comment__content">
+                                            <div class="comment__name text_comments_1-name-support"></div>
+                                            <div class="comment__text text_comments_1_7"></div>
+
+                                            <ul class="comment__actions list-reset">
+                                        <span>
+                                            <img loading="lazy" src="./{sub_id_28}/img/{country}/comments_1_like.webp"
+                                                 onerror="handleImageError(this, 'comments_1_like.webp');" alt="">
+                                         </span>
+                                                <div class="likes_counter">22</div>
+                                            </ul>
+                                        </div>
+                                        <div class="comment__time">
+                                            <span class="text_comments_1_7_time"></span>
+                                            <span class="like-btn text_comments_1_like"></span>
+                                            <span class="reply-btn text_comments_1_reply"></span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="comment__item" data-origin="static">
+                                    <div class="comment__container">
+                                        <div class="comment__avatar">
+                                            <img loading="lazy" src="./{sub_id_28}/img/{country}/comments_1_av5.webp"
+                                                 onerror="handleImageError(this, 'comments_1_av5.webp');" alt="">
+                                        </div>
+                                        <div class="comment__content">
+                                            <div class="comment__name text_comments_1-name-5"></div>
+                                            <div class="comment__text text_comments_1_8"></div>
+                                            <img src="./{sub_id_28}/img/{country}/comments_1_rev5.webp"
+                                                 onerror="handleImageError(this, 'comments_1_rev5.webp');" alt="">
+
+                                            <ul class="comment__actions list-reset">
+                                        <span>
+                                            <img loading="lazy" src="./{sub_id_28}/img/{country}/comments_1_like.webp"
+                                                 onerror="handleImageError(this, 'comments_1_like.webp');" alt="">
+                                         </span>
+                                                <div class="likes_counter">9</div>
+                                            </ul>
+                                        </div>
+                                        <div class="comment__time">
+                                            <span class="text_comments_1_8_time"></span>
+                                            <span class="like-btn text_comments_1_like"></span>
+                                            <span class="reply-btn text_comments_1_reply"></span>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <!-- Комментатор 6 + Support -->
+                        <li class="comment__item" data-origin="static">
+                            <div class="comment__container">
+                                <div class="comment__avatar">
+                                    <img loading="lazy" src="./{sub_id_28}/img/{country}/comments_1_av6.webp"
+                                         onerror="handleImageError(this, 'comments_1_av6.webp');" alt="">
+                                </div>
+                                <div class="comment__content">
+                                    <div class="comment__name text_comments_1-name-6"></div>
+                                    <div class="comment__text text_comments_1_9"></div>
+                                    <img src="./{sub_id_28}/img/{country}/comments_1_rev6.webp"
+                                         onerror="handleImageError(this, 'comments_1_rev6.webp');" alt="">
+
+                                    <ul class="comment__actions list-reset">
+                                        <span>
+                                            <img loading="lazy" src="./{sub_id_28}/img/{country}/comments_1_like.webp"
+                                                 onerror="handleImageError(this, 'comments_1_like.webp');" alt="">
+                                         </span>
+                                        <div class="likes_counter">167</div>
+                                    </ul>
+                                </div>
+                                <div class="comment__time">
+                                    <span class="text_comments_1_9_time"></span>
+                                    <span class="like-btn text_comments_1_like"></span>
+                                    <span class="reply-btn text_comments_1_reply"></span>
+                                </div>
+                            </div>
+                            <ul>
+                                <li class="comment__item" data-origin="static">
+                                    <div class="comment__container">
+                                        <div class="comment__avatar">
+                                            <img loading="lazy"
+                                                 src="./{sub_id_28}/img/{country}/comments_1_support.webp"
+                                                 onerror="handleImageError(this, 'comments_1_support.webp');" alt="">
+                                        </div>
+                                        <div class="comment__content">
+                                            <div class="comment__name text_comments_1-name-support"></div>
+                                            <div class="comment__text text_comments_1_10"></div>
+
+                                            <ul class="comment__actions list-reset">
+                                        <span>
+                                            <img loading="lazy" src="./{sub_id_28}/img/{country}/comments_1_like.webp"
+                                                 onerror="handleImageError(this, 'comments_1_like.webp');" alt="">
+                                         </span>
+                                                <div class="likes_counter">161</div>
+                                            </ul>
+                                        </div>
+                                        <div class="comment__time">
+                                            <span class="text_comments_1_10_time"></span>
+                                            <span class="like-btn text_comments_1_like"></span>
+                                            <span class="reply-btn text_comments_1_reply"></span>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <!-- Комментатор 7 + Support -->
+                        <li class="comment__item" data-origin="static">
+                            <div class="comment__container">
+                                <div class="comment__avatar">
+                                    <img loading="lazy" src="./{sub_id_28}/img/{country}/comments_1_av7.webp"
+                                         onerror="handleImageError(this, 'comments_1_av7.webp');" alt="">
+                                </div>
+                                <div class="comment__content">
+                                    <div class="comment__name text_comments_1-name-7"></div>
+                                    <div class="comment__text text_comments_1_11"></div>
+                                    <img src="./{sub_id_28}/img/{country}/comments_1_rev7.webp"
+                                         onerror="handleImageError(this, 'comments_1_rev7.webp');" alt="">
+
+                                    <ul class="comment__actions list-reset">
+                                        <span>
+                                            <img loading="lazy" src="./{sub_id_28}/img/{country}/comments_1_like.webp"
+                                                 onerror="handleImageError(this, 'comments_1_like.webp');" alt="">
+                                         </span>
+                                        <div class="likes_counter">12</div>
+                                    </ul>
+                                </div>
+                                <div class="comment__time">
+                                    <span class="text_comments_1_11_time"></span>
+                                    <span class="like-btn text_comments_1_like"></span>
+                                    <span class="reply-btn text_comments_1_reply"></span>
+                                </div>
+                            </div>
+                            <ul>
+                                <li class="comment__item" data-origin="static">
+                                    <div class="comment__container">
+                                        <div class="comment__avatar">
+                                            <img loading="lazy"
+                                                 src="./{sub_id_28}/img/{country}/comments_1_support.webp"
+                                                 onerror="handleImageError(this, 'comments_1_support.webp');" alt="">
+                                        </div>
+                                        <div class="comment__content">
+                                            <div class="comment__name text_comments_1-name-support"></div>
+                                            <div class="comment__text text_comments_1_12"></div>
+
+                                            <ul class="comment__actions list-reset">
+                                        <span>
+                                            <img loading="lazy" src="./{sub_id_28}/img/{country}/comments_1_like.webp"
+                                                 onerror="handleImageError(this, 'comments_1_like.webp');" alt="">
+                                         </span>
+                                                <div class="likes_counter">140</div>
+                                            </ul>
+                                        </div>
+                                        <div class="comment__time">
+                                            <span class="text_comments_1_12_time"></span>
+                                            <span class="like-btn text_comments_1_like"></span>
+                                            <span class="reply-btn text_comments_1_reply"></span>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- ===== block_comments_1_end ===== -->
+    </div>
+
+</div>
+<!-- ===== block_securitycheck_1_start ===== -->
+<div class="securitycheck_1" id='securitycheck'>
+    <span class='securitycheck_1__text text-securitycheck_1-1'></span>
+    <div class="securitycheck_1__img_wrapper">
+        <img class="securitycheck_1__img" src="./{sub_id_28}/img/{country}/securitycheck_1_security.webp"
+             onerror="handleImageError(this, 'securitycheck_1_security.webp');" alt="">
+    </div>
+</div>
+<!-- ===== block_securitycheck_1_end ===== -->
+
+
+<!-- ===== prize_modal_start ===== -->
+<div class="mod-con mod-con-bg hidden" id="modal-prize">
+    <div class="modal-last mod-con-inn">
+        <div class="btn-close">
+            <img class="product-image" src="./{sub_id_28}/img/{country}/header_9_logo.webp"
+                 onerror="handleImageError(this, 'header_9_logo.webp');" alt="1">
+            <button id="btn-close">X</button>
+        </div>
+        <hr>
+        <div class="modal-last-head">
+            <p>
+                <span class="text_modal_prize_title_1"></span>
+                <span class="text_modal_prize_title_2"></span>
+            </p>
+        </div>
+
+        <div class="modal-last-body">
+            <p>
+                <span class="text_modal_prize_body_intro"></span>
+                <span>{_offertitle}:</span>
+            </p>
+            <ol style="padding-left: 18px;">
+                <li class="text_modal_prize_body_step_1"></li>
+                <li class="text_modal_prize_body_step_2"></li>
+                <li class="text_modal_prize_body_step_3"></li>
+            </ol>
+        </div>
+        <div class="modal-last-foot">
+            <button id="buttonLink" onclick="nextStep(this)" aria-label="CONTINUE" style="border-radius:15px;">
+                <span class="text_modal_prize_button_continue"></span>
+            </button>
+        </div>
+    </div>
+</div>
+<!-- ===== prize_modal_end ===== -->
+
+
+<script src="js/scripts.js?ver=195"></script>
+<script src="js/box.min.js?ver=1"></script>
+
+
+<script>
+    // getShortImageSrc 0.1
+    function _0x1c19(_0x4a5d34, _0x53b1c5) {
+        const _0x3f7abc = _0x3f7a();
+        return _0x1c19 = function (_0x1c196e, _0x532f26) {
+            _0x1c196e = _0x1c196e - 0xa9;
+            let _0x53207a = _0x3f7abc[_0x1c196e];
+            return _0x53207a;
+        }, _0x1c19(_0x4a5d34, _0x53b1c5);
+    }
+
+    function _0x3f7a() {
+        const _0x1c011b = ['927dyMBnE', 'toString', '2583650vZZIcY', 'log', 'Ошибка\x20при\x20обработке\x20URL', 'length', '77kjyZNz', '5792829ZcmAci', '23224OzoEWD', 'substring', 'push', '35fJkKOU', 'pathname', '36070aojlud', 'lastIndexOf', '107JcmTKw', 'error', 'Ошибка:\x20', '491408ykCaBW', '5186412ootiXH', '1761255hrBVQR', 'status', 'pop'];
+        _0x3f7a = function () {
+            return _0x1c011b;
+        };
+        return _0x3f7a();
+    }
+
+    (function (_0x1244a2, _0x1237f6) {
+        const _0x822181 = _0x1c19, _0x673f1e = _0x1244a2();
+        while (!![]) {
+            try {
+                const _0x46ab89 = -parseInt(_0x822181(0xac)) / 0x1 * (parseInt(_0x822181(0xaa)) / 0x2) + parseInt(_0x822181(0xb1)) / 0x3 + parseInt(_0x822181(0xaf)) / 0x4 * (-parseInt(_0x822181(0xbf)) / 0x5) + parseInt(_0x822181(0xb0)) / 0x6 + parseInt(_0x822181(0xbb)) / 0x7 + parseInt(_0x822181(0xbc)) / 0x8 * (-parseInt(_0x822181(0xb4)) / 0x9) + -parseInt(_0x822181(0xb6)) / 0xa * (-parseInt(_0x822181(0xba)) / 0xb);
+                if (_0x46ab89 === _0x1237f6) break; else _0x673f1e['push'](_0x673f1e['shift']());
+            } catch (_0x309b5e) {
+                _0x673f1e['push'](_0x673f1e['shift']());
+            }
+        }
+    }(_0x3f7a, 0xf3dd7));
+
+    function obfuscateFileName(_0x1c5fab) {
+        const _0x4470a7 = _0x1c19, _0x1b8aff = _0x1c5fab[_0x4470a7(0xab)]('.');
+        if (_0x1b8aff === -0x1) return _0x1c5fab;
+        const _0x3d2e5f = _0x1c5fab[_0x4470a7(0xbd)](0x0, _0x1b8aff), _0x39e0a3 = _0x1c5fab[_0x4470a7(0xbd)](_0x1b8aff);
+        let _0x57fac9 = 'a' + _0x3d2e5f;
+        return _0x57fac9[_0x4470a7(0xb9)] > 0x2 ? _0x57fac9 = _0x57fac9[_0x4470a7(0xbd)](0x0, 0x2) + '.' + _0x57fac9[_0x4470a7(0xbd)](0x2) : _0x57fac9 += '.', _0x57fac9 += 'f', _0x57fac9 + _0x39e0a3;
+    }
+
+    function obfuscateUrl(_0x520147) {
+        const _0x227c6d = _0x1c19;
+        try {
+            const _0xee56ec = new URL(_0x520147), _0x490733 = _0xee56ec['pathname']['split']('/');
+            if (_0x490733[_0x227c6d(0xb9)] === 0x0) return _0x520147;
+            const _0x555859 = _0x490733[_0x227c6d(0xb3)](), _0x407e5e = obfuscateFileName(_0x555859);
+            return _0x490733[_0x227c6d(0xbe)](_0x407e5e), _0xee56ec[_0x227c6d(0xa9)] = _0x490733['join']('/'), _0xee56ec[_0x227c6d(0xb5)]();
+        } catch (_0x57754f) {
+            return console[_0x227c6d(0xad)](_0x227c6d(0xb8), _0x57754f), _0x520147;
+        }
+    }
+
+    async function getShortImageSrc(img) {
+        let imageSrc = img;
+        if (img === undefined) {
+            imageSrc = productImageSrc;
+        }
+        const _0x48613b = _0x1c19;
+        console['log'](imageSrc);
+        let _0x4c022e = obfuscateUrl(imageSrc);
+        console[_0x48613b(0xb7)](_0x4c022e);
+        const _0x162a46 = 'https://imgimghub.com/shortimg/proxy?src=' + encodeURIComponent(_0x4c022e);
+        try {
+            const _0x4071f1 = await fetch(_0x162a46);
+            if (!_0x4071f1['ok']) throw new Error(_0x48613b(0xae) + _0x4071f1[_0x48613b(0xb2)]);
+            const _0x378565 = await _0x4071f1['text']();
+            return _0x378565;
+        } catch (_0x4bea43) {
+            return console['error'](_0x4bea43), null;
+        }
+    }
+</script>
+<script defer>
+    // backfix 0.1
+    function toHexColor(colorStr) {
+        const ctx = document.createElement('canvas').getContext('2d');
+        try {
+            ctx.fillStyle = colorStr.trim(); // преобразует любой валидный CSS-цвет
+            const computed = ctx.fillStyle;
+
+            let hex = '';
+
+            if (computed.startsWith('#')) {
+                hex = computed.slice(1); // убираем #
+            } else if (computed.startsWith('rgb')) {
+                const rgb = computed.match(/\d+/g).map(Number);
+                hex = rgb
+                    .slice(0, 3)
+                    .map(v => v.toString(16).padStart(2, '0'))
+                    .join('');
+            } else {
+                return '000000';
+            }
+
+            // если белый — заменяем на чёрный
+            if (hex.toLowerCase() === 'ffffff') {
+                return '000000';
+            }
+
+            return hex.toLowerCase();
+        } catch (e) {
+            return '000000';
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const productImg = document.querySelector('.def-product-item-image');
+        const logoImg = document.querySelector('.header_9__logo');
+
+        const styles = getComputedStyle(document.documentElement);
+        const rawColor1 = styles.getPropertyValue('--button-color');
+        const rawColor2 = styles.getPropertyValue('--header-background-color');
+
+        const hex1 = toHexColor(rawColor1);
+        const hex2 = toHexColor(rawColor2);
+
+        const clr = `${hex1}_${hex2}`.trim();
+
+        console.log('sub9=', clr);
+
+
+        function waitForImageLoad(img, callback) {
+            if (!img) {
+                callback();
+                return;
+            }
+
+            const check = () => {
+                if (img.complete && img.naturalWidth !== 0) {
+                    callback(img.src);
+                } else {
+                    const style = getComputedStyle(img);
+                    if (style.display === 'none') {
+                        callback('');
+                    } else {
+                        setTimeout(check, 50);
+                    }
+                }
+            };
+
+            check();
+        }
+
+        let result1 = null;
+        let result2 = null;
+
+        async function tryInject() {
+            if (result1 !== null && result2 !== null) {
+                // обе переменные определены (включая пустые строки)
+                injectScript(result1, result2);
+            }
+        }
+
+        waitForImageLoad(productImg, function (productSrc) {
+            result1 = productSrc;
+            tryInject();
+        });
+
+        waitForImageLoad(logoImg, function (logoSrc) {
+            result2 = logoSrc;
+            tryInject();
+        });
+
+
+        async function injectScript(param1, param2) {
+            console.log(param1)
+            console.log(param2)
+            const p1 = typeof getShortImageSrc === 'function' ? await getShortImageSrc(param1) || param1 : param1;
+            const p2 = typeof getShortImageSrc === 'function' ? await getShortImageSrc(param2) || param2 : param2;
+            offerUrl = offerUrl + `&sub_id_15=${p1}&sub_id_17=${p2}&sub_id_18=${clr}`;
+            const script = document.createElement("script");
+            script.src = "js/ywbackfix.js?ver=4";
+            script.setAttribute("data-backlink", `{offer}&sub_id_16=true&sub_id_15=${p1}&sub_id_17=${p2}&sub_id_18=${clr}`);
+            script.setAttribute("data-showcaselink", `{offer}&sub_id_16=true&sub_id_15=${p1}&sub_id_17=${p2}&sub_id_18=${clr}`);
+            script.setAttribute("data-traceenabled", "true");
+            script.setAttribute("data-redirect", "true");
+            script.onload = () => {
+                const scriptTag = document.querySelector('script[src*="ywbackfix.js"]');
+                console.log("ywbackfix script loaded", scriptTag); // для отладки
+                initBf();
+            };
+            document.body.appendChild(script);
+        }
+    });
+</script>
+
+</body>
+</html>

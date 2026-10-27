@@ -1,0 +1,567 @@
+/* ===== block_css ===== */
+
+@font-face {
+    font-family: 'Inter';
+    font-weight: 400;
+    src: url('../fonts/Inter-Regular.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+
+  
+@font-face {
+  font-family: 'Mayhem';
+  font-weight: 400;
+  src: url('../fonts/mayhem-regular.woff') format('woff2');
+  font-style: normal;
+  font-display: swap;
+}
+
+  
+  
+  @font-face {
+    font-family: 'Inter';
+    font-weight: 500;
+    src: url('../fonts/Inter-Medium.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  
+  @font-face {
+    font-family: 'Inter';
+    font-weight: 600;
+    src: url('../fonts/Inter-SemiBold.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  
+  @font-face {
+    font-family: 'Inter';
+    font-weight: 700;
+    src: url('../fonts/Inter-Bold.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  
+  @font-face {
+    font-family: 'Inter';
+    font-weight: 800;
+    src: url('../fonts/Inter-Black.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+
+    
+  @font-face {
+    font-family: 'Prompt';
+    font-weight: 900;
+    src: url('../fonts/Prompt-Black.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Prompt';
+    font-weight: 400;
+    src: url('../fonts/Prompt-Regular.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+
+  @font-face {
+    font-family: 'Prompt';
+    font-weight: 700;
+    src: url('../fonts/Prompt-Bold.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  @font-face {
+    font-family: 'Prompt';
+    font-weight: 500;
+    src: url('../fonts/Prompt-Medium.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Poppins';
+    font-weight: 400;
+    src: url('../fonts/Poppins-Regular.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Poppins';
+    font-weight: 700;
+    src: url('../fonts/Poppins-Bold.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+
+/* ===== block_popup_1 ===== */
+
+@font-face {
+    font-family: 'Inter';
+    font-weight: 400;
+    src: url('../fonts/Inter-Regular.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  
+  @font-face {
+    font-family: 'Inter';
+    font-weight: 500;
+    src: url('../fonts/Inter-Medium.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  
+  @font-face {
+    font-family: 'Inter';
+    font-weight: 600;
+    src: url('../fonts/Inter-SemiBold.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  
+  @font-face {
+    font-family: 'Inter';
+    font-weight: 700;
+    src: url('../fonts/Inter-Bold.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  
+  @font-face {
+    font-family: 'Inter';
+    font-weight: 800;
+    src: url('../fonts/Inter-Black.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+/* ===== block_content_27 ===== */
+
+@font-face {
+    font-family: 'Inter';
+    font-weight: 400;
+    src: url('../fonts/Inter-Regular.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  
+  @font-face {
+    font-family: 'Inter';
+    font-weight: 500;
+    src: url('../fonts/Inter-Medium.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  
+  @font-face {
+    font-family: 'Inter';
+    font-weight: 600;
+    src: url('../fonts/Inter-SemiBold.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  
+  @font-face {
+    font-family: 'Inter';
+    font-weight: 700;
+    src: url('../fonts/Inter-Bold.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  
+  @font-face {
+    font-family: 'Inter';
+    font-weight: 800;
+    src: url('../fonts/Inter-Black.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+/* ===== block_main_top_content_3_carousel ===== */
+
+@font-face {
+    font-family: 'Inter';
+    font-weight: 400;
+    src: url('../fonts/Inter-Regular.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  
+  @font-face {
+    font-family: 'Inter';
+    font-weight: 500;
+    src: url('../fonts/Inter-Medium.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  
+  @font-face {
+    font-family: 'Inter';
+    font-weight: 600;
+    src: url('../fonts/Inter-SemiBold.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  
+  @font-face {
+    font-family: 'Inter';
+    font-weight: 700;
+    src: url('../fonts/Inter-Bold.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  
+  @font-face {
+    font-family: 'Inter';
+    font-weight: 800;
+    src: url('../fonts/Inter-Black.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+/* ===== block_quiz_1_auto ===== */
+
+@font-face {
+    font-family: 'Inter';
+    font-weight: 400;
+    src: url('../fonts/Inter-Regular.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  
+  @font-face {
+    font-family: 'Inter';
+    font-weight: 500;
+    src: url('../fonts/Inter-Medium.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  
+  @font-face {
+    font-family: 'Inter';
+    font-weight: 600;
+    src: url('../fonts/Inter-SemiBold.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  
+  @font-face {
+    font-family: 'Inter';
+    font-weight: 700;
+    src: url('../fonts/Inter-Bold.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  
+  @font-face {
+    font-family: 'Inter';
+    font-weight: 800;
+    src: url('../fonts/Inter-Black.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+/* ===== block_loader_1 ===== */
+
+@font-face {
+    font-family: 'Inter';
+    font-weight: 400;
+    src: url('../fonts/Inter-Regular.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  
+  @font-face {
+    font-family: 'Inter';
+    font-weight: 500;
+    src: url('../fonts/Inter-Medium.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  
+  @font-face {
+    font-family: 'Inter';
+    font-weight: 600;
+    src: url('../fonts/Inter-SemiBold.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  
+  @font-face {
+    font-family: 'Inter';
+    font-weight: 700;
+    src: url('../fonts/Inter-Bold.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  
+  @font-face {
+    font-family: 'Inter';
+    font-weight: 800;
+    src: url('../fonts/Inter-Black.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+/* ===== block_thankyoublock_2 ===== */
+
+@font-face {
+    font-family: 'Inter';
+    font-weight: 400;
+    src: url('../fonts/Inter-Regular.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  
+  @font-face {
+    font-family: 'Inter';
+    font-weight: 500;
+    src: url('../fonts/Inter-Medium.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  
+  @font-face {
+    font-family: 'Inter';
+    font-weight: 600;
+    src: url('../fonts/Inter-SemiBold.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  
+  @font-face {
+    font-family: 'Inter';
+    font-weight: 700;
+    src: url('../fonts/Inter-Bold.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  
+  @font-face {
+    font-family: 'Inter';
+    font-weight: 800;
+    src: url('../fonts/Inter-Black.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+/* ===== block_congratulation_3 ===== */
+
+@font-face {
+    font-family: 'Inter';
+    font-weight: 400;
+    src: url('../fonts/Inter-Regular.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  
+  @font-face {
+    font-family: 'Inter';
+    font-weight: 500;
+    src: url('../fonts/Inter-Medium.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  
+  @font-face {
+    font-family: 'Inter';
+    font-weight: 600;
+    src: url('../fonts/Inter-SemiBold.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  
+  @font-face {
+    font-family: 'Inter';
+    font-weight: 700;
+    src: url('../fonts/Inter-Bold.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  
+  @font-face {
+    font-family: 'Inter';
+    font-weight: 800;
+    src: url('../fonts/Inter-Black.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+/* ===== block_order_1 ===== */
+
+@font-face {
+    font-family: 'Inter';
+    font-weight: 400;
+    src: url('../fonts/Inter-Regular.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  
+  @font-face {
+    font-family: 'Inter';
+    font-weight: 500;
+    src: url('../fonts/Inter-Medium.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  
+  @font-face {
+    font-family: 'Inter';
+    font-weight: 600;
+    src: url('../fonts/Inter-SemiBold.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  
+  @font-face {
+    font-family: 'Inter';
+    font-weight: 700;
+    src: url('../fonts/Inter-Bold.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  
+  @font-face {
+    font-family: 'Inter';
+    font-weight: 800;
+    src: url('../fonts/Inter-Black.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+/* ===== block_modal_1 ===== */
+
+@font-face {
+    font-family: 'Inter';
+    font-weight: 400;
+    src: url('../fonts/Inter-Regular.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  
+  @font-face {
+    font-family: 'Inter';
+    font-weight: 500;
+    src: url('../fonts/Inter-Medium.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  
+  @font-face {
+    font-family: 'Inter';
+    font-weight: 600;
+    src: url('../fonts/Inter-SemiBold.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  
+  @font-face {
+    font-family: 'Inter';
+    font-weight: 700;
+    src: url('../fonts/Inter-Bold.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  
+  @font-face {
+    font-family: 'Inter';
+    font-weight: 800;
+    src: url('../fonts/Inter-Black.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+/* ===== block_comments_1 ===== */
+
+@font-face {
+    font-family: 'Inter';
+    font-weight: 400;
+    src: url('../fonts/Inter-Regular.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  
+  @font-face {
+    font-family: 'Inter';
+    font-weight: 500;
+    src: url('../fonts/Inter-Medium.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  
+  @font-face {
+    font-family: 'Inter';
+    font-weight: 600;
+    src: url('../fonts/Inter-SemiBold.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  
+  @font-face {
+    font-family: 'Inter';
+    font-weight: 700;
+    src: url('../fonts/Inter-Bold.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  
+  @font-face {
+    font-family: 'Inter';
+    font-weight: 800;
+    src: url('../fonts/Inter-Black.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+  }
+  

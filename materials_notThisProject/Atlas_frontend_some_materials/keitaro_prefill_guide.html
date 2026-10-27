@@ -1,0 +1,1223 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Keitaro + Prefill + Form Submit: Практический конспект</title>
+  <style>
+    :root {
+      --bg: #f4f6fa;
+      --card: #ffffff;
+      --text: #14213d;
+      --muted: #5f6b84;
+      --line: #d9dfeb;
+      --accent: #1f6feb;
+      --accent-2: #00a36c;
+      --warn: #b54708;
+      --danger: #b42318;
+      --code-bg: #0f172a;
+      --code-text: #dbeafe;
+      --shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+      --radius: 14px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      width: 100%;
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      color: var(--text);
+      background: linear-gradient(180deg, #eef3ff 0%, var(--bg) 100%);
+      line-height: 1.58;
+      width: 100%;
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(10px);
+      background: rgba(244, 246, 250, 0.92);
+      border-bottom: 1px solid var(--line);
+      width: 100%;
+    }
+
+    .topbar-inner {
+      width: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      font-weight: 800;
+      font-size: 14px;
+      letter-spacing: 0.2px;
+      color: #0b254f;
+      padding: 6px 10px;
+      border: 1px solid #c8d4f1;
+      border-radius: 999px;
+      background: #f8fbff;
+      white-space: nowrap;
+    }
+
+    .menu {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      max-width: 100%;
+    }
+
+    .menu a {
+      text-decoration: none;
+      font-size: 13px;
+      color: #1e3a8a;
+      border: 1px solid #ccdaf9;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #fff;
+    }
+
+    .menu a:hover {
+      border-color: #93b4ff;
+      color: #0b56d0;
+    }
+
+    .layout {
+      width: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 24px 20px 60px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .hero {
+      padding: 22px;
+      border-radius: var(--radius);
+      background: radial-gradient(circle at top right, #dce8ff, #ffffff 58%);
+      border: 1px solid #d6e1fb;
+      box-shadow: var(--shadow);
+    }
+
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: 28px;
+      line-height: 1.2;
+      letter-spacing: -0.3px;
+    }
+
+    .hero p {
+      margin: 0;
+      color: #35476d;
+      max-width: 980px;
+    }
+
+    .meta {
+      margin-top: 12px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .meta span {
+      background: #fff;
+      border: 1px solid #d6e1fb;
+      color: #2e4b85;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 12px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px;
+    }
+
+    h2 {
+      margin: 0 0 12px;
+      font-size: 23px;
+      line-height: 1.25;
+      letter-spacing: -0.2px;
+    }
+
+    h3 {
+      margin: 18px 0 8px;
+      font-size: 18px;
+      line-height: 1.3;
+    }
+
+    h4 {
+      margin: 14px 0 6px;
+      font-size: 16px;
+      line-height: 1.35;
+    }
+
+    p {
+      margin: 8px 0;
+    }
+
+    ul {
+      margin: 8px 0;
+      padding-left: 18px;
+    }
+
+    li {
+      margin: 6px 0;
+    }
+
+    .note,
+    .warn,
+    .danger,
+    .ok {
+      border-radius: 10px;
+      padding: 12px 14px;
+      border: 1px solid;
+      margin: 10px 0;
+      font-size: 14px;
+    }
+
+    .note {
+      background: #eef4ff;
+      border-color: #bfd5ff;
+      color: #103777;
+    }
+
+    .ok {
+      background: #ecfbf3;
+      border-color: #a7e6c7;
+      color: #055b35;
+    }
+
+    .warn {
+      background: #fff8eb;
+      border-color: #ffd9a6;
+      color: #7a4b00;
+    }
+
+    .danger {
+      background: #fff1f1;
+      border-color: #f6b3b3;
+      color: #8a1111;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .flow {
+      display: grid;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .flow-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .node {
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid #cdd9f5;
+      background: #f9fbff;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .arrow {
+      color: #6c7ba0;
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      overflow: hidden;
+      font-size: 14px;
+      table-layout: fixed;
+    }
+
+    th,
+    td {
+      border-bottom: 1px solid var(--line);
+      border-right: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+      text-align: left;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    th:last-child,
+    td:last-child {
+      border-right: none;
+    }
+
+    thead th {
+      background: #edf3ff;
+      color: #1e3a8a;
+      font-weight: 700;
+    }
+
+    .code-block {
+      margin: 12px 0;
+      border: 1px solid #2b3a5b;
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--code-bg);
+      max-width: 100%;
+    }
+
+    .code-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      background: #172446;
+      border-bottom: 1px solid #2b3a5b;
+    }
+
+    .code-title {
+      color: #b7ceff;
+      font-size: 12px;
+      letter-spacing: 0.2px;
+      font-weight: 600;
+    }
+
+    .copy-btn {
+      border: 1px solid #4f78d0;
+      border-radius: 8px;
+      background: #20468f;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 9px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .copy-btn:hover {
+      background: #285bb8;
+    }
+
+    pre {
+      margin: 0;
+      padding: 12px;
+      overflow: auto;
+      color: var(--code-text);
+      font-size: 12.5px;
+      line-height: 1.45;
+      tab-size: 2;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+      max-width: 100%;
+    }
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    }
+
+    .anchor-link {
+      font-size: 12px;
+      color: #2b57b1;
+      text-decoration: none;
+      border-bottom: 1px dashed #93b4ff;
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .kbd {
+      display: inline-block;
+      padding: 2px 7px;
+      border: 1px solid #c7d4f4;
+      border-bottom-width: 2px;
+      border-radius: 6px;
+      font-size: 12px;
+      background: #fff;
+      color: #1d3f84;
+      white-space: nowrap;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .legend span {
+      padding: 4px 8px;
+      border: 1px solid #d2ddf8;
+      border-radius: 8px;
+      font-size: 12px;
+      background: #f8fbff;
+      color: #27498a;
+    }
+
+    @media (max-width: 980px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .hero h1 {
+        font-size: 24px;
+      }
+
+      .topbar-inner,
+      .layout {
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+
+      .menu {
+        gap: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">Keitaro / Landing / Prefill Cheatbook</div>
+      <nav class="menu">
+        <a href="#fast">Быстрые ответы</a>
+        <a href="#map">Карта системы</a>
+        <a href="#url">Разбор URL</a>
+        <a href="#s2934">2934</a>
+        <a href="#s4051">4051</a>
+        <a href="#s5171">5171</a>
+        <a href="#incident">Инцидент</a>
+        <a href="#debug">Чек-лист</a>
+        <a href="#practice">Практика</a>
+        <a href="#dict">Словарь</a>
+      </nav>
+    </div>
+  </div>
+
+  <main class="layout">
+    <section class="hero" id="top">
+      <h1>Пособие: как реально работает связка Keitaro + landing + prefill + отправка параметров</h1>
+      <p>
+        Это конспект под твой текущий стек и твои реальные файлы: <code>2934_landing_archive</code>, <code>4051_landing_archive</code>, <code>5171_offer_archive</code>.
+        Главная цель: не просто "поправить код", а понимать, почему параметры иногда есть в Network, но пустые на оффере, где Query String,
+        где Form Data, и как диагностировать это за 2-3 минуты.
+      </p>
+      <div class="meta">
+        <span>Формат: практический</span>
+        <span>Язык: RU</span>
+        <span>Опора: локальный код + твои скриншоты</span>
+        <span>Приоритет обучения: 2934</span>
+      </div>
+    </section>
+
+    <section class="card" id="fast">
+      <h2>1) Быстрые ответы на твои главные вопросы</h2>
+
+      <h3>Почему раньше в Network было "всё есть", но на оффере пусто?</h3>
+      <p>
+        Потому что тест-оффер <code>5171</code> читает параметры только из URL-строки
+        (<code>window.location.search</code>), а не из POST-body.
+        Если форма отправила данные в <strong>Form Data</strong>, но не в URL, этот оффер их не увидит.
+      </p>
+      <div class="ok">
+        В <code>5171_offer_archive/index.php</code> прямо стоит: <code>const params = new URLSearchParams(window.location.search);</code>.
+      </div>
+
+      <h3>Что такое Query String и Form Data простыми словами?</h3>
+      <ul>
+        <li><strong>Query String</strong> — часть URL после <code>?</code>, например <code>?sub_id_24=Ivan&amp;sub_id_27=a%40b.com</code>.</li>
+        <li><strong>Form Data</strong> — тело POST-запроса (body), не всегда дублируется в URL.</li>
+        <li>Если оффер/скрипт читает только Query String, то Form Data "не видна" для него.</li>
+      </ul>
+
+      <h3>Почему было дублирование параметров в DevTools?</h3>
+      <p>
+        Потому что один и тот же набор sub_id добавлялся в URL (Query String) и одновременно как поля формы (Form Data).
+        Для тестового GET-оффера это избыточно и сбивает визуально.
+      </p>
+
+      <h3>Что значит Display GET Params (5171)?</h3>
+      <p>
+        Это демонстрационный оффер-страница, которая выводит то, что пришло в URL как GET-параметры,
+        и подсвечивает, какие обязательные параметры отсутствуют.
+      </p>
+
+      <h3>Почему после первого фикса у тебя мог быть 404?</h3>
+      <div class="warn">
+        Вероятная причина (инференс): редирект ушёл на невалидный/неподставленный URL (например, шаблон вида <code>{offer}</code>)
+        или на некорректно собранный <code>action</code>. В итоговом рабочем варианте добавлены проверки URL
+        перед редиректом (<code>setKeitaroOfferAction</code> возвращает <code>false</code>, если URL плохой).
+      </div>
+    </section>
+
+    <section class="card" id="map">
+      <h2>2) Карта всей системы (чтобы "сложить картину" в голове)</h2>
+
+      <div class="flow">
+        <div class="flow-row">
+          <div class="node">Источник трафика (FB/TikTok/etc)</div>
+          <div class="arrow">→</div>
+          <div class="node">Кампания в Keitaro</div>
+          <div class="arrow">→</div>
+          <div class="node">Tracking URL (с макросами)</div>
+        </div>
+        <div class="flow-row">
+          <div class="node">Keitaro подставляет значения макросов</div>
+          <div class="arrow">→</div>
+          <div class="node">Открывается Landing</div>
+          <div class="arrow">→</div>
+          <div class="node">Пользователь проходит квиз/префилл</div>
+        </div>
+        <div class="flow-row">
+          <div class="node">Landing собирает поля sub_id_xx</div>
+          <div class="arrow">→</div>
+          <div class="node">Редирект/submit на Offer URL</div>
+          <div class="arrow">→</div>
+          <div class="node">Offer/партнёрка читает параметры</div>
+        </div>
+      </div>
+
+      <div class="note">
+        <strong>Ключевая мысль:</strong> "параметры есть в Network" ещё не равно "оффер их обработал".
+        Важно, <em>каким способом</em> они были переданы (GET/query или POST/body) и <em>каким способом</em> оффер их читает.
+      </div>
+
+      <h3>Компоненты из твоих скриншотов Keitaro</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Экран Keitaro</th>
+            <th>Что это</th>
+            <th>Зачем тебе как верстальщику</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Кампании</td>
+            <td>Связка: источник трафика + поток + лендинг + оффер</td>
+            <td>Понимать, где именно формируется tracking URL и какие макросы туда попадают</td>
+          </tr>
+          <tr>
+            <td>Tracking</td>
+            <td>Генерация трекинг-ссылки</td>
+            <td>Проверять, есть ли обязательные параметры и рабочий домен/HTTPS</td>
+          </tr>
+          <tr>
+            <td>Параметры</td>
+            <td>Маппинг полей/макросов для кампании</td>
+            <td>Понимать источник значений для <code>{token}</code>, <code>{campaign.id}</code>, <code>{offerlogo}</code> и т.д.</td>
+          </tr>
+          <tr>
+            <td>Лендинги</td>
+            <td>Архивы страниц</td>
+            <td>Точка, где ты правишь UI и JS-логику префилла/формы</td>
+          </tr>
+          <tr>
+            <td>Офферы</td>
+            <td>Куда идёт финальный переход/submit</td>
+            <td>Тест-офферы вроде <code>Display GET Params</code> помогают валидировать передачу параметров</td>
+          </tr>
+          <tr>
+            <td>Домены</td>
+            <td>Статус DNS/сертификатов</td>
+            <td>Если домен/SSL не готов, часть трекинга/редиректов может вести себя нестабильно</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Почему один оффер скачивается, другой нет?</h3>
+      <p>
+        Обычно скачиваются локальные офферы/пакеты, у которых есть загруженный код/архив. У внешнего/"прокинутого" оффера
+        может не быть downloadable-source. Также влияет тип оффера и права/роль в Keitaro.
+      </p>
+    </section>
+
+    <section class="card" id="url">
+      <h2>3) Разбор твоей трекинг-ссылки по группам</h2>
+      <p class="small">Ссылка сокращена визуально, но логика такая же.</p>
+
+      <div class="code-block">
+        <div class="code-head">
+          <div class="code-title">Пример tracking URL</div>
+          <button class="copy-btn" data-copy-target="code-tracking-url">Copy</button>
+        </div>
+        <pre id="code-tracking-url"><code>http://185.237.224.166/KvjqdXbx?utm_campaign={{campaign.name}}&amp;adset_name={{adset.name}}&amp;utm_creative={{ad.name}}&amp;utm_placement={{placement}}&amp;campaign_id={{campaign.id}}&amp;adset_id={{adset.id}}&amp;ad_id={{ad.id}}&amp;utm_source={{site_source_name}}&amp;pixel=test_pixel&amp;token={token}&amp;domain={domain}&amp;offertitle=123&amp;offerlogo={offerlogo}&amp;backfix_sub_id_16={backfix}&amp;offerbrand={offerbrand}&amp;offerbigimage={offerbigimage}&amp;appid_os_push={appid_os_push}&amp;safari_web_id_os_push={safari_web_id_os_push}&amp;names=Alise Djns, Sam Pit, Juli, Alex, Diego, Gloria, Ann, Jhone, Iren, 1, 2, 3, 4, 5, 6, 7, UGG&amp;priceold=100$&amp;pricenew=10$&amp;namesnotif=1, 2, 3, 4, 5, 6, 7&amp;cc_country=Test_Country</code></pre>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Группа</th>
+            <th>Параметры</th>
+            <th>Смысл</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Трафик-атрибуция</td>
+            <td><code>utm_campaign</code>, <code>adset_name</code>, <code>utm_creative</code>, <code>utm_placement</code>, <code>campaign_id</code>, <code>adset_id</code>, <code>ad_id</code>, <code>utm_source</code></td>
+            <td>Чтобы потом понимать из какого объявления пришёл пользователь</td>
+          </tr>
+          <tr>
+            <td>Трекинг / сессия</td>
+            <td><code>token</code>, <code>pixel</code>, <code>domain</code></td>
+            <td>Идентификация клика/сессии в трекере</td>
+          </tr>
+          <tr>
+            <td>Контент лендинга</td>
+            <td><code>offertitle</code>, <code>offerlogo</code>, <code>offerbrand</code>, <code>offerbigimage</code>, <code>priceold</code>, <code>pricenew</code>, <code>names</code>, <code>namesnotif</code>, <code>cc_country</code></td>
+            <td>Динамика текста/изображений и локализация</td>
+          </tr>
+          <tr>
+            <td>Служебные</td>
+            <td><code>backfix_sub_id_16</code>, <code>appid_os_push</code>, <code>safari_web_id_os_push</code></td>
+            <td>Тех.связки и доп.интеграции</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="note">
+        На этапе загрузки лендинга часть значений остаётся как макросы (<code>{token}</code>, <code>{{campaign.id}}</code>)
+        до подстановки трекером. Это нормально.
+      </div>
+    </section>
+
+    <section class="card" id="s2934">
+      <h2>4) Глубокий разбор 2934 (базовый шаблон, приоритет для обучения)</h2>
+
+      <h3>4.1 Где инициализируются переменные и макросы</h3>
+      <p>
+        В <code>2934_landing_archive/index.html</code> (верхний inline-script) создаются ключевые переменные:
+        <code>offerUrl</code>, <code>productImageSrc</code>, <code>cc_country</code>, <code>pricenew</code>, <code>names</code> и др.
+      </p>
+
+      <div class="code-block">
+        <div class="code-head">
+          <div class="code-title">2934_landing_archive/index.html:50-59, 72-83, 131-135</div>
+          <button class="copy-btn" data-copy-target="code-2934-macros">Copy</button>
+        </div>
+        <pre id="code-2934-macros"><code>function getQueryParam(param) {
+  let urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(param);
+}
+
+var productImageSrc = '{offerlogo}';
+let lId = '{landing_id}'
+let cId = '{campaign_id}'
+let offerUrl = '{offer}'
+...
+let productName = "{sub_id_28}"
+...
+let pricenew = "{_offer_value:ctc}"
+if (pricenew == "") {
+  pricenew = "{_pricenew}"
+}
+let priceold = "{_priceold}"
+...
+let offerTitle = "{_offertitle}"
+let product = "{_extra_param_4}"
+if (product == "" || product.includes("extra_param_") || product.includes("name2")) {
+  product = offerTitle
+}</code></pre>
+      </div>
+
+      <h3>4.2 Где добавляются служебные sub_id_15 / sub_id_17 / sub_id_18 к офферу</h3>
+      <p>
+        Блок <code>injectScript()</code> добавляет параметры картинки/лого/цвета прямо в <code>offerUrl</code>.
+      </p>
+
+      <div class="code-block">
+        <div class="code-head">
+          <div class="code-title">2934_landing_archive/index.html:1447-1456</div>
+          <button class="copy-btn" data-copy-target="code-2934-inject">Copy</button>
+        </div>
+        <pre id="code-2934-inject"><code>async function injectScript(param1, param2) {
+  const p1 = typeof getShortImageSrc === 'function' ? await getShortImageSrc(param1) || param1 : param1;
+  const p2 = typeof getShortImageSrc === 'function' ? await getShortImageSrc(param2) || param2 : param2;
+  offerUrl = offerUrl + `&amp;sub_id_15=${p1}&amp;sub_id_17=${p2}&amp;sub_id_18=${clr}`;
+  ...
+}</code></pre>
+      </div>
+
+      <h3>4.3 Как выглядит HTML-форма и маппинг sub_id</h3>
+      <p>
+        В форме <code>#mForm</code> напрямую зашиты имена полей вида <code>sub_id_24</code>, <code>sub_id_27</code> и т.д.
+      </p>
+
+      <div class="code-block">
+        <div class="code-head">
+          <div class="code-title">2934_landing_archive/index.html:745-873 (фрагмент)</div>
+          <button class="copy-btn" data-copy-target="code-2934-form-map">Copy</button>
+        </div>
+        <pre id="code-2934-form-map"><code>&lt;form class="cart-form" id="mForm" action="/"&gt;
+  &lt;input id="countryCodeHiddenField" type="hidden" name="country_code" value=""&gt;
+  &lt;input name="sub_id_21" ...&gt; &lt;!-- city --&gt;
+  &lt;input name="sub_id_22" ...&gt; &lt;!-- address --&gt;
+  &lt;input name="sub_id_23" ...&gt; &lt;!-- zip --&gt;
+  &lt;input name="sub_id_24" ...&gt; &lt;!-- first name --&gt;
+  &lt;input name="sub_id_25" ...&gt; &lt;!-- last name --&gt;
+  &lt;input name="sub_id_26" class="js-phone-input" ...&gt; &lt;!-- phone --&gt;
+  &lt;input name="sub_id_27" class="js-email-input" ...&gt; &lt;!-- email --&gt;
+&lt;/form&gt;</code></pre>
+      </div>
+
+      <h3>4.4 Что делает submit-обработчик в 2934</h3>
+      <p>
+        Важный кусок: перед submit из <code>offerUrl</code> разбираются query-параметры и добавляются как hidden-input.
+        Затем вызывается <code>event.target.submit()</code>.
+      </p>
+
+      <div class="code-block">
+        <div class="code-head">
+          <div class="code-title">2934_landing_archive/js/scripts.js:2070-2123</div>
+          <button class="copy-btn" data-copy-target="code-2934-submit">Copy</button>
+        </div>
+        <pre id="code-2934-submit"><code>document.getElementById('mForm').addEventListener('submit', async function (event) {
+  event.preventDefault();
+
+  this.querySelectorAll("input[name='_lp'], input[name='_token']").forEach(input =&gt; input.remove());
+
+  const params = offerUrl.split("?")[1].split("&amp;");
+  const form = document.getElementById("mForm");
+  params.forEach(item =&gt; {
+    const [name, value] = item.split("=");
+    addHiddenField(name, value);
+  });
+
+  ...
+
+  event.target.submit();
+})</code></pre>
+      </div>
+
+      <h3>4.5 Валидация в 2934</h3>
+      <p>
+        Валидация email/phone реализована в отдельных функциях и управляет классами <code>valid/invalid</code>.
+      </p>
+
+      <div class="code-block">
+        <div class="code-head">
+          <div class="code-title">2934_landing_archive/js/scripts.js:2202-2255</div>
+          <button class="copy-btn" data-copy-target="code-2934-validate">Copy</button>
+        </div>
+        <pre id="code-2934-validate"><code>function validateEmail(email) { ... }
+function validatePhone(phone) {
+  var re = /^\d{5,}$/;
+  return re.test(String(phone));
+}
+
+function validate() {
+  var valid = true;
+  const email = document.querySelector('.js-email-input').value;
+  const phone = document.querySelector('.js-phone-input').value;
+  ...
+  return valid;
+}</code></pre>
+      </div>
+
+      <h3>4.6 openUrl() в 2934 (когда используется редирект без префил-формы)</h3>
+      <p>
+        Функция на последнем шаге может сразу редиректить на оффер и докидывать <code>sub_id_15</code> в query.
+      </p>
+
+      <div class="code-block">
+        <div class="code-head">
+          <div class="code-title">2934_landing_archive/js/scripts.js:235-253</div>
+          <button class="copy-btn" data-copy-target="code-2934-openurl">Copy</button>
+        </div>
+        <pre id="code-2934-openurl"><code>async function openUrl(el) {
+  ...
+  if (typeof offerUrl === 'string') {
+    offerUrl = new URL(offerUrl, window.location.origin);
+  }
+
+  offerUrl.searchParams.set('sub_id_15', productImageSrc);
+  window.location.href = offerUrl.toString();
+}</code></pre>
+      </div>
+
+      <div class="note">
+        В 2934 есть смешанная логика: где-то параметры добавляются в query URL, где-то добавляются hidden-полями в форму.
+        Это рабоче, но может приводить к дублированию и путанице при дебаге.
+      </div>
+    </section>
+
+    <section class="card" id="s4051">
+      <h2>5) Разбор 4051 (твой кейс с фиксом отправки)</h2>
+
+      <h3>5.1 Где хранится offer URL в 4051</h3>
+      <p>
+        В <code>4051_landing_archive/index.html</code> значения собираются в <code>window.KT</code>.
+      </p>
+
+      <div class="code-block">
+        <div class="code-head">
+          <div class="code-title">4051_landing_archive/index.html:25-30, 95-97</div>
+          <button class="copy-btn" data-copy-target="code-4051-kt-vars">Copy</button>
+        </div>
+        <pre id="code-4051-kt-vars"><code>window.KT = window.KT || {};
+window.KT.productImageSrc = '{offerlogo}';
+window.KT.lId = '{landing_id}';
+window.KT.cId = '{campaign_id}';
+window.KT.offerUrl = '{offer}';
+...
+window.KT.offerTitle = "{_offertitle}";
+window.KT.product = "{_extra_param_4}";</code></pre>
+      </div>
+
+      <h3>5.2 Что делает form-handler в 4051</h3>
+      <p>
+        Отдельный <code>form-handler.js</code> берёт форму <code>#mForm</code>, валидирует, собирает значения,
+        и строит финальный URL редиректа.
+      </p>
+
+      <div class="grid-2">
+        <div>
+          <h4>Функции</h4>
+          <ul>
+            <li><code>validate()</code> — проверка email/phone.</li>
+            <li><code>findFirstInvalid()</code> — фокус/анимация первой невалидной ячейки.</li>
+            <li><code>setKeitaroOfferAction(form)</code> — сбор URL с query-параметрами из формы.</li>
+            <li><code>waitOn(btn)</code> — блокировка кнопки на момент отправки.</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Итоговый принцип</h4>
+          <ul>
+            <li>Берём <code>window.KT.offerUrl</code>.</li>
+            <li>Пробегаем все поля формы через <code>new FormData(form)</code>.</li>
+            <li>Пишем их в <code>url.searchParams.set(...)</code>.</li>
+            <li>Делаем <code>window.location.href = actionUrl</code> (query-only).</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="code-block">
+        <div class="code-head">
+          <div class="code-title">4051_landing_archive/form-handler.js:76-108</div>
+          <button class="copy-btn" data-copy-target="code-4051-action">Copy</button>
+        </div>
+        <pre id="code-4051-action"><code>function setKeitaroOfferAction(form) {
+  const offerUrl = window.KT &amp;&amp; typeof window.KT.offerUrl === 'string'
+    ? window.KT.offerUrl
+    : '';
+
+  if (!offerUrl || offerUrl.includes('{offer}') || offerUrl.includes('%7Boffer%7D')) {
+    return false;
+  }
+
+  if (!/^https?:\/\//i.test(offerUrl)) {
+    return false;
+  }
+
+  let actionUrl = offerUrl;
+  try {
+    const url = new URL(offerUrl, window.location.origin);
+    const formData = new FormData(form);
+
+    for (const [name, value] of formData.entries()) {
+      if (name === '_lp' || name === '_token') continue;
+      if (typeof value !== 'string') continue;
+      if (value.trim() === '') continue;
+      url.searchParams.set(name, value);
+    }
+
+    actionUrl = url.toString();
+  } catch (e) {
+    actionUrl = offerUrl;
+  }
+
+  form.setAttribute('action', actionUrl);
+  return true;
+}</code></pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-head">
+          <div class="code-title">4051_landing_archive/form-handler.js:135-170</div>
+          <button class="copy-btn" data-copy-target="code-4051-submit">Copy</button>
+        </div>
+        <pre id="code-4051-submit"><code>form.addEventListener('submit', function (e) {
+  if (!validate(form)) {
+    e.preventDefault();
+    findFirstInvalid(form);
+    return;
+  }
+
+  ... // гарантируем sub_id_15 (картинка)
+
+  if (!setKeitaroOfferAction(form)) {
+    e.preventDefault();
+    return;
+  }
+
+  const btn = qs('button[type="submit"]', form);
+  waitOn(btn);
+
+  // Query-only redirect (no POST body / Form Data).
+  e.preventDefault();
+  const actionUrl = form.getAttribute('action');
+  if (actionUrl) {
+    window.location.href = actionUrl;
+  }
+});</code></pre>
+      </div>
+
+      <div class="ok">
+        Это именно тот паттерн, который в твоём кейсе убрал проблему с "пусто в Display GET Params":
+        параметры начали лететь через query string, который этот тест-оффер читает.
+      </div>
+    </section>
+
+    <section class="card" id="s5171">
+      <h2>6) Разбор 5171 (Display GET Params)</h2>
+
+      <p>
+        Это диагностическая страница: она парсит URL, проверяет обязательные ключи и выводит их.
+        То есть это "лупа" для GET-параметров.
+      </p>
+
+      <div class="code-block">
+        <div class="code-head">
+          <div class="code-title">5171_offer_archive/index.php:84-109</div>
+          <button class="copy-btn" data-copy-target="code-5171-init">Copy</button>
+        </div>
+        <pre id="code-5171-init"><code>const PARAM_LABELS = {
+  "sub_id_27": "Email",
+  "sub_id_24": "Имя",
+  "sub_id_25": "Фамилия",
+  "sub_id_22": "Адрес",
+  "sub_id_9": "Штат",
+  "sub_id_23": "Post/Zip code",
+  "sub_id_21": "Город",
+  "sub_id_26": "Телефон",
+  "sub_id_15": "Product Img",
+  "sub_id_17": "Logo Img",
+};
+
+const REQUIRED_PARAMS = ["sub_id_27","sub_id_24","sub_id_25","sub_id_22","sub_id_9","sub_id_23","sub_id_21","sub_id_26"];
+const params = new URLSearchParams(window.location.search);</code></pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-head">
+          <div class="code-title">5171_offer_archive/index.php:124-150</div>
+          <button class="copy-btn" data-copy-target="code-5171-check">Copy</button>
+        </div>
+        <pre id="code-5171-check"><code>// проверка обязательных
+const notFoundParams = []
+for (const key of REQUIRED_PARAMS) {
+  if (!params.has(key)) {
+    notFoundParams.push(PARAM_LABELS[key] ?? key)
+  }
+}
+
+// рендер обязательных
+REQUIRED_PARAMS.forEach((key) =&gt; {
+  var value = params.get(key)
+  var isError = value == null;
+  renderParam(key, value, isError);
+});
+
+// рендер остальных
+params.forEach((value, key) =&gt; {
+  if (REQUIRED_PARAMS.includes(key)) return;
+  renderParam(key, value);
+});</code></pre>
+      </div>
+
+      <h3>Вывод по 5171</h3>
+      <ul>
+        <li>Если параметр только в POST body, а не в URL, то <code>params.has(key)</code> вернёт <code>false</code>.</li>
+        <li>Поэтому ты и видел ситуацию: в DevTools данные "вроде отправились", а на экране оффера пусто.</li>
+      </ul>
+    </section>
+
+    <section class="card" id="incident">
+      <h2>7) Инцидент 4051: последовательный разбор "почему было так"</h2>
+
+      <h3>Шаг 1. Симптом</h3>
+      <p>
+        На оффере (Display GET Params) пусто по обязательным полям, хотя в Network ты видишь sub_id в запросе.
+      </p>
+
+      <h3>Шаг 2. Технический факт</h3>
+      <p>
+        В Network может быть одновременно:
+      </p>
+      <ul>
+        <li><strong>Query String Parameters</strong> (в URL),</li>
+        <li><strong>Form Data</strong> (в POST body).</li>
+      </ul>
+      <p>
+        Оффер 5171 проверяет только Query String через <code>window.location.search</code>.
+      </p>
+
+      <h3>Шаг 3. Почему дублировалось</h3>
+      <p>
+        Код мог одновременно прокинуть sub_id через URL и hidden input-поля формы, из-за чего в DevTools появлялись дубли в query и body.
+      </p>
+
+      <h3>Шаг 4. Что было сделано в рабочем решении</h3>
+      <ul>
+        <li>Значения формы собираются через <code>FormData(form)</code>.</li>
+        <li>Но вместо POST body они сериализуются в URL query (<code>url.searchParams.set</code>).</li>
+        <li>Далее идёт редирект <code>window.location.href = actionUrl</code>.</li>
+        <li>Итог: query содержит все sub_id, 5171 их видит.</li>
+      </ul>
+
+      <h3>Шаг 5. Почему первый фикс мог дать 404</h3>
+      <div class="warn">
+        Это не 100% доказанный факт, а рабочая гипотеза: редирект улетал на некорректный action URL.
+        В текущем решении добавлены защитные проверки на placeholder <code>{offer}</code> и валидность URL.
+      </div>
+    </section>
+
+    <section class="card" id="debug">
+      <h2>8) Практический чек-лист дебага (когда пишут "не прилетают параметры")</h2>
+
+      <h3>Шаг A. Проверка на лендинге</h3>
+      <ul>
+        <li>Открой DevTools → Network → запрос отправки.</li>
+        <li>Смотри <strong>Request Method</strong>.</li>
+        <li>Смотри отдельно: <strong>Query String Parameters</strong> и <strong>Form Data</strong>.</li>
+        <li>Проверь, есть ли ключевые sub_id: 24,25,27,26,22,23,21,9.</li>
+      </ul>
+
+      <h3>Шаг B. Проверка целевого оффера</h3>
+      <ul>
+        <li>Если оффер типа 5171 (GET display), то поля обязаны быть именно в Query String.</li>
+        <li>Если оффер серверный и читает POST, тогда Form Data может быть достаточной.</li>
+      </ul>
+
+      <h3>Шаг C. Проверка action URL перед отправкой</h3>
+      <ul>
+        <li>Проверь, что не осталось <code>{offer}</code> в сыром виде.</li>
+        <li>Проверь, что URL абсолютный (<code>http://</code> или <code>https://</code>).</li>
+        <li>Проверь, что в конце нет сломанного query из-за двойных <code>?</code>/<code>&amp;</code>.</li>
+      </ul>
+
+      <h3>Шаг D. Keitaro-side sanity</h3>
+      <ul>
+        <li>Кампания активна.</li>
+        <li>Поток ведёт на нужный landing и нужный offer.</li>
+        <li>Домен/HTTPS в статусе OK (если нужен динамический tracking method).</li>
+      </ul>
+
+      <div class="ok">
+        Быстрый smoke-test: временно ставишь оффер 5171, отправляешь форму, видишь все обязательные поля — значит client-side часть передачи исправна.
+      </div>
+    </section>
+
+    <section class="card" id="practice">
+      <h2>9) Практикум: как добавлять новое поле без поломок</h2>
+
+      <h3>9.1 Добавляешь input в форму</h3>
+      <div class="code-block">
+        <div class="code-head">
+          <div class="code-title">HTML пример</div>
+          <button class="copy-btn" data-copy-target="code-practice-html">Copy</button>
+        </div>
+        <pre id="code-practice-html"><code>&lt;div class="input"&gt;
+  &lt;label&gt;Apartment / Unit&lt;/label&gt;
+  &lt;input name="sub_id_30" type="text" required&gt;
+&lt;/div&gt;</code></pre>
+      </div>
+
+      <h3>9.2 Если нужно — добавляешь валидацию</h3>
+      <div class="code-block">
+        <div class="code-head">
+          <div class="code-title">JS пример</div>
+          <button class="copy-btn" data-copy-target="code-practice-js">Copy</button>
+        </div>
+        <pre id="code-practice-js"><code>function validateApartment(value) {
+  return value.trim().length &gt;= 2;
+}
+
+// в submit-проверке
+const apt = form.querySelector('input[name="sub_id_30"]');
+if (apt &amp;&amp; !validateApartment(apt.value)) {
+  valid = false;
+  apt.closest('.input')?.classList.add('invalid');
+}</code></pre>
+      </div>
+
+      <h3>9.3 Для GET-display оффера убедись, что поле уйдёт в query</h3>
+      <div class="code-block">
+        <div class="code-head">
+          <div class="code-title">Паттерн query-only сериализации</div>
+          <button class="copy-btn" data-copy-target="code-practice-query">Copy</button>
+        </div>
+        <pre id="code-practice-query"><code>const url = new URL(window.KT.offerUrl, window.location.origin);
+const fd = new FormData(form);
+for (const [name, value] of fd.entries()) {
+  if (typeof value === 'string' &amp;&amp; value.trim() !== '') {
+    url.searchParams.set(name, value);
+  }
+}
+window.location.href = url.toString();</code></pre>
+      </div>
+
+      <h3>9.4 Мини-check после правки</h3>
+      <ul>
+        <li>UI не поехал.</li>
+        <li>Валидация не пропускает пустые критичные поля.</li>
+        <li>В Network нужный sub_id есть в Query String (если тест через 5171).</li>
+        <li>Нет 404 после submit.</li>
+      </ul>
+    </section>
+
+    <section class="card" id="dict">
+      <h2>10) Словарь терминов простым языком</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Термин</th>
+            <th>Что значит</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Landing</td>
+            <td>Страница-прокладка/квиз, где пользователь взаимодействует до оффера.</td>
+          </tr>
+          <tr>
+            <td>Offer</td>
+            <td>Целевая страница/партнёрка/CRM endpoint, куда приводится пользователь/данные.</td>
+          </tr>
+          <tr>
+            <td>Prefill</td>
+            <td>Экран/форма, где пользователь вводит контактные/адресные данные.</td>
+          </tr>
+          <tr>
+            <td>Query String</td>
+            <td>Параметры в URL после <code>?</code>.</td>
+          </tr>
+          <tr>
+            <td>Form Data</td>
+            <td>Тело POST-запроса формы.</td>
+          </tr>
+          <tr>
+            <td>sub_id_xx</td>
+            <td>Кастомные поля трекинга (обычно для передачи пользовательских данных/атрибутов).</td>
+          </tr>
+          <tr>
+            <td>_lp / _token</td>
+            <td>Служебные параметры трекера для связывания клика/сессии.</td>
+          </tr>
+          <tr>
+            <td>Display GET Params</td>
+            <td>Тест-оффер, который визуально показывает только GET-параметры из URL.</td>
+          </tr>
+          <tr>
+            <td>404 после submit</td>
+            <td>Чаще всего плохой action URL или неправильный редиректный путь.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Финальная памятка по твоему кейсу</h3>
+      <div class="legend">
+        <span>Если тестируешь через 5171 → отправляй данные в Query String.</span>
+        <span>Network смотри по двум блокам: Query и Form Data отдельно.</span>
+        <span>Валидация и транспорт данных — разные уровни, проверяй оба.</span>
+        <span>Невалидный offer URL почти всегда = риск 404.</span>
+      </div>
+
+      <p class="small" style="margin-top: 14px;">
+        Основа материала: реальные фрагменты кода из
+        <code>/Users/sergeybudyakin/Downloads/3894_landing_archive/2934_landing_archive</code>,
+        <code>/Users/sergeybudyakin/Downloads/3894_landing_archive/4051_landing_archive</code>,
+        <code>/Users/sergeybudyakin/Downloads/3894_landing_archive/5171_offer_archive</code>.
+      </p>
+
+      <p><a class="anchor-link" href="#top">↑ Наверх</a></p>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      const buttons = document.querySelectorAll('.copy-btn');
+
+      function fallbackCopy(text) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.top = '-9999px';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        try {
+          document.execCommand('copy');
+        } catch (e) {
+        }
+        document.body.removeChild(ta);
+      }
+
+      buttons.forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          const targetId = btn.getAttribute('data-copy-target');
+          const el = document.getElementById(targetId);
+          if (!el) return;
+
+          const text = el.innerText;
+          try {
+            if (navigator.clipboard && window.isSecureContext) {
+              await navigator.clipboard.writeText(text);
+            } else {
+              fallbackCopy(text);
+            }
+            const old = btn.textContent;
+            btn.textContent = 'Copied';
+            setTimeout(() => {
+              btn.textContent = old;
+            }, 1200);
+          } catch (e) {
+            fallbackCopy(text);
+            const old = btn.textContent;
+            btn.textContent = 'Copied';
+            setTimeout(() => {
+              btn.textContent = old;
+            }, 1200);
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

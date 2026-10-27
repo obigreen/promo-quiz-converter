@@ -1,0 +1,927 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Workbook: Мини-prefill лендинг с отправкой в Keitaro</title>
+  <style>
+    :root {
+      --bg: #f5f7fc;
+      --card: #ffffff;
+      --line: #d9e1f2;
+      --text: #12233f;
+      --muted: #5e6f8f;
+      --accent: #245fd1;
+      --ok: #0f8c53;
+      --warn: #b86b00;
+      --code-bg: #0f172a;
+      --code-text: #dbeafe;
+      --shadow: 0 8px 22px rgba(18, 35, 63, 0.08);
+      --radius: 14px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      width: 100%;
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background: linear-gradient(180deg, #eef3ff 0%, var(--bg) 100%);
+      color: var(--text);
+      line-height: 1.58;
+      width: 100%;
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      width: 100%;
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(10px);
+      background: rgba(245, 247, 252, 0.94);
+    }
+
+    .topbar-inner {
+      width: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 12px 20px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .pill {
+      border: 1px solid #c6d5f6;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 13px;
+      color: #234b97;
+      background: #fff;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .pill.brand {
+      font-weight: 800;
+      color: #102f68;
+      background: #f7faff;
+    }
+
+    .wrap {
+      width: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 22px 20px 56px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .hero,
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px;
+      max-width: 100%;
+    }
+
+    .hero {
+      background: radial-gradient(circle at top right, #dce8ff, #fff 58%);
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: 30px;
+      line-height: 1.22;
+      letter-spacing: -0.4px;
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 23px;
+      line-height: 1.28;
+      letter-spacing: -0.2px;
+    }
+
+    h3 {
+      margin: 18px 0 8px;
+      font-size: 18px;
+      line-height: 1.33;
+    }
+
+    h4 {
+      margin: 13px 0 6px;
+      font-size: 16px;
+      line-height: 1.35;
+    }
+
+    p { margin: 8px 0; }
+
+    ul {
+      margin: 8px 0;
+      padding-left: 20px;
+    }
+
+    li { margin: 6px 0; }
+
+    .small { color: var(--muted); font-size: 13px; }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .checklist {
+      display: grid;
+      gap: 6px;
+      padding: 10px 12px;
+      border: 1px dashed #b5c8ee;
+      border-radius: 12px;
+      background: #f9fbff;
+    }
+
+    .check-item {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      font-size: 14px;
+    }
+
+    .badge {
+      display: inline-block;
+      border: 1px solid #bfd0f4;
+      border-radius: 999px;
+      padding: 3px 9px;
+      font-size: 12px;
+      color: #204688;
+      background: #f7faff;
+      margin-right: 6px;
+      margin-top: 6px;
+    }
+
+    .ok,
+    .warn,
+    .info {
+      border-radius: 10px;
+      padding: 11px 13px;
+      border: 1px solid;
+      margin: 10px 0;
+      font-size: 14px;
+    }
+
+    .ok {
+      border-color: #a8e0c2;
+      background: #ecfbf3;
+      color: #045433;
+    }
+
+    .warn {
+      border-color: #ffd6a4;
+      background: #fff8eb;
+      color: #774600;
+    }
+
+    .info {
+      border-color: #bfd5ff;
+      background: #eef4ff;
+      color: #0d3b84;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      overflow: hidden;
+      table-layout: fixed;
+      font-size: 14px;
+    }
+
+    thead th {
+      background: #edf3ff;
+      color: #1c3f83;
+      font-weight: 700;
+    }
+
+    th,
+    td {
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+      padding: 9px 10px;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+
+    th:last-child,
+    td:last-child { border-right: 0; }
+
+    tr:last-child td { border-bottom: 0; }
+
+    .step {
+      border: 1px solid #d8e3fb;
+      border-radius: 12px;
+      padding: 14px;
+      background: #fbfdff;
+      margin-top: 12px;
+    }
+
+    .step-title {
+      font-weight: 800;
+      font-size: 18px;
+      margin: 0 0 8px;
+      color: #173a7a;
+    }
+
+    .code {
+      border: 1px solid #2a3b61;
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--code-bg);
+      margin: 10px 0;
+      max-width: 100%;
+    }
+
+    .code-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 8px 10px;
+      background: #172446;
+      border-bottom: 1px solid #2a3b61;
+    }
+
+    .code-title {
+      color: #bcd2ff;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+
+    .copy-btn {
+      border: 1px solid #4e78d2;
+      background: #1f488f;
+      color: #fff;
+      border-radius: 8px;
+      padding: 4px 9px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .copy-btn:hover { background: #285cb8; }
+
+    pre {
+      margin: 0;
+      padding: 12px;
+      overflow: auto;
+      color: var(--code-text);
+      font-size: 12.5px;
+      line-height: 1.44;
+      tab-size: 2;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+      max-width: 100%;
+    }
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    }
+
+    .kbd {
+      display: inline-block;
+      border: 1px solid #c7d4f5;
+      border-bottom-width: 2px;
+      border-radius: 6px;
+      padding: 2px 7px;
+      font-size: 12px;
+      background: #fff;
+      color: #1c4388;
+      white-space: nowrap;
+    }
+
+    .back {
+      font-size: 13px;
+      color: #245fd1;
+      text-decoration: none;
+      border-bottom: 1px dashed #90b2f5;
+    }
+
+    @media (max-width: 980px) {
+      .grid-2 { grid-template-columns: 1fr; }
+      h1 { font-size: 25px; }
+      .topbar-inner,
+      .wrap {
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar" id="top">
+    <div class="topbar-inner">
+      <span class="pill brand">Workbook: Mini Prefill From Scratch</span>
+      <a class="pill" href="#target">Цель</a>
+      <a class="pill" href="#map">Сабы</a>
+      <a class="pill" href="#steps">Шаги</a>
+      <a class="pill" href="#debug">Дебаг</a>
+      <a class="pill" href="#final">Финальная проверка</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero" id="target">
+      <h1>Методичка-практикум: собрать мини-ленд с префилом и рабочей отправкой в Keitaro</h1>
+      <p>
+        Формат: ты пишешь сам с нуля (пустая папка), а здесь у тебя план, задания, контрольные точки и эталонные куски.
+        Цель: в конце получить мини-страницу с popup, текстами из JSON, формой prefill и корректной передачей параметров на оффер.
+      </p>
+      <div style="margin-top: 8px;">
+        <span class="badge">База: 2934</span>
+        <span class="badge">Фокус: form + validation + submit</span>
+        <span class="badge">Транспорт: Query String (для Display GET Params)</span>
+      </div>
+      <div class="info">
+        В этом практикуме мы специально не копируем весь 2934. Мы берём именно учебное ядро: макросы, JSON-тексты, popup,
+        prefill-форма, валидация, сбор sub_id и редирект на оффер.
+      </div>
+    </section>
+
+    <section class="card" id="map">
+      <h2>Обязательная карта параметров (должно прилететь на тест-оффер)</h2>
+      <p class="small">Эта таблица под твой скрин с Display GET Params.</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Поле формы / служебное</th>
+            <th>Имя параметра</th>
+            <th>Источник</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Email</td><td><code>sub_id_27</code></td><td>input</td></tr>
+          <tr><td>Имя</td><td><code>sub_id_24</code></td><td>input</td></tr>
+          <tr><td>Фамилия</td><td><code>sub_id_25</code></td><td>input</td></tr>
+          <tr><td>Адрес</td><td><code>sub_id_22</code></td><td>input</td></tr>
+          <tr><td>Штат</td><td><code>sub_id_9</code></td><td>select</td></tr>
+          <tr><td>Post/Zip</td><td><code>sub_id_23</code></td><td>input</td></tr>
+          <tr><td>Город</td><td><code>sub_id_21</code></td><td>input</td></tr>
+          <tr><td>Телефон</td><td><code>sub_id_26</code></td><td>input</td></tr>
+          <tr><td>Опция оплаты</td><td><code>paymentOption</code></td><td>hidden/фикс = <code>card</code></td></tr>
+          <tr><td>Картинка продукта</td><td><code>sub_id_15</code></td><td>img src / макрос <code>{offerlogo}</code></td></tr>
+          <tr><td>Click data</td><td><code>_lp</code>, <code>_token</code></td><td>берутся из входящего URL</td></tr>
+        </tbody>
+      </table>
+
+      <div class="warn">
+        Если ты тестируешь через Display GET Params (5171), параметры должны оказаться в URL query,
+        не только в Form Data body.
+      </div>
+    </section>
+
+    <section class="card" id="steps">
+      <h2>Пошаговый учебный трек</h2>
+
+      <div class="step">
+        <p class="step-title">Шаг 0. Создай структуру проекта</p>
+        <p><strong>Задание:</strong> создай пустой мини-проект.</p>
+        <div class="code">
+          <div class="code-head">
+            <div class="code-title">Структура папок</div>
+            <button class="copy-btn" data-copy-target="code-structure">Copy</button>
+          </div>
+          <pre id="code-structure"><code>mini-prefill/
+  index.html
+  css/
+    styles.css
+  js/
+    main.js
+  translate/
+    en.json
+  img/
+    product.webp</code></pre>
+        </div>
+        <div class="checklist">
+          <label class="check-item"><input type="checkbox"/> Папки и файлы созданы</label>
+          <label class="check-item"><input type="checkbox"/> `index.html` подключает `css/styles.css` и `js/main.js`</label>
+        </div>
+      </div>
+
+      <div class="step">
+        <p class="step-title">Шаг 1. Базовый каркас HTML (header + popup + prefill form)</p>
+        <p><strong>Задание:</strong> собери минимальный UI. Нужны: шапка, popup-уведомление, карточка с формой.</p>
+
+        <div class="code">
+          <div class="code-head">
+            <div class="code-title">Каркас index.html (фрагмент)</div>
+            <button class="copy-btn" data-copy-target="code-html-skeleton">Copy</button>
+          </div>
+          <pre id="code-html-skeleton"><code>&lt;body&gt;
+  &lt;header class="top"&gt;
+    &lt;img class="logo" src="{offerlogo}" alt="logo"/&gt;
+    &lt;h1 class="text_title"&gt;&lt;/h1&gt;
+  &lt;/header&gt;
+
+  &lt;div class="notification" style="display:none;"&gt;
+    &lt;img class="def-product-item-image" src="{offerlogo}" alt="product"/&gt;
+    &lt;p class="text_popup_name"&gt;&lt;/p&gt;
+    &lt;p class="text_popup_body"&gt;&lt;/p&gt;
+    &lt;button class="notification__closeIcon" type="button"&gt;×&lt;/button&gt;
+  &lt;/div&gt;
+
+  &lt;main class="prefill"&gt;
+    &lt;h2 class="text_form_title"&gt;&lt;/h2&gt;
+    &lt;form id="mForm" class="cart-form" novalidate&gt;
+      &lt;input type="hidden" name="country_code" id="countryCodeHiddenField" value="" /&gt;
+      &lt;input type="hidden" name="paymentOption" value="card" /&gt;
+
+      &lt;input name="sub_id_24" autocomplete="given-name" placeholder="First name" required /&gt;
+      &lt;input name="sub_id_25" autocomplete="family-name" placeholder="Last name" required /&gt;
+      &lt;input name="sub_id_27" class="js-email-input" autocomplete="email" placeholder="Email" required /&gt;
+      &lt;input name="sub_id_26" class="js-phone-input" autocomplete="tel" placeholder="Phone" required /&gt;
+      &lt;input name="sub_id_22" autocomplete="address-line1" placeholder="Address" required /&gt;
+      &lt;input name="sub_id_23" autocomplete="postal-code" placeholder="ZIP" required /&gt;
+      &lt;input name="sub_id_21" autocomplete="address-level2" placeholder="City" required /&gt;
+
+      &lt;select name="sub_id_9" required&gt;
+        &lt;option value=""&gt;State&lt;/option&gt;
+        &lt;option value="AL"&gt;AL - Alabama&lt;/option&gt;
+        &lt;option value="AZ"&gt;AZ - Arizona&lt;/option&gt;
+        &lt;option value="CA"&gt;CA - California&lt;/option&gt;
+      &lt;/select&gt;
+
+      &lt;button id="startBtn" type="submit"&gt;Continue&lt;/button&gt;
+    &lt;/form&gt;
+  &lt;/main&gt;
+&lt;/body&gt;</code></pre>
+        </div>
+
+        <div class="checklist">
+          <label class="check-item"><input type="checkbox"/> На странице есть popup</label>
+          <label class="check-item"><input type="checkbox"/> Есть форма с `id="mForm"`</label>
+          <label class="check-item"><input type="checkbox"/> Все нужные `sub_id` поля добавлены</label>
+        </div>
+      </div>
+
+      <div class="step">
+        <p class="step-title">Шаг 2. Макро-переменные и bootstrap данных</p>
+        <p><strong>Задание:</strong> в начале `main.js` заведи объект `window.KT`, как в прод-лендах.</p>
+
+        <div class="code">
+          <div class="code-head">
+            <div class="code-title">main.js: bootstrap</div>
+            <button class="copy-btn" data-copy-target="code-bootstrap">Copy</button>
+          </div>
+          <pre id="code-bootstrap"><code>window.KT = window.KT || {};
+window.KT.offerUrl = '{offer}';
+window.KT.productImageSrc = '{offerlogo}';
+window.KT.offerTitle = '{_offertitle}';
+window.KT.pricenew = '{_pricenew}';
+window.KT.priceold = '{_priceold}';
+window.KT.cc_country = '{_cc_country}';
+window.KT.names = '{_names}';
+
+function getQueryParam(name) {
+  return new URLSearchParams(window.location.search).get(name);
+}
+
+function decodeNames(raw) {
+  if (!raw || raw.includes('_names')) return [];
+  return raw.split(',').map(x =&gt; {
+    const v = x.trim();
+    try { return decodeURIComponent(v); } catch { return v; }
+  }).filter(Boolean);
+}</code></pre>
+        </div>
+
+        <div class="info">
+          Мини-правило: если макрос не подставился (например, остался `{offer}`), не отправляй форму и покажи ошибку в консоли.
+        </div>
+      </div>
+
+      <div class="step">
+        <p class="step-title">Шаг 3. JSON-переводы и автоподстановка текстов</p>
+        <p><strong>Задание:</strong> сделай как в 2934: загрузи `translate/en.json`, замени макросы в текстах и вставь в DOM.</p>
+
+        <div class="code">
+          <div class="code-head">
+            <div class="code-title">translate/en.json (минимум для старта)</div>
+            <button class="copy-btn" data-copy-target="code-en-json">Copy</button>
+          </div>
+          <pre id="code-en-json"><code>{
+  "text_title": "{_offertitle} - Secure checkout",
+  "text_form_title": "Shipping details for {_offertitle}",
+  "text_popup_name": "{_name1}",
+  "text_popup_body": "from {_cc_country} just claimed {_offertitle} for {_pricenew}",
+  "text_wait": "Wait"
+}</code></pre>
+        </div>
+
+        <div class="code">
+          <div class="code-head">
+            <div class="code-title">main.js: загрузка и применение translate</div>
+            <button class="copy-btn" data-copy-target="code-apply-translations">Copy</button>
+          </div>
+          <pre id="code-apply-translations"><code>let translation = null;
+
+async function loadLangData(lang = 'en') {
+  const response = await fetch(`translate/${lang}.json`);
+  if (!response.ok) throw new Error('translate file not found');
+  return response.json();
+}
+
+function macroReplace(text, ctx) {
+  return String(text)
+    .replaceAll('{_offertitle}', ctx.offerTitle || '')
+    .replaceAll('{_pricenew}', ctx.pricenew || '')
+    .replaceAll('{_priceold}', ctx.priceold || '')
+    .replaceAll('{_cc_country}', ctx.cc_country || '')
+    .replaceAll('{_name1}', ctx.name1 || 'User');
+}
+
+function applyTranslations(dict, ctx) {
+  Object.keys(dict).forEach((key) =&gt; {
+    document.querySelectorAll('.' + key).forEach((el) =&gt; {
+      el.innerHTML = macroReplace(dict[key], ctx);
+    });
+  });
+}
+
+document.addEventListener('DOMContentLoaded', async () =&gt; {
+  const names = decodeNames(window.KT.names);
+  const ctx = {
+    ...window.KT,
+    name1: names[0] || 'Alex'
+  };
+  translation = await loadLangData('en');
+  applyTranslations(translation, ctx);
+});</code></pre>
+        </div>
+
+        <div class="checklist">
+          <label class="check-item"><input type="checkbox"/> Тексты загрузились из JSON</label>
+          <label class="check-item"><input type="checkbox"/> Макросы заменились (`offertitle`, `pricenew`, `name1`)</label>
+        </div>
+      </div>
+
+      <div class="step">
+        <p class="step-title">Шаг 4. Popup-уведомление (как учебный аналог блока popup_1 из 2934)</p>
+        <p><strong>Задание:</strong> покажи popup через 3-5 секунд, затем скрой. Запомни в localStorage, что уже показывался.</p>
+
+        <div class="code">
+          <div class="code-head">
+            <div class="code-title">main.js: popup logic</div>
+            <button class="copy-btn" data-copy-target="code-popup">Copy</button>
+          </div>
+          <pre id="code-popup"><code>function saveLS(key, value) {
+  localStorage.setItem('mini_prefill_' + key, value);
+}
+
+function getLS(key) {
+  return localStorage.getItem('mini_prefill_' + key);
+}
+
+function initPopup() {
+  const popup = document.querySelector('.notification');
+  const closeBtn = document.querySelector('.notification__closeIcon');
+  if (!popup) return;
+
+  if (getLS('popupShowed') === 'true') return;
+
+  setTimeout(() =&gt; {
+    popup.style.display = 'block';
+    saveLS('popupShowed', 'true');
+  }, 3500);
+
+  setTimeout(() =&gt; {
+    popup.style.display = 'none';
+  }, 9000);
+
+  closeBtn?.addEventListener('click', () =&gt; {
+    popup.style.display = 'none';
+  });
+}</code></pre>
+        </div>
+      </div>
+
+      <div class="step">
+        <p class="step-title">Шаг 5. Валидация формы</p>
+        <p><strong>Задание:</strong> реализуй минимум, как в 2934/4051 — email + phone + required поля.</p>
+
+        <div class="code">
+          <div class="code-head">
+            <div class="code-title">main.js: validate functions</div>
+            <button class="copy-btn" data-copy-target="code-validate">Copy</button>
+          </div>
+          <pre id="code-validate"><code>function validateEmail(email) {
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(String(email).trim().toLowerCase());
+}
+
+function validatePhone(phone) {
+  return /^\d{5,}$/.test(String(phone).replace(/\D/g, ''));
+}
+
+function markField(input, isValid) {
+  input.classList.toggle('invalid', !isValid);
+  input.classList.toggle('valid', isValid);
+}
+
+function validateForm(form) {
+  let valid = true;
+
+  const required = form.querySelectorAll('[name][required]');
+  required.forEach((el) =&gt; {
+    const ok = String(el.value || '').trim() !== '';
+    markField(el, ok);
+    if (!ok) valid = false;
+  });
+
+  const email = form.querySelector('.js-email-input');
+  if (email) {
+    const ok = validateEmail(email.value);
+    markField(email, ok);
+    if (!ok) valid = false;
+  }
+
+  const phone = form.querySelector('.js-phone-input');
+  if (phone) {
+    const ok = validatePhone(phone.value);
+    markField(phone, ok);
+    if (!ok) valid = false;
+  }
+
+  return valid;
+}</code></pre>
+        </div>
+      </div>
+
+      <div class="step">
+        <p class="step-title">Шаг 6. Сбор параметров и отправка (ключевой этап)</p>
+        <p>
+          <strong>Задание:</strong> на submit собери все поля в query string и сделай редирект на оффер.
+          Это важно для теста через Display GET Params.
+        </p>
+
+        <div class="code">
+          <div class="code-head">
+            <div class="code-title">main.js: query-only submit handler</div>
+            <button class="copy-btn" data-copy-target="code-submit">Copy</button>
+          </div>
+          <pre id="code-submit"><code>function ensureProductImageParam(form) {
+  let hidden = form.querySelector('input[name="sub_id_15"]');
+  if (!hidden) {
+    hidden = document.createElement('input');
+    hidden.type = 'hidden';
+    hidden.name = 'sub_id_15';
+    form.appendChild(hidden);
+  }
+
+  const img = document.querySelector('.def-product-item-image');
+  hidden.value = img?.src || window.KT.productImageSrc || '';
+}
+
+function buildActionUrl(form) {
+  const offerUrl = window.KT.offerUrl;
+  if (!offerUrl || offerUrl.includes('{offer}') || offerUrl.includes('%7Boffer%7D')) {
+    throw new Error('Offer URL is not resolved');
+  }
+
+  const url = new URL(offerUrl, window.location.origin);
+
+  // 1) переносим входящие технические query (в т.ч. _lp/_token)
+  const incoming = new URLSearchParams(window.location.search);
+  incoming.forEach((value, key) =&gt; {
+    if (!url.searchParams.has(key) &amp;&amp; value !== '') {
+      url.searchParams.set(key, value);
+    }
+  });
+
+  // 2) переносим поля формы
+  const fd = new FormData(form);
+  for (const [name, value] of fd.entries()) {
+    if (typeof value !== 'string') continue;
+    if (value.trim() === '') continue;
+    url.searchParams.set(name, value.trim());
+  }
+
+  // fallback: paymentOption
+  if (!url.searchParams.get('paymentOption')) {
+    url.searchParams.set('paymentOption', 'card');
+  }
+
+  return url.toString();
+}
+
+function initForm() {
+  const form = document.getElementById('mForm');
+  const btn = document.getElementById('startBtn');
+  if (!form) return;
+
+  form.addEventListener('submit', (e) =&gt; {
+    e.preventDefault();
+
+    if (!validateForm(form)) {
+      form.querySelector('.invalid')?.focus();
+      return;
+    }
+
+    ensureProductImageParam(form);
+
+    try {
+      btn.disabled = true;
+      btn.textContent = (translation?.text_wait || 'Wait') + '...';
+      const actionUrl = buildActionUrl(form);
+      window.location.href = actionUrl;
+    } catch (err) {
+      console.error(err);
+      btn.disabled = false;
+      btn.textContent = 'Continue';
+    }
+  });
+}</code></pre>
+        </div>
+
+        <div class="ok">
+          Контрольная точка: после submit у тебя в DevTools в <strong>Query String Parameters</strong> должны быть
+          `sub_id_27, sub_id_24, sub_id_25, sub_id_22, sub_id_9, sub_id_23, sub_id_21, sub_id_26, paymentOption, sub_id_15, _lp, _token`.
+        </div>
+      </div>
+
+      <div class="step">
+        <p class="step-title">Шаг 7. Инициализация всего приложения</p>
+        <p><strong>Задание:</strong> собери общий запуск в конце `main.js`.</p>
+
+        <div class="code">
+          <div class="code-head">
+            <div class="code-title">main.js: app init</div>
+            <button class="copy-btn" data-copy-target="code-init">Copy</button>
+          </div>
+          <pre id="code-init"><code>document.addEventListener('DOMContentLoaded', async () =&gt; {
+  try {
+    const names = decodeNames(window.KT.names);
+    const ctx = {
+      ...window.KT,
+      name1: names[0] || 'Alex'
+    };
+
+    translation = await loadLangData('en');
+    applyTranslations(translation, ctx);
+  } catch (e) {
+    console.warn('translation fallback', e);
+  }
+
+  initPopup();
+  initForm();
+});</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" id="debug">
+      <h2>Дебаг-сценарий (проверка по шагам)</h2>
+
+      <h3>Сценарий A: локальная проверка</h3>
+      <ul>
+        <li>Открой страницу с query: <code>?_lp=1&amp;_token=test123</code>.</li>
+        <li>Заполни форму валидными данными.</li>
+        <li>Проверь, что кнопка меняется на <code>Wait...</code> и идёт редирект.</li>
+      </ul>
+
+      <h3>Сценарий B: через Display GET Params</h3>
+      <ul>
+        <li>Поставь `window.KT.offerUrl` на тест-оффер отображения GET-параметров.</li>
+        <li>Отправь форму.</li>
+        <li>Убедись, что обязательные поля не пустые, и нет ошибки "не хватает ...".</li>
+      </ul>
+
+      <h3>Сценарий C: ловим типичные баги</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Симптом</th>
+            <th>Причина</th>
+            <th>Что чинить</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>404 после submit</td>
+            <td><code>{offer}</code> не подставился или URL сломан</td>
+            <td>проверка в <code>buildActionUrl</code> + лог в консоль</td>
+          </tr>
+          <tr>
+            <td>Поля пустые в Display GET Params</td>
+            <td>передача ушла в body, а не в query</td>
+            <td>оставить query-only редирект, без <code>form.submit()</code></td>
+          </tr>
+          <tr>
+            <td>Нет `_lp`/`_token`</td>
+            <td>входной URL не содержит их или ты не прокинул входящие query</td>
+            <td>добавь копирование `window.location.search` в action URL</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card" id="final">
+      <h2>Финальное задание (мини-экзамен)</h2>
+      <p>
+        Сделай свою версию без копипаста целиком. Используй только шаги и контрольные точки.
+      </p>
+
+      <div class="checklist">
+        <label class="check-item"><input type="checkbox"/> Файл `translate/en.json` реально подгружается</label>
+        <label class="check-item"><input type="checkbox"/> Popup показывается 1 раз и скрывается</label>
+        <label class="check-item"><input type="checkbox"/> Все required поля валидируются</label>
+        <label class="check-item"><input type="checkbox"/> Телефон и email валидируются отдельно</label>
+        <label class="check-item"><input type="checkbox"/> На submit query содержит все нужные sub_id</label>
+        <label class="check-item"><input type="checkbox"/> `_lp` и `_token` не потерялись</label>
+        <label class="check-item"><input type="checkbox"/> В Display GET Params нет ошибки по обязательным полям</label>
+      </div>
+
+      <div class="info">
+        Хочешь следующий уровень: после этого добавляем модуль “квиз до префила” и логику step-flow (упрощённый аналог 2934),
+        но форма и отправка уже будут у тебя под контролем.
+      </div>
+
+      <p><a class="back" href="#top">↑ Наверх</a></p>
+    </section>
+
+    <section class="card">
+      <h2>Референсы по текущему проекту</h2>
+      <p class="small">
+        Основа методички собрана по этим файлам:
+        <code>/Users/sergeybudyakin/Downloads/3894_landing_archive/2934_landing_archive/index.html</code>,
+        <code>/Users/sergeybudyakin/Downloads/3894_landing_archive/2934_landing_archive/js/scripts.js</code>,
+        <code>/Users/sergeybudyakin/Downloads/3894_landing_archive/4051_landing_archive/form-handler.js</code>,
+        <code>/Users/sergeybudyakin/Downloads/3894_landing_archive/5171_offer_archive/index.php</code>.
+      </p>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      const buttons = document.querySelectorAll('.copy-btn');
+
+      function fallbackCopy(text) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.top = '-9999px';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        try {
+          document.execCommand('copy');
+        } catch (e) {}
+        document.body.removeChild(ta);
+      }
+
+      buttons.forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          const id = btn.getAttribute('data-copy-target');
+          const el = document.getElementById(id);
+          if (!el) return;
+
+          const text = el.innerText;
+          try {
+            if (navigator.clipboard && window.isSecureContext) {
+              await navigator.clipboard.writeText(text);
+            } else {
+              fallbackCopy(text);
+            }
+            const old = btn.textContent;
+            btn.textContent = 'Copied';
+            setTimeout(() => { btn.textContent = old; }, 1200);
+          } catch (e) {
+            fallbackCopy(text);
+            const old = btn.textContent;
+            btn.textContent = 'Copied';
+            setTimeout(() => { btn.textContent = old; }, 1200);
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
